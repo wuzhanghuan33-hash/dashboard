@@ -1,0 +1,743 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<meta http-equiv="Cache-Control" content="no-cache, no-store, must-revalidate">
+<meta http-equiv="Pragma" content="no-cache">
+<meta http-equiv="Expires" content="0">
+<title>万家乐天猫官旗 · 2026 业绩看板</title>
+<script>/* Chart.js 异步加载，不阻塞页面渲染 */
+(function(){var d=document,s=d.createElement('script');s.src='https://cdn.bootcdn.net/ajax/libs/Chart.js/4.4.7/chart.umd.min.js';s.onerror=function(){var s2=d.createElement('script');s2.src='https://cdn.jsdelivr.net/npm/chart.js@4.4.7/dist/chart.umd.min.js';d.head.appendChild(s2);};d.head.appendChild(s);})();</script>
+<script src="data.js?v=20260721a"></script>
+<style>
+* { margin:0; padding:0; box-sizing:border-box; }
+body { font-family:-apple-system,BlinkMacSystemFont,"Segoe UI",Roboto,sans-serif; background:#eef1f5; color:#1e293b; }
+
+/* Header */
+.header { background:linear-gradient(135deg,#0f172a,#1e293b); color:#fff; padding:16px 24px; display:flex; justify-content:space-between; align-items:center; flex-wrap:wrap; gap:8px; border-bottom:3px solid #3b82f6; }
+.header h1 { font-size:17px; font-weight:600; letter-spacing:.3px; }
+.header .sub { font-size:11px; opacity:.6; margin-top:1px; }
+.header-actions { display:flex; align-items:center; gap:10px; }
+.auto-refresh { display:flex; align-items:center; gap:5px; font-size:11px; cursor:pointer; color:rgba(255,255,255,.8); }
+.auto-refresh input { accent-color:#3b82f6; }
+.update-time { font-size:11px; opacity:.5; }
+
+/* Container */
+.container { max-width:1440px; margin:0 auto; padding:8px 12px; }
+
+/* Filter Bar */
+.filter-bar { display:flex; align-items:center; gap:6px; margin-bottom:8px; flex-wrap:wrap; background:#fff; border-radius:8px; padding:8px 12px; box-shadow:0 1px 2px rgba(0,0,0,.04); }
+.filter-bar label { font-size:11px; color:#64748b; font-weight:500; }
+.filter-bar input[type=date] { padding:4px 8px; border:1px solid #e2e8f0; border-radius:5px; font-size:11px; background:#f8fafc; color:#1e293b; outline:none; transition:border-color .15s; }
+.filter-bar input[type=date]:focus { border-color:#3b82f6; }
+.filter-bar .presets { display:flex; gap:3px; flex-wrap:wrap; }
+.filter-bar .preset-btn { padding:4px 12px; border-radius:12px; border:1px solid #e2e8f0; background:#fff; cursor:pointer; font-size:11px; color:#64748b; transition:all .15s; font-weight:500; }
+.filter-bar .preset-btn:hover { border-color:#3b82f6; color:#3b82f6; background:#f0f7ff; }
+.filter-bar .preset-btn.active { background:#1e293b; color:#fff; border-color:#1e293b; }
+.filter-bar .date-inputs { display:flex; align-items:center; gap:3px; margin-left:auto; }
+
+/* Section */
+.section { margin-bottom:6px; }
+.section-title { display:flex; align-items:center; gap:6px; font-size:11px; font-weight:600; color:#0f172a; padding:6px 0 4px 2px; letter-spacing:.3px; }
+.section-title .dot { width:3px; height:14px; border-radius:2px; display:inline-block; }
+.section-body {  }
+
+/* KPI Grid */
+.kpi-grid { display:grid; gap:6px; }
+.kpi-grid.cols-3 { grid-template-columns:repeat(3,1fr); }
+.kpi-grid.cols-4 { grid-template-columns:repeat(4,1fr); }
+.kpi-grid.cols-auto { grid-template-columns:repeat(auto-fit,minmax(130px,1fr)); }
+.kpi-card { background:#fff; border-radius:8px; padding:10px 12px; box-shadow:0 1px 2px rgba(0,0,0,.04); border-left:3px solid #e2e8f0; }
+.kpi-card .label { font-size:10px; color:#64748b; font-weight:500; letter-spacing:.4px; margin-bottom:1px; }
+.kpi-card .value { font-size:18px; font-weight:700; line-height:1.3; }
+.kpi-card .sub { font-size:10px; margin-top:1px; color:#94a3b8; }
+.good { color:#16a34a; }
+.bad { color:#dc2626; }
+.neutral { color:#d97706; }
+
+/* Charts */
+.chart-row { display:grid; grid-template-columns:1fr 1fr; gap:6px; }
+.chart-box { background:#fff; border-radius:8px; padding:10px 12px; box-shadow:0 1px 2px rgba(0,0,0,.04); }
+.chart-box.full { grid-column:1/-1; }
+.chart-box h3 { font-size:12px; font-weight:600; margin-bottom:6px; color:#0f172a; display:flex; align-items:center; gap:6px; }
+.chart-box h3 small { font-weight:400; font-size:10px; color:#94a3b8; }
+.chart-box canvas { width:100%!important; max-height:220px; min-height:160px; }
+
+/* Compare Section */
+.compare-grid { display:grid; grid-template-columns:repeat(auto-fit,minmax(180px,1fr)); gap:6px; }
+.compare-card { background:#fff; border-radius:8px; padding:10px 12px; box-shadow:0 1px 2px rgba(0,0,0,.04); }
+.compare-card h4 { font-size:11px; font-weight:600; color:#0f172a; margin-bottom:6px; }
+.compare-card .stat { display:flex; justify-content:space-between; padding:2px 0; font-size:11px; border-bottom:1px solid #f1f5f9; }
+.compare-card .stat:last-child { border-bottom:none; }
+.compare-card .stat .val { font-weight:600; }
+
+/* Table */
+.table-wrap { overflow-x:auto; border-radius:6px; border:1px solid #e2e8f0; }
+table { width:100%; border-collapse:collapse; font-size:10.5px; }
+thead { position:sticky; top:0; z-index:1; }
+thead th { padding:4px 5px; text-align:right; font-weight:600; color:#475569; border-bottom:1px solid #e2e8f0; white-space:nowrap; font-size:9.5px; letter-spacing:.2px; }
+thead th:first-child { text-align:left; padding-left:8px; }
+thead th.group-header { background:#f1f5f9; font-size:9px; color:#64748b; letter-spacing:.5px; text-align:center; }
+thead th.col-header { background:#f8fafc; }
+tbody td { padding:3px 5px; text-align:right; border-bottom:1px solid #f1f5f9; white-space:nowrap; font-size:10px; }
+tbody td:first-child { text-align:left; font-weight:500; padding-left:8px; }
+tbody tr:nth-child(even) { background:#fafbfc; }
+tbody tr:hover { background:#eef2ff; }
+tbody tr.weekend td { color:#94a3b8; }
+.high-achieve { color:#16a34a; font-weight:600; }
+.low-achieve { color:#dc2626; font-weight:600; }
+
+/* Insights */
+.insights { background:#fff; border-radius:8px; padding:10px 12px; box-shadow:0 1px 2px rgba(0,0,0,.04); }
+.insights h3 { font-size:12px; font-weight:600; color:#0f172a; margin-bottom:6px; display:flex; align-items:center; gap:6px; }
+.insights ul { list-style:none; padding:0; display:flex; flex-wrap:wrap; gap:4px 16px; }
+.insights li { font-size:11px; padding:2px 0; padding-left:12px; position:relative; }
+.insights li::before { content:""; position:absolute; left:0; top:6px; width:5px; height:5px; border-radius:50%; background:#1e293b; }
+.insights li.pos::before { background:#16a34a; }
+.insights li.neg::before { background:#dc2626; }
+
+/* Footer */
+.footer { text-align:center; padding:12px; font-size:10px; color:#94a3b8; }
+
+@media (max-width:768px) {
+  .chart-row { grid-template-columns:1fr; }
+  .kpi-grid.cols-3, .kpi-grid.cols-4 { grid-template-columns:repeat(2,1fr); }
+  .header { padding:12px 16px; }
+  .header h1 { font-size:14px; }
+  .filter-bar .date-inputs { margin-left:0; width:100%; justify-content:flex-end; }
+  .filter-bar .presets { width:100%; }
+}
+</style>
+</head>
+<body>
+
+<div class="header">
+  <div>
+    <h1>万家乐 · 天猫自营官旗 2026 业绩看板</h1>
+    <div class="sub" id="headerSub">数据源：飞书 天猫官旗业绩表</div>
+  </div>
+  <div class="header-actions">
+    <label class="auto-refresh"><input type="checkbox" id="autoRefresh"> 自动刷新（60秒）</label>
+    <span class="update-time" id="updateTime"></span>
+  </div>
+</div>
+
+<div class="container" id="app">
+  <!-- Filter bar -->
+  <div class="filter-bar" id="filterBar">
+    <div class="presets" id="presets"></div>
+    <div class="date-inputs">
+      <label>从</label>
+      <input type="date" id="startDate">
+      <label>至</label>
+      <input type="date" id="endDate">
+    </div>
+  </div>
+
+  <!-- Section 1: 经营概览 -->
+  <div class="section">
+    <div class="section-title"><span class="dot" style="background:#3b82f6"></span> 经营概览</div>
+    <div class="section-body">
+      <div class="kpi-grid cols-auto" id="kpiOverview"></div>
+      <div class="chart-row">
+        <div class="chart-box full">
+          <h3>逐日业绩走势 <small>蓝色=目标 / 绿色=达成 / 灰色=同期 / 橙线=达成率</small></h3>
+          <canvas id="dailyChart"></canvas>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <!-- Section 2: 资金与退款 -->
+  <div class="section">
+    <div class="section-title"><span class="dot" style="background:#ef4444"></span> 资金与退款</div>
+    <div class="section-body">
+      <div class="kpi-grid cols-3" id="kpiRefund"></div>
+      <div class="chart-row">
+        <div class="chart-box full">
+          <h3>达成率 vs 退款率</h3>
+          <canvas id="rateChart"></canvas>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <!-- Section 3: 流量与转化 -->
+  <div class="section">
+    <div class="section-title"><span class="dot" style="background:#f59e0b"></span> 流量与转化</div>
+    <div class="section-body">
+      <div class="kpi-grid cols-4" id="kpiTraffic"></div>
+      <div class="chart-row">
+        <div class="chart-box"><h3>访客 & 买家趋势</h3><canvas id="trafficChart"></canvas></div>
+        <div class="chart-box"><h3>客单价走势</h3><canvas id="aovChart"></canvas></div>
+      </div>
+      <div class="chart-row" style="margin-top:6px">
+        <div class="chart-box full">
+          <h3>加购率 & 加购转化率 <small>加购人数含在明细表</small></h3>
+          <canvas id="cartChart"></canvas>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <!-- Section 4: 同比对比 -->
+  <div class="section">
+    <div class="section-title"><span class="dot" style="background:#8b5cf6"></span> 同比对比</div>
+    <div class="section-body">
+      <div class="compare-grid" id="compareGrid"></div>
+      <div class="chart-row" style="margin-top:6px">
+        <div class="chart-box full">
+          <h3>前同比趋势 <small>绿色=增长 / 红色=下降</small></h3>
+          <canvas id="yoyChart"></canvas>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <!-- Section 5: 区间分析 -->
+  <div class="section">
+    <div class="section-title"><span class="dot" style="background:#06b6d4"></span> 区间分析</div>
+    <div class="section-body">
+      <div class="insights" id="insights"></div>
+    </div>
+  </div>
+
+  <!-- Section 6: 逐日明细 -->
+  <div class="section">
+    <div class="section-title"><span class="dot" style="background:#64748b"></span> 逐日明细 <small id="tableCount" style="font-weight:400;font-size:10px;color:#94a3b8"></small></div>
+    <div class="section-body">
+      <div class="table-wrap" id="dailyTable"></div>
+    </div>
+  </div>
+</div>
+
+<div class="footer" id="footer"></div>
+
+<script>
+// ==================== DATA LOADING ====================
+let DB = null;
+let CHART_INSTANCES = {};
+
+function fmt(n) { return n==null?"—":Math.abs(n)>=10000?(n/10000).toFixed(1)+"万":n.toLocaleString(); }
+function fmtPct(n) { return (n*100).toFixed(1)+"%"; }
+
+function loadData() {
+  DB = DASHBOARD_DATA;
+  document.getElementById('headerSub').textContent = `数据源：飞书 天猫官旗业绩表 · 更新于 ${DB.lastUpdated}`;
+  init();
+}
+
+// ==================== DATA HELPERS ====================
+function getAllDays() {
+  const all = [];
+  Object.keys(DB.months).sort().forEach(m => {
+    const mo = DB.months[m];
+    mo.days.forEach(d => {
+      const date = `2026-${String(m).padStart(2,'0')}-${d.d}`;
+      all.push({ date, month: parseInt(m), ...d });
+    });
+  });
+  return all;
+}
+
+function calcLastYear(a, y) {
+  // y is the 同比% change. last year value = a / (1 + y/100)
+  if (y === 0 || y === null || y === undefined) return null;
+  return Math.round(a / (1 + y / 100));
+}
+
+function filterDays(allDays, startStr, endStr) {
+  const start = new Date(startStr);
+  const end = new Date(endStr);
+  return allDays.filter(d => {
+    const dt = new Date(d.date);
+    return dt >= start && dt <= end;
+  });
+}
+
+function getDateRangeLabel(days) {
+  if (!days.length) return "";
+  const first = days[0].date, last = days[days.length-1].date;
+  return `${first} ~ ${last} (共${days.length}天)`;
+}
+
+// ==================== RENDER ====================
+function init() {
+  const allDays = getAllDays();
+  const firstDate = allDays[0].date;
+  const lastDate = allDays[allDays.length-1].date;
+
+  // Date inputs
+  document.getElementById('startDate').value = firstDate;
+  document.getElementById('endDate').value = lastDate;
+  document.getElementById('startDate').min = firstDate;
+  document.getElementById('endDate').max = lastDate;
+
+  // Presets
+  const presetsEl = document.getElementById('presets');
+  presetsEl.innerHTML = '<button class="preset-btn" data-range="all">全部</button>';
+  Object.keys(DB.months).sort().forEach(m => {
+    const mo = DB.months[m];
+    presetsEl.innerHTML += `<button class="preset-btn" data-range="m${m}">${mo.name}</button>`;
+  });
+  presetsEl.innerHTML += `<button class="preset-btn" data-range="h1">H1</button>`;
+  presetsEl.innerHTML += `<button class="preset-btn" data-range="h2">H2</button>`;
+  presetsEl.querySelectorAll('.preset-btn').forEach(btn => {
+    btn.addEventListener('click', () => {
+      presetsEl.querySelectorAll('.preset-btn').forEach(b => b.classList.remove('active'));
+      btn.classList.add('active');
+      const range = btn.dataset.range;
+      if (range === 'all') { setDateRange(firstDate, lastDate); }
+      else if (range === 'h1') { setDateRange('2026-01-01', '2026-06-30'); }
+      else if (range === 'h2') { setDateRange('2026-07-01', lastDate); }
+      else {
+        const m = parseInt(range.slice(1));
+        const start = `2026-${String(m).padStart(2,'0')}-01`;
+        const end = `2026-${String(m).padStart(2,'0')}-${String(new Date(2026,m,0).getDate()).padStart(2,'0')}`;
+        setDateRange(start, end);
+      }
+    });
+  });
+
+  // Preselect "全部"
+  document.querySelector('[data-range="all"]').classList.add('active');
+
+  // Event listeners
+  document.getElementById('startDate').addEventListener('change', updateFromDates);
+  document.getElementById('endDate').addEventListener('change', updateFromDates);
+
+  // Auto-refresh
+  let refreshTimer;
+  document.getElementById('autoRefresh').addEventListener('change', function() {
+    if (this.checked) {
+      refreshTimer = setInterval(() => {
+        document.getElementById('updateTime').textContent = `🔄 ${new Date().toLocaleTimeString()}`;
+        // In future, re-fetch data.json here
+      }, 60000);
+    } else {
+      clearInterval(refreshTimer);
+    }
+  });
+
+  renderAll();
+}
+
+function setDateRange(start, end) {
+  document.getElementById('startDate').value = start;
+  document.getElementById('endDate').value = end;
+  renderAll();
+}
+
+function updateFromDates() {
+  document.querySelectorAll('.preset-btn').forEach(b => b.classList.remove('active'));
+  renderAll();
+}
+
+function renderAll() {
+  const start = document.getElementById('startDate').value;
+  const end = document.getElementById('endDate').value;
+  const allDays = getAllDays();
+  const days = filterDays(allDays, start, end);
+
+  if (!days.length) {
+    document.getElementById('kpiOverview').innerHTML = '<div class="kpi-card"><div class="label">⚠️</div><div class="value">无数据</div><div class="sub">请选择其他日期范围</div></div>';
+    return;
+  }
+
+  renderOverview(days);
+  renderRefundKPI(days);
+  renderTrafficKPI(days);
+  renderCompare(days);
+  renderDailyChart(days);
+  renderRateChart(days);
+  renderTrafficChart(days);
+  renderAOVChart(days);
+  renderCartChart(days);
+  renderYoYChart(days);
+  renderInsights(days);
+  renderTable(days);
+  document.getElementById('tableCount').textContent = getDateRangeLabel(days);
+}
+
+// ==================== SECTION: 经营概览 ====================
+function renderOverview(days) {
+  const totalT = days.reduce((s,r) => s+r.t, 0);
+  const totalA = days.reduce((s,r) => s+r.a, 0);
+  const rate = totalA / totalT;
+  const daysAbove = days.filter(r => r.rr >= 1).length;
+
+  // 同期 total
+  let totalLastYear = 0, hasLastYear = false;
+  days.forEach(d => {
+    const ly = calcLastYear(d.a, d.y);
+    if (ly !== null) { totalLastYear += ly; hasLastYear = true; }
+  });
+
+  // 剔退净额与同比
+  const hasPostRefund = days.some(r => r.post_refund !== undefined);
+  const totalPostRefund = hasPostRefund ? days.reduce((s,r) => s + (r.post_refund||0), 0) : 0;
+  const refundLoss = totalA - totalPostRefund;
+  const hasNetYoY = days.some(r => r.y_net !== null);
+  let totalLyPostRefund = 0, netYearOverYear = null;
+  if (hasNetYoY) {
+    totalLyPostRefund = days.reduce((s,r) => s + (r.ly_post_refund||0), 0);
+    netYearOverYear = ((totalPostRefund - totalLyPostRefund) / totalLyPostRefund * 100).toFixed(1);
+  }
+
+  const el = document.getElementById('kpiOverview');
+  el.innerHTML = `
+    <div class="kpi-card" style="border-left-color:#3b82f6"><div class="label">业绩目标</div><div class="value">${fmt(totalT)}</div><div class="sub">${days.length}天</div></div>
+    <div class="kpi-card" style="border-left-color:#16a34a"><div class="label">业绩达成</div><div class="value">${fmt(totalA)}</div><div class="sub ${rate>=.85?'good':'bad'}">${totalA>=totalT?'超额 '+fmt(totalA-totalT):'差额 '+fmt(totalA-totalT)}</div></div>
+    <div class="kpi-card" style="border-left-color:${rate>=1?'#16a34a':rate>=.8?'#d97706':'#dc2626'}"><div class="label">达成率</div><div class="value" style="color:${rate>=1?'#16a34a':rate>=.8?'#d97706':'#dc2626'}">${fmtPct(rate)}</div><div class="sub">超目标 ${daysAbove}/${days.length} 天</div></div>
+    ${hasLastYear?`<div class="kpi-card" style="border-left-color:#8b5cf6"><div class="label">同期业绩（2025）</div><div class="value">${fmt(totalLastYear)}</div><div class="sub ${totalA>=totalLastYear?'good':'bad'}">同比 ${((totalA/totalLastYear-1)*100).toFixed(1)}%</div></div>`:''}
+    ${hasPostRefund?`<div class="kpi-card" style="border-left-color:#f97316"><div class="label">净达成（剔退）</div><div class="value">${fmt(totalPostRefund)}</div><div class="sub ${netYearOverYear!==null?(parseFloat(netYearOverYear)>=0?'good':'bad'):''}">剔退 ${fmt(refundLoss)} | 净达成率 ${fmtPct(totalPostRefund/totalT)}${netYearOverYear!==null?' | 同比 '+netYearOverYear+'%':''}</div></div>`:''}
+  `;
+}
+
+// ==================== SECTION: 资金与退款 ====================
+function renderRefundKPI(days) {
+  const actualDays = days.filter(d => d.a > 0);
+  const hasRefundAmt = actualDays.some(r => r.refund_amt !== undefined);
+  const totalA = actualDays.reduce((s,r) => s+r.a, 0);
+  const totalRefundAmt = hasRefundAmt ? actualDays.reduce((s,r) => s + (r.refund_amt||0), 0) : 0;
+  const totalPostRefund = hasRefundAmt ? actualDays.reduce((s,r) => s + (r.post_refund||0), 0) : 0;
+  const avgRef = totalA ? totalRefundAmt / totalA * 100 : 0;
+  const maxRef = actualDays.length ? Math.max(...actualDays.map(r => r.ref||0)) : 0;
+
+  const el = document.getElementById('kpiRefund');
+  el.innerHTML = `
+    <div class="kpi-card" style="border-left-color:#ef4444"><div class="label">平均退款率</div><div class="value" style="color:${avgRef>35?'#dc2626':'#16a34a'}">${avgRef.toFixed(1)}%</div><div class="sub">最高 ${maxRef.toFixed(1)}%</div></div>
+    ${hasRefundAmt?`
+    <div class="kpi-card" style="border-left-color:#f97316"><div class="label">退款金额</div><div class="value" style="color:#dc2626">${fmt(totalRefundAmt)}</div><div class="sub">占达成 ${(totalRefundAmt/totalA*100).toFixed(1)}%</div></div>
+    <div class="kpi-card" style="border-left-color:#16a34a"><div class="label">去退金额</div><div class="value">${fmt(totalPostRefund)}</div><div class="sub">剔除退款后净额</div></div>
+    `:'<div class="kpi-card" style="border-left-color:#94a3b8"><div class="label">注</div><div class="value" style="font-size:13px">本区间无退款明细</div><div class="sub">7月起开始记录</div></div>'}
+  `;
+}
+
+// ==================== SECTION: 流量与转化 ====================
+function renderTrafficKPI(days) {
+  const actualDays = days.filter(d => d.a > 0);
+  const totalA = actualDays.reduce((s,r) => s+r.a, 0);
+  const totalB = actualDays.reduce((s,r) => s+r.b, 0);
+  const totalV = actualDays.reduce((s,r) => s+r.v, 0);
+  const avgAov = totalB ? Math.round(totalA / totalB) : 0;
+  const maxAov = actualDays.length ? Math.max(...actualDays.map(r => r.aov)) : 0;
+  const hasCart = actualDays.some(r => r.cart_users !== undefined);
+  const totalCart = hasCart ? actualDays.reduce((s,r) => s + (r.cart_users||0), 0) : 0;
+  const avgCr = hasCart && totalV ? (totalCart / totalV * 100).toFixed(1) : '—';
+
+  const el = document.getElementById('kpiTraffic');
+  el.innerHTML = `
+    <div class="kpi-card" style="border-left-color:#f59e0b"><div class="label">访客数</div><div class="value">${totalV>=10000?(totalV/10000).toFixed(1)+'万':totalV.toLocaleString()}</div><div class="sub">日均 ${(totalV/actualDays.length).toFixed(1)}</div></div>
+    <div class="kpi-card" style="border-left-color:#f97316"><div class="label">买家数</div><div class="value">${totalB.toLocaleString()}</div><div class="sub">日均 ${Math.round(totalB/actualDays.length).toLocaleString()}</div></div>
+    <div class="kpi-card" style="border-left-color:#06b6d4"><div class="label">客单价</div><div class="value">${avgAov.toLocaleString()}</div><div class="sub">最高 ${maxAov.toLocaleString()} / 日均</div></div>
+    ${hasCart?`<div class="kpi-card" style="border-left-color:#8b5cf6"><div class="label">加购人数</div><div class="value">${totalCart>=10000?(totalCart/10000).toFixed(1)+'万':totalCart.toLocaleString()}</div><div class="sub">日均 ${(totalCart/actualDays.length).toFixed(1)} / 加购率均 ${avgCr}%</div></div>`:'<div class="kpi-card" style="border-left-color:#94a3b8"><div class="label">加购数据</div><div class="value" style="font-size:13px">本区间无</div><div class="sub">部分月份未记录</div></div>'}
+  `;
+}
+
+// ==================== 同比对比 ====================
+function renderCompare(days) {
+  let hasLastYear = false;
+  let totalA = 0, totalLy = 0;
+
+  days.forEach(d => {
+    const ly = calcLastYear(d.a, d.y);
+    if (ly !== null) { hasLastYear = true; totalA += d.a; totalLy += ly; }
+  });
+
+  // Net YoY
+  const hasNetYoY = days.some(r => r.y_net !== null);
+  let totalNet = 0, totalLyNet = 0;
+  if (hasNetYoY) {
+    days.forEach(d => {
+      totalNet += d.post_refund || 0;
+      totalLyNet += d.ly_post_refund || 0;
+    });
+  }
+
+  const el = document.getElementById('compareGrid');
+
+  if (!hasLastYear && !hasNetYoY) {
+    el.innerHTML = '';
+    return;
+  }
+
+  const yoySales = hasLastYear ? ((totalA / totalLy - 1) * 100).toFixed(1) : null;
+  const yoyNet = hasNetYoY && totalLyNet > 0 ? ((totalNet / totalLyNet - 1) * 100).toFixed(1) : null;
+
+  el.innerHTML = `
+    ${hasLastYear?`<div class="compare-card">
+      <h4>GMV 同比（2025）</h4>
+      <div class="stat"><span>2026 达成</span><span class="val">${fmt(totalA)}</span></div>
+      <div class="stat"><span>2025 同期</span><span class="val">${fmt(totalLy)}（计算值）</span></div>
+      <div class="stat"><span>同比增长</span><span class="val ${parseFloat(yoySales)>=0?'good':'bad'}">${yoySales}%</span></div>
+      <div class="stat"><span>差额</span><span class="val ${parseFloat(yoySales)>=0?'good':'bad'}">${totalA>=totalLy?'+':''}${fmt(totalA-totalLy)}</span></div>
+    </div>`:''}
+    ${hasNetYoY?`<div class="compare-card">
+      <h4>剔退后净额同比（2025）</h4>
+      <div class="stat"><span>2026 去退净额</span><span class="val">${fmt(totalNet)}</span></div>
+      <div class="stat"><span>2025 去退净额</span><span class="val">${fmt(totalLyNet)}（飞书表提取）</span></div>
+      <div class="stat"><span>同比增长</span><span class="val ${parseFloat(yoyNet)>=0?'good':'bad'}">${yoyNet}%</span></div>
+      <div class="stat"><span>差额</span><span class="val ${parseFloat(yoyNet)>=0?'good':'bad'}">${totalNet>=totalLyNet?'+':''}${fmt(totalNet-totalLyNet)}</span></div>
+    </div>`:''}
+    <div class="compare-card">
+      <h4>增长幅度</h4>
+      <div class="stat"><span>GMV 增长天数</span><span class="val good">${hasLastYear?days.filter(d=>d.y!==null&&d.y>0).length:0}天</span></div>
+      <div class="stat"><span>GMV 下降天数</span><span class="val bad">${hasLastYear?days.filter(d=>d.y!==null&&d.y<0).length:0}天</span></div>
+      <div class="stat"><span>剔退最高同比</span><span class="val good">${(()=>{const v=days.filter(d=>d.y_net!==null&&d.y_net>0).map(d=>d.y_net);return v.length?Math.max(...v).toFixed(1):'—';})()}%</span></div>
+      <div class="stat"><span>剔退最低同比</span><span class="val bad">${(()=>{const v=days.filter(d=>d.y_net!==null&&!isNaN(d.y_net)).map(d=>d.y_net);return v.length?Math.min(...v).toFixed(1):'—';})()}%</span></div>
+    </div>
+    <div class="compare-card">
+      <h4>备注</h4>
+      <div style="font-size:10px;color:#64748b;line-height:1.6">
+        GMV 同期根据前同比%反向计算；<br>
+        剔退净额同比从飞书 2025 段逐日提取，<br>
+        春节期间同比暴涨（1月底-2月初）因2025年春节在1月底，存在错位。
+      </div>
+    </div>
+  `;
+}
+
+// ==================== CHARTS ====================
+function renderDailyChart(days) {
+  if (typeof Chart === 'undefined') return;
+  const labels = days.map(r => r.date.slice(5));
+  const ctx = document.getElementById('dailyChart').getContext('2d');
+  if (CHART_INSTANCES.daily) CHART_INSTANCES.daily.destroy();
+
+  const lyData = days.map(r => calcLastYear(r.a, r.y));
+
+  CHART_INSTANCES.daily = new Chart(ctx, {
+    type:'bar',
+    data:{
+      labels,
+      datasets:[
+        {label:'目标',data:days.map(r=>r.t),backgroundColor:'rgba(26,35,126,.12)',borderColor:'rgba(26,35,126,.25)',borderWidth:1,borderRadius:2,order:3},
+        {label:'达成',data:days.map(r=>r.a),backgroundColor:'rgba(18,183,106,.45)',borderColor:'#12b76a',borderWidth:1,borderRadius:2,order:3},
+        {label:'同期(2025)',data:lyData,backgroundColor:'rgba(152,162,179,.3)',borderColor:'#98a2b3',borderWidth:1,borderRadius:2,order:3,type:'bar'},
+        {label:'达成率',data:days.map(r=>r.rr*100),type:'line',borderColor:'#f79009',backgroundColor:'rgba(247,144,9,.1)',fill:true,pointRadius:2,pointHoverRadius:5,borderWidth:2,tension:.3,yAxisID:'y1',order:1}
+      ]
+    },
+    options:{
+      responsive:true,maintainAspectRatio:false,
+      interaction:{mode:'index',intersect:false},
+      plugins:{legend:{position:'top',labels:{boxWidth:12,font:{size:10}}}},
+      scales:{
+        x:{grid:{display:false},ticks:{font:{size:9},maxTicksLimit:25}},
+        y:{type:'linear',position:'left',title:{display:true,text:'销售额(元)',font:{size:9}},ticks:{callback:v=>v>=10000?(v/10000)+'万':v,font:{size:9}}},
+        y1:{type:'linear',position:'right',min:0,max:Math.max(...days.map(r=>r.rr*100))*1.3,grid:{display:false},title:{display:true,text:'达成率(%)',font:{size:9}},ticks:{callback:v=>v+'%',font:{size:9}}}
+      }
+    }
+  });
+}
+
+function renderRateChart(days) {
+  if (typeof Chart === 'undefined') return;
+  const labels = days.map(r => r.date.slice(5));
+  const ctx = document.getElementById('rateChart').getContext('2d');
+  if (CHART_INSTANCES.rate) CHART_INSTANCES.rate.destroy();
+  CHART_INSTANCES.rate = new Chart(ctx,{
+    type:'line',
+    data:{labels,
+      datasets:[
+        {label:'达成率',data:days.map(r=>r.rr*100),borderColor:'#12b76a',backgroundColor:'rgba(18,183,106,.1)',fill:true,pointRadius:2,tension:.3,borderWidth:2},
+        {label:'退款率',data:days.map(r=>r.ref!==null?r.ref:null),borderColor:'#f04438',backgroundColor:'rgba(240,68,56,.1)',fill:true,pointRadius:2,tension:.3,borderWidth:2,spanGaps:false}
+      ]
+    },
+    options:{
+      responsive:true,maintainAspectRatio:false,
+      interaction:{mode:'index',intersect:false},
+      plugins:{legend:{position:'top',labels:{boxWidth:12,font:{size:10}}}},
+      scales:{
+        x:{grid:{display:false},ticks:{font:{size:9},maxTicksLimit:15}},
+        y:{title:{display:true,text:'%',font:{size:9}},ticks:{font:{size:9},callback:v=>v+'%'},min:0}
+      }
+    }
+  });
+}
+
+function renderTrafficChart(days) {
+  if (typeof Chart === 'undefined') return;
+  const labels = days.map(r => r.date.slice(5));
+  const ctx = document.getElementById('trafficChart').getContext('2d');
+  if (CHART_INSTANCES.traffic) CHART_INSTANCES.traffic.destroy();
+  CHART_INSTANCES.traffic = new Chart(ctx,{
+    type:'bar',
+    data:{labels,
+      datasets:[
+        {label:'访客',data:days.map(r=>r.v),backgroundColor:'rgba(69,100,255,.35)',borderColor:'rgba(69,100,255,.6)',borderWidth:1,borderRadius:2,order:2},
+        {label:'买家',data:days.map(r=>r.b),backgroundColor:'rgba(247,144,9,.45)',borderColor:'#f79009',borderWidth:1,borderRadius:2,order:2},
+        {label:'客单价',data:days.map(r=>r.aov),type:'line',borderColor:'#12b76a',pointRadius:2,tension:.3,borderWidth:2,yAxisID:'y1',order:1}
+      ]
+    },
+    options:{
+      responsive:true,maintainAspectRatio:false,
+      interaction:{mode:'index',intersect:false},
+      plugins:{legend:{position:'top',labels:{boxWidth:12,font:{size:10}}}},
+      scales:{
+        x:{grid:{display:false},ticks:{font:{size:9},maxTicksLimit:15}},
+        y:{title:{display:true,text:'人数',font:{size:9}},ticks:{font:{size:9}}},
+        y1:{type:'linear',position:'right',title:{display:true,text:'客单价',font:{size:9}},grid:{display:false},ticks:{font:{size:9}}}
+      }
+    }
+  });
+}
+
+function renderAOVChart(days) {
+  if (typeof Chart === 'undefined') return;
+  const labels = days.map(r => r.date.slice(5));
+  const ctx = document.getElementById('aovChart').getContext('2d');
+  if (CHART_INSTANCES.aov) CHART_INSTANCES.aov.destroy();
+  CHART_INSTANCES.aov = new Chart(ctx,{
+    type:'line',
+    data:{labels,
+      datasets:[
+        {label:'客单价',data:days.map(r=>r.aov),borderColor:'#455eff',backgroundColor:'rgba(69,94,255,.08)',fill:true,pointRadius:2,tension:.3,borderWidth:2},
+        {label:'买家数',data:days.map(r=>r.b),borderColor:'#f79009',backgroundColor:'rgba(247,144,9,.05)',fill:true,pointRadius:2,tension:.3,borderWidth:2,yAxisID:'y1'}
+      ]
+    },
+    options:{
+      responsive:true,maintainAspectRatio:false,
+      interaction:{mode:'index',intersect:false},
+      plugins:{legend:{position:'top',labels:{boxWidth:12,font:{size:10}}}},
+      scales:{
+        x:{grid:{display:false},ticks:{font:{size:9},maxTicksLimit:15}},
+        y:{title:{display:true,text:'客单价(元)',font:{size:9}},ticks:{font:{size:9}}},
+        y1:{type:'linear',position:'right',title:{display:true,text:'买家数',font:{size:9}},grid:{display:false},ticks:{font:{size:9}}}
+      }
+    }
+  });
+}
+
+function renderCartChart(days) {
+  if (typeof Chart === 'undefined') return;
+  const labels = days.map(r => r.date.slice(5));
+  const ctx = document.getElementById('cartChart').getContext('2d');
+  if (CHART_INSTANCES.cart) CHART_INSTANCES.cart.destroy();
+  const hasCartRate = days.some(r => r.cart_rate !== undefined && r.cart_rate > 0);
+  const hasCartConv = days.some(r => r.cart_conv !== undefined && r.cart_conv > 0);
+  const datasets = [];
+  if (hasCartRate) datasets.push({label:'加购率(%)',data:days.map(r=>r.cart_rate||null),borderColor:'#8b5cf6',backgroundColor:'rgba(139,92,246,.1)',fill:true,pointRadius:2,tension:.3,borderWidth:2});
+  if (hasCartConv) datasets.push({label:'加购转化率(%)',data:days.map(r=>r.cart_conv||null),borderColor:'#06b6d4',backgroundColor:'rgba(6,182,212,.1)',fill:true,pointRadius:2,tension:.3,borderWidth:2,yAxisID:hasCartRate?'y1':undefined});
+  if (!datasets.length) {
+    document.getElementById('cartChart').parentElement.innerHTML = '<div style="text-align:center;padding:24px;color:#94a3b8;font-size:12px">本区间无加购数据</div>';
+    return;
+  }
+  CHART_INSTANCES.cart = new Chart(ctx,{
+    type:'line',
+    data:{labels, datasets},
+    options:{
+      responsive:true,maintainAspectRatio:false,
+      interaction:{mode:'index',intersect:false},
+      plugins:{legend:{position:'top',labels:{boxWidth:12,font:{size:10}}}},
+      scales:{
+        x:{grid:{display:false},ticks:{font:{size:9},maxTicksLimit:15}},
+        y:{title:{display:true,text:'%',font:{size:9}},ticks:{font:{size:9},callback:v=>v+'%'},min:0},
+        ...(hasCartRate && hasCartConv ? {y1:{type:'linear',position:'right',title:{display:true,text:'%',font:{size:9}},grid:{display:false},ticks:{font:{size:9},callback:v=>v+'%'}}} : {})
+      }
+    }
+  });
+}
+
+function renderYoYChart(days) {
+  if (typeof Chart === 'undefined') return;
+  const labels = days.map(r => r.date.slice(5));
+  const ctx = document.getElementById('yoyChart').getContext('2d');
+  if (CHART_INSTANCES.yoy) CHART_INSTANCES.yoy.destroy();
+  CHART_INSTANCES.yoy = new Chart(ctx,{
+    type:'bar',
+    data:{labels,
+      datasets:[{
+        label:'前同比(%)',
+        data:days.map(r=>r.y!==null?r.y:null),
+        backgroundColor:days.map(r=>r.y!==null?(r.y>=0?'rgba(18,183,106,.6)':'rgba(240,68,56,.6)'):'rgba(0,0,0,0)'),
+        borderColor:days.map(r=>r.y!==null?(r.y>=0?'#12b76a':'#f04438'):'rgba(0,0,0,0)'),
+        borderWidth:1,borderRadius:2
+      }]
+    },
+    options:{
+      responsive:true,maintainAspectRatio:false,
+      plugins:{legend:{position:'top',labels:{boxWidth:12,font:{size:10}}}},
+      scales:{
+        x:{grid:{display:false},ticks:{font:{size:9},maxTicksLimit:15}},
+        y:{title:{display:true,text:'同比%',font:{size:9}},ticks:{font:{size:9},callback:v=>v+'%'}}
+      }
+    }
+  });
+}
+
+// ==================== INSIGHTS ====================
+function renderInsights(days) {
+  const totalA = days.reduce((s,r) => s+r.a, 0);
+  const totalT = days.reduce((s,r) => s+r.t, 0);
+  const rate = totalA / totalT;
+  const topDay = days.reduce((best, d) => d.a > best.a ? d : best, days[0]);
+  const lowDay = days.reduce((worst, d) => d.rr < worst.rr ? d : worst, days[0]);
+  const highAov = days.reduce((best, d) => d.aov > best.aov ? d : best, days[0]);
+  const refVals = days.filter(r => r.ref !== null);
+  const avgRef = refVals.length ? refVals.reduce((s,r) => s+r.ref, 0) / refVals.length : 0;
+  const highRef = refVals.length ? refVals.reduce((worst, d) => d.ref > worst.ref ? d : worst, refVals[0]) : null;
+
+  const items = [];
+  if (days.length >= 7) {
+    const first7 = days.slice(0,7), last7 = days.slice(-7);
+    const first7avg = first7.reduce((s,r)=>s+r.a,0)/7;
+    const last7avg = last7.reduce((s,r)=>s+r.a,0)/7;
+    const trend = ((last7avg/first7avg-1)*100).toFixed(1);
+    items.push({text:`近7天日均${fmt(last7avg)}`+(trend>=0?`, 较前期增长${trend}%`:(trend.startsWith('-')?`, 较前期${trend}%`:`, 较前期下降${Math.abs(parseFloat(trend))}%`)),cls:parseFloat(trend)>=0?'pos':'neg'});
+  }
+  items.push({text:`单日最高：${topDay.date.slice(5)} 达成 ${fmt(topDay.a)}（达成率${fmtPct(topDay.rr)}）`,cls:'pos'});
+  items.push({text:`单日最低：${lowDay.date.slice(5)} 达成率仅 ${fmtPct(lowDay.rr)}（${fmt(lowDay.a)}）`,cls:'neg'});
+  items.push({text:`最高客单价：${highAov.date.slice(5)} 达 ${highAov.aov}元/单`,cls:'pos'});
+  if (avgRef > 30 && highRef) items.push({text:`退款率偏高（均值${avgRef.toFixed(1)}%），需关注${highRef.date.slice(5)}达${highRef.ref}%`,cls:'neg'});
+  if (rate >= 1) items.push({text:`期间达成率${fmtPct(rate)}，整体超额完成`,cls:'pos'});
+  else items.push({text:`期间达成率${fmtPct(rate)}，未达目标，差额${fmt(totalT-totalA)}`,cls:'neg'});
+
+  const el = document.getElementById('insights');
+  el.innerHTML = `<h3>区间分析</h3><ul>${items.map(i => `<li class="${i.cls}">${i.text}</li>`).join('')}</ul>`;
+}
+
+// ==================== TABLE ====================
+function renderTable(days) {
+  const el = document.getElementById('dailyTable');
+  let html = `<table><thead><tr>
+    <th>日期</th><th>节奏</th><th>目标</th><th>达成</th><th>达成率</th><th>同期(2025)</th><th>前同比</th><th>退款率</th><th>退款金额</th><th>去退金额</th><th>访客</th><th>买家</th><th>客单价</th><th>加购人数</th><th>加购率</th><th>加购转化率</th>
+  </tr></thead><tbody>`;
+  days.forEach(d => {
+    const rateCls = d.rr >= 1 ? 'high-achieve' : d.rr < .6 ? 'low-achieve' : '';
+    const yoyCls = d.y >= 0 ? 'high-achieve' : d.y !== null && d.y < 0 ? 'low-achieve' : '';
+    const isWeekend = d.w === 6 || d.w === 7;
+    const ly = calcLastYear(d.a, d.y);
+    const refAmt = d.refund_amt !== undefined ? fmt(d.refund_amt) : '—';
+    const postRef = d.post_refund !== undefined ? fmt(d.post_refund) : '—';
+    const refStr = d.ref !== null ? d.ref + '%' : '—';
+    const yStr = d.y !== null ? (d.y >= 0 ? '+' : '') + d.y + '%' : '—';
+    html += `<tr class="${isWeekend?'weekend':''}">
+      <td>${d.date.slice(5)}</td><td>${d.r}</td>
+      <td>${fmt(d.t)}</td><td>${fmt(d.a)}</td>
+      <td class="${rateCls}">${fmtPct(d.rr)}</td>
+      <td style="color:#98a2b3">${ly!==null?fmt(ly):'—'}</td>
+      <td class="${yoyCls}">${yStr}</td>
+      <td>${refStr}</td>
+      <td>${refAmt}</td>
+      <td>${postRef}</td>
+      <td>${d.v.toLocaleString()}</td>
+      <td>${d.b.toLocaleString()}</td>
+      <td>${d.aov.toLocaleString()}</td>
+      <td>${d.cart_users!==undefined?d.cart_users.toLocaleString():'—'}</td>
+      <td>${d.cart_rate!==undefined&&d.cart_rate>0?d.cart_rate+'%':'—'}</td>
+      <td>${d.cart_conv!==undefined&&d.cart_conv>0?d.cart_conv+'%':'—'}</td>
+    </tr>`;
+  });
+  html += '</tbody></table>';
+  el.innerHTML = html;
+}
+
+// ==================== START ====================
+loadData();
+// Chart.js 异步加载完成后重绘图表
+(function retryCharts(){if(typeof Chart!=='undefined'){renderAll();}else{setTimeout(retryCharts,500);}})();
+</script>
+</body>
+</html>
