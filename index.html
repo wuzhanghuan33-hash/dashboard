@@ -432,6 +432,7 @@ function renderTrafficKPI(days) {
   const hasCart = actualDays.some(r => r.cart_users !== undefined);
   const totalCart = hasCart ? actualDays.reduce((s,r) => s + (r.cart_users||0), 0) : 0;
   const avgCr = hasCart && totalV ? (totalCart / totalV * 100).toFixed(1) : '—';
+  const totalT = actualDays.reduce((s,r) => s+r.t, 0);
 
   // 目标值
   const hasVTarget = actualDays.some(r => r.v_t > 0);
@@ -441,7 +442,8 @@ function renderTrafficKPI(days) {
   const totalBTarget = hasBTarget ? actualDays.reduce((s,r) => s + (r.b_t||0), 0) : 0;
   const bRate = hasBTarget && totalBTarget > 0 ? (totalB / totalBTarget * 100).toFixed(1) : null;
   const hasAovTarget = actualDays.some(r => r.aov_t > 0);
-  const avgAovTarget = hasAovTarget ? actualDays.filter(r => r.aov_t > 0).reduce((s,r) => s+r.aov_t, 0) / actualDays.filter(r => r.aov_t > 0).length : null;
+  // 周期目标客单价 = 总目标业绩 / 总目标买家（口径一致）
+  const periodTargetAov = hasAovTarget && totalBTarget > 0 ? Math.round(totalT / totalBTarget) : null;
   const hasCartTarget = actualDays.some(r => r.cart_users_t > 0);
   const totalCartTarget = hasCartTarget ? actualDays.reduce((s,r) => s + (r.cart_users_t||0), 0) : 0;
   const cartRate = hasCartTarget && totalCartTarget > 0 ? (totalCart / totalCartTarget * 100).toFixed(1) : null;
@@ -450,7 +452,7 @@ function renderTrafficKPI(days) {
   el.innerHTML = `
     <div class="kpi-card" style="border-left-color:#f59e0b"><div class="label">访客数${vRate!==null?' · 目标达成 '+vRate+'%':''}</div><div class="value">${totalV>=10000?(totalV/10000).toFixed(1)+'万':totalV.toLocaleString()}</div><div class="sub">日均 ${(totalV/actualDays.length).toFixed(1)}${hasVTarget?' · 目标 '+fmt(totalVTarget):''}</div></div>
     <div class="kpi-card" style="border-left-color:#f97316"><div class="label">买家数${bRate!==null?' · 目标达成 '+bRate+'%':''}</div><div class="value">${totalB.toLocaleString()}</div><div class="sub">日均 ${Math.round(totalB/actualDays.length).toLocaleString()}${hasBTarget?' · 目标 '+fmt(totalBTarget):''}</div></div>
-    <div class="kpi-card" style="border-left-color:#06b6d4"><div class="label">客单价${avgAovTarget!==null?' · 目标达成 '+(avgAov/avgAovTarget*100).toFixed(2)+'%':''}</div><div class="value">${avgAov.toLocaleString()}</div><div class="sub">最高 ${maxAov.toLocaleString()}${avgAovTarget!==null?' · 目标 '+avgAovTarget.toFixed(2)+'元':''}</div></div>
+    <div class="kpi-card" style="border-left-color:#06b6d4"><div class="label">客单价${periodTargetAov!==null?' · 目标达成 '+(avgAov/periodTargetAov*100).toFixed(2)+'%':''}</div><div class="value">${avgAov.toLocaleString()}</div><div class="sub">最高 ${maxAov.toLocaleString()}${periodTargetAov!==null?' · 目标 '+periodTargetAov.toFixed(2)+'元':''}</div></div>
     ${hasCart?`<div class="kpi-card" style="border-left-color:#8b5cf6"><div class="label">加购人数${cartRate!==null?' · 目标达成 '+cartRate+'%':''}</div><div class="value">${totalCart>=10000?(totalCart/10000).toFixed(1)+'万':totalCart.toLocaleString()}</div><div class="sub">日均 ${(totalCart/actualDays.length).toFixed(1)} · 加购率 ${avgCr}%${hasCartTarget?' · 目标 '+fmt(totalCartTarget):''}</div></div>`:'<div class="kpi-card" style="border-left-color:#94a3b8"><div class="label">加购数据</div><div class="value" style="font-size:13px">本区间无</div><div class="sub">部分月份未记录</div></div>'}
   `;
 }
