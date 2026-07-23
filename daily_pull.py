@@ -50,6 +50,17 @@ SHEET7 = {
         "cart_users": {"idx": 29, "label": "加购人数达成"},
         "cart_rate":  {"idx": 31, "label": "加购率达成"},
         "cart_conv":  {"idx": 33, "label": "加购转化率达成"},
+        # 各指标目标（从飞书提取）
+        "visitors_target":   {"idx": 20, "label": "访客目标"},
+        "buyers_target":     {"idx": 22, "label": "买家目标"},
+        "aov_target":        {"idx": 26, "label": "客单价目标"},
+        "ref_rate_target":   {"idx": 15, "label": "退款率目标"},
+        "refund_amt_target": {"idx": 9,  "label": "退款金额目标"},
+        "post_refund_target":{"idx": 11, "label": "去退金额目标"},
+        "conv_rate_target":  {"idx": 24, "label": "转化率目标"},
+        "cart_users_target": {"idx": 28, "label": "加购人数目标"},
+        "cart_rate_target":  {"idx": 30, "label": "加购率目标"},
+        "cart_conv_target":  {"idx": 32, "label": "加购转化率目标"},
     },
 }
 
@@ -391,6 +402,25 @@ def extract_july_data(target_id):
                     day["y"] = round(val * 100, 1)
                 else:
                     day["y"] = None
+            # 目标字段
+            elif field == "visitors_target":
+                day["v_t"] = int(val) if isinstance(val, (int, float)) else 0
+            elif field == "buyers_target":
+                day["b_t"] = int(val) if isinstance(val, (int, float)) else 0
+            elif field == "aov_target":
+                day["aov_t"] = int(val) if isinstance(val, (int, float)) else 0
+            elif field == "ref_rate_target":
+                day["ref_t"] = round(val * 100, 1) if isinstance(val, (int, float)) else 0
+            elif field in ("refund_amt_target", "post_refund_target"):
+                day[field.replace("_target", "_t")] = int(val) if isinstance(val, (int, float)) else 0
+            elif field == "conv_rate_target":
+                day["conv_t"] = val if isinstance(val, (int, float)) else 0
+            elif field == "cart_users_target":
+                day["cart_users_t"] = int(val) if isinstance(val, (int, float)) else 0
+            elif field == "cart_rate_target":
+                day["cart_rate_t"] = round(val * 100, 1) if isinstance(val, (int, float)) else 0
+            elif field == "cart_conv_target":
+                day["cart_conv_t"] = round(val * 100, 1) if isinstance(val, (int, float)) else 0
 
         # 达成率 = a / t
         day["rr"] = round(day["a"] / day["t"], 3) if day["t"] > 0 else 0
@@ -448,6 +478,12 @@ def merge_days(existing_days, new_days):
                            "cart_users", "cart_rate", "cart_conv"):
                     if nd.get(f) == 0 and ed.get(f, 0) > 0:
                         nd[f] = ed[f]
+
+            # 目标值始终保留（飞书目标行稳定，新数据可能为空）
+            for f in ("v_t", "b_t", "aov_t", "ref_t", "refund_amt_t", "post_refund_t",
+                       "conv_t", "cart_users_t", "cart_rate_t", "cart_conv_t"):
+                if nd.get(f) in (0, None, 0.0) and ed.get(f, 0) > 0:
+                    nd[f] = ed[f]
 
             # 保留来自 backfill_yoy_net.py 的外部注入字段
             for f in ("ly_post_refund", "y_net"):
