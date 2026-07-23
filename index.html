@@ -443,7 +443,7 @@ function renderTrafficKPI(days) {
   const bRate = hasBTarget && totalBTarget > 0 ? (totalB / totalBTarget * 100).toFixed(1) : null;
   const hasAovTarget = actualDays.some(r => r.aov_t > 0);
   // 周期目标客单价 = 总目标业绩 / 总目标买家（口径一致）
-  const periodTargetAov = hasAovTarget && totalBTarget > 0 ? Math.round(totalT / totalBTarget) : null;
+  const periodTargetAov = hasAovTarget && totalBTarget > 0 ? totalT / totalBTarget : null;
   const hasCartTarget = actualDays.some(r => r.cart_users_t > 0);
   const totalCartTarget = hasCartTarget ? actualDays.reduce((s,r) => s + (r.cart_users_t||0), 0) : 0;
   const cartRate = hasCartTarget && totalCartTarget > 0 ? (totalCart / totalCartTarget * 100).toFixed(1) : null;
