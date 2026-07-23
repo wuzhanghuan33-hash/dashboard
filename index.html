@@ -87,6 +87,7 @@ tbody tr:hover { background:#eef2ff; }
 tbody tr.weekend td { color:#94a3b8; }
 .high-achieve { color:#16a34a; font-weight:600; }
 .low-achieve { color:#dc2626; font-weight:600; }
+td .tgt { font-size:8px; color:#94a3b8; font-weight:400; }
 
 /* Insights */
 .insights { background:#fff; border-radius:8px; padding:10px 12px; box-shadow:0 1px 2px rgba(0,0,0,.04); }
@@ -405,9 +406,13 @@ function renderRefundKPI(days) {
   const avgRef = totalA ? totalRefundAmt / totalA * 100 : 0;
   const maxRef = actualDays.length ? Math.max(...actualDays.map(r => r.ref||0)) : 0;
 
+  // 退款率目标
+  const refDays = actualDays.filter(r => r.ref_t !== undefined && r.ref_t > 0);
+  const avgRefTarget = refDays.length ? refDays.reduce((s,r) => s+r.ref_t, 0) / refDays.length : null;
+
   const el = document.getElementById('kpiRefund');
   el.innerHTML = `
-    <div class="kpi-card" style="border-left-color:#ef4444"><div class="label">平均退款率</div><div class="value" style="color:${avgRef>35?'#dc2626':'#16a34a'}">${avgRef.toFixed(1)}%</div><div class="sub">最高 ${maxRef.toFixed(1)}%</div></div>
+    <div class="kpi-card" style="border-left-color:#ef4444"><div class="label">平均退款率${avgRefTarget!==null?' (目标 '+avgRefTarget.toFixed(1)+'%)':''}</div><div class="value" style="color:${avgRef>35?'#dc2626':'#16a34a'}">${avgRef.toFixed(1)}%</div><div class="sub">最高 ${maxRef.toFixed(1)}% ${avgRefTarget!==null?'· '+(avgRef<=avgRefTarget?'达标':'超标 '+(avgRef-avgRefTarget).toFixed(1)+'pp'):''}</div></div>
     ${hasRefundAmt?`
     <div class="kpi-card" style="border-left-color:#f97316"><div class="label">退款金额</div><div class="value" style="color:#dc2626">${fmt(totalRefundAmt)}</div><div class="sub">占达成 ${(totalRefundAmt/totalA*100).toFixed(1)}%</div></div>
     <div class="kpi-card" style="border-left-color:#16a34a"><div class="label">去退金额</div><div class="value">${fmt(totalPostRefund)}</div><div class="sub">剔除退款后净额</div></div>
@@ -427,12 +432,25 @@ function renderTrafficKPI(days) {
   const totalCart = hasCart ? actualDays.reduce((s,r) => s + (r.cart_users||0), 0) : 0;
   const avgCr = hasCart && totalV ? (totalCart / totalV * 100).toFixed(1) : '—';
 
+  // 目标值
+  const hasVTarget = actualDays.some(r => r.v_t > 0);
+  const totalVTarget = hasVTarget ? actualDays.reduce((s,r) => s + (r.v_t||0), 0) : 0;
+  const vRate = hasVTarget && totalVTarget > 0 ? (totalV / totalVTarget * 100).toFixed(1) : null;
+  const hasBTarget = actualDays.some(r => r.b_t > 0);
+  const totalBTarget = hasBTarget ? actualDays.reduce((s,r) => s + (r.b_t||0), 0) : 0;
+  const bRate = hasBTarget && totalBTarget > 0 ? (totalB / totalBTarget * 100).toFixed(1) : null;
+  const hasAovTarget = actualDays.some(r => r.aov_t > 0);
+  const avgAovTarget = hasAovTarget ? actualDays.filter(r => r.aov_t > 0).reduce((s,r) => s+r.aov_t, 0) / actualDays.filter(r => r.aov_t > 0).length : null;
+  const hasCartTarget = actualDays.some(r => r.cart_users_t > 0);
+  const totalCartTarget = hasCartTarget ? actualDays.reduce((s,r) => s + (r.cart_users_t||0), 0) : 0;
+  const cartRate = hasCartTarget && totalCartTarget > 0 ? (totalCart / totalCartTarget * 100).toFixed(1) : null;
+
   const el = document.getElementById('kpiTraffic');
   el.innerHTML = `
-    <div class="kpi-card" style="border-left-color:#f59e0b"><div class="label">访客数</div><div class="value">${totalV>=10000?(totalV/10000).toFixed(1)+'万':totalV.toLocaleString()}</div><div class="sub">日均 ${(totalV/actualDays.length).toFixed(1)}</div></div>
-    <div class="kpi-card" style="border-left-color:#f97316"><div class="label">买家数</div><div class="value">${totalB.toLocaleString()}</div><div class="sub">日均 ${Math.round(totalB/actualDays.length).toLocaleString()}</div></div>
-    <div class="kpi-card" style="border-left-color:#06b6d4"><div class="label">客单价</div><div class="value">${avgAov.toLocaleString()}</div><div class="sub">最高 ${maxAov.toLocaleString()} / 日均</div></div>
-    ${hasCart?`<div class="kpi-card" style="border-left-color:#8b5cf6"><div class="label">加购人数</div><div class="value">${totalCart>=10000?(totalCart/10000).toFixed(1)+'万':totalCart.toLocaleString()}</div><div class="sub">日均 ${(totalCart/actualDays.length).toFixed(1)} / 加购率均 ${avgCr}%</div></div>`:'<div class="kpi-card" style="border-left-color:#94a3b8"><div class="label">加购数据</div><div class="value" style="font-size:13px">本区间无</div><div class="sub">部分月份未记录</div></div>'}
+    <div class="kpi-card" style="border-left-color:#f59e0b"><div class="label">访客数${vRate!==null?' · 目标达成 '+vRate+'%':''}</div><div class="value">${totalV>=10000?(totalV/10000).toFixed(1)+'万':totalV.toLocaleString()}</div><div class="sub">日均 ${(totalV/actualDays.length).toFixed(1)}${hasVTarget?' · 目标 '+fmt(totalVTarget):''}</div></div>
+    <div class="kpi-card" style="border-left-color:#f97316"><div class="label">买家数${bRate!==null?' · 目标达成 '+bRate+'%':''}</div><div class="value">${totalB.toLocaleString()}</div><div class="sub">日均 ${Math.round(totalB/actualDays.length).toLocaleString()}${hasBTarget?' · 目标 '+fmt(totalBTarget):''}</div></div>
+    <div class="kpi-card" style="border-left-color:#06b6d4"><div class="label">客单价${avgAovTarget!==null?' · 目标 '+avgAovTarget+'元':''}</div><div class="value">${avgAov.toLocaleString()}</div><div class="sub">最高 ${maxAov.toLocaleString()}${avgAovTarget!==null?' · '+(avgAov>=avgAovTarget?'达标 ':'差距 ')+(avgAov-avgAovTarget).toLocaleString()+'元':''}</div></div>
+    ${hasCart?`<div class="kpi-card" style="border-left-color:#8b5cf6"><div class="label">加购人数${cartRate!==null?' · 目标达成 '+cartRate+'%':''}</div><div class="value">${totalCart>=10000?(totalCart/10000).toFixed(1)+'万':totalCart.toLocaleString()}</div><div class="sub">日均 ${(totalCart/actualDays.length).toFixed(1)} · 加购率 ${avgCr}%${hasCartTarget?' · 目标 '+fmt(totalCartTarget):''}</div></div>`:'<div class="kpi-card" style="border-left-color:#94a3b8"><div class="label">加购数据</div><div class="value" style="font-size:13px">本区间无</div><div class="sub">部分月份未记录</div></div>'}
   `;
 }
 
@@ -722,9 +740,9 @@ function renderTable(days) {
       <td>${refStr}</td>
       <td>${refAmt}</td>
       <td>${postRef}</td>
-      <td>${d.v.toLocaleString()}</td>
-      <td>${d.b.toLocaleString()}</td>
-      <td>${d.aov.toLocaleString()}</td>
+      <td class="${d.v_t>0?(d.v>=d.v_t?'high-achieve':'low-achieve'):''}">${d.v.toLocaleString()}<span class="tgt">${d.v_t>0?'/'+d.v_t.toLocaleString():''}</span></td>
+      <td class="${d.b_t>0?(d.b>=d.b_t?'high-achieve':'low-achieve'):''}">${d.b.toLocaleString()}<span class="tgt">${d.b_t>0?'/'+d.b_t.toLocaleString():''}</span></td>
+      <td class="${d.aov_t>0?(d.aov>=d.aov_t?'high-achieve':'low-achieve'):''}">${d.aov.toLocaleString()}<span class="tgt">${d.aov_t>0?'/'+d.aov_t.toLocaleString():''}</span></td>
       <td>${d.cart_users!==undefined?d.cart_users.toLocaleString():'—'}</td>
       <td>${d.cart_rate!==undefined&&d.cart_rate>0?d.cart_rate+'%':'—'}</td>
       <td>${d.cart_conv!==undefined&&d.cart_conv>0?d.cart_conv+'%':'—'}</td>
