@@ -16,7 +16,7 @@ cd "$DIR" || exit 1
 /usr/bin/python3 fix_data.py >> "$LOG" 2>&1
 
 # 4. 推送到 GitHub Pages
-git add data.json data.js
+git add data.json data.js index.html
 git diff --cached --quiet || {
   git commit -m "auto: $(date '+%Y-%m-%d %H:%M') 数据更新" >> "$LOG" 2>&1
   # GitHub 走 ssh 无需代理
