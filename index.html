@@ -6,10 +6,11 @@
 <meta http-equiv="Cache-Control" content="no-cache, no-store, must-revalidate">
 <meta http-equiv="Pragma" content="no-cache">
 <meta http-equiv="Expires" content="0">
+<meta http-equiv="Content-Version" content="v20260723a">
 <title>万家乐天猫官旗 · 2026 业绩看板</title>
 <script>/* Chart.js 异步加载，不阻塞页面渲染 */
 (function(){var d=document,s=d.createElement('script');s.src='https://cdn.bootcdn.net/ajax/libs/Chart.js/4.4.7/chart.umd.min.js';s.onerror=function(){var s2=d.createElement('script');s2.src='https://cdn.jsdelivr.net/npm/chart.js@4.4.7/dist/chart.umd.min.js';d.head.appendChild(s2);};d.head.appendChild(s);})();</script>
-<script>document.write('<script src="data.js?_='+Date.now()+'"><\/script>');</script>
+<script src="data.js?v=20260723a"></script>
 <style>
 * { margin:0; padding:0; box-sizing:border-box; }
 body { font-family:-apple-system,BlinkMacSystemFont,"Segoe UI",Roboto,sans-serif; background:#eef1f5; color:#1e293b; }
@@ -449,7 +450,7 @@ function renderTrafficKPI(days) {
   el.innerHTML = `
     <div class="kpi-card" style="border-left-color:#f59e0b"><div class="label">访客数${vRate!==null?' · 目标达成 '+vRate+'%':''}</div><div class="value">${totalV>=10000?(totalV/10000).toFixed(1)+'万':totalV.toLocaleString()}</div><div class="sub">日均 ${(totalV/actualDays.length).toFixed(1)}${hasVTarget?' · 目标 '+fmt(totalVTarget):''}</div></div>
     <div class="kpi-card" style="border-left-color:#f97316"><div class="label">买家数${bRate!==null?' · 目标达成 '+bRate+'%':''}</div><div class="value">${totalB.toLocaleString()}</div><div class="sub">日均 ${Math.round(totalB/actualDays.length).toLocaleString()}${hasBTarget?' · 目标 '+fmt(totalBTarget):''}</div></div>
-    <div class="kpi-card" style="border-left-color:#06b6d4"><div class="label">客单价${avgAovTarget!==null?' · 目标达成 '+(avgAov/avgAovTarget*100).toFixed(1)+'%':''}</div><div class="value">${avgAov.toLocaleString()}</div><div class="sub">最高 ${maxAov.toLocaleString()}${avgAovTarget!==null?' · 目标 '+avgAovTarget+'元':''}</div></div>
+    <div class="kpi-card" style="border-left-color:#06b6d4"><div class="label">客单价${avgAovTarget!==null?' · 目标达成 '+(avgAov/avgAovTarget*100).toFixed(2)+'%':''}</div><div class="value">${avgAov.toLocaleString()}</div><div class="sub">最高 ${maxAov.toLocaleString()}${avgAovTarget!==null?' · 目标 '+avgAovTarget+'元':''}</div></div>
     ${hasCart?`<div class="kpi-card" style="border-left-color:#8b5cf6"><div class="label">加购人数${cartRate!==null?' · 目标达成 '+cartRate+'%':''}</div><div class="value">${totalCart>=10000?(totalCart/10000).toFixed(1)+'万':totalCart.toLocaleString()}</div><div class="sub">日均 ${(totalCart/actualDays.length).toFixed(1)} · 加购率 ${avgCr}%${hasCartTarget?' · 目标 '+fmt(totalCartTarget):''}</div></div>`:'<div class="kpi-card" style="border-left-color:#94a3b8"><div class="label">加购数据</div><div class="value" style="font-size:13px">本区间无</div><div class="sub">部分月份未记录</div></div>'}
   `;
 }
