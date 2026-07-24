@@ -1,5 +1,5 @@
 {
-  "lastUpdated": "2026-07-23",
+  "lastUpdated": "2026-07-24",
   "yearTarget": 210957500,
   "months": {
     "1": {
@@ -4463,8 +4463,8 @@
       "name": "7月",
       "label": "—",
       "target": 30000000,
-      "actual": 15073532,
-      "rate": 0.502,
+      "actual": 15869145,
+      "rate": 0.529,
       "days": [
         {
           "d": "01",
@@ -5128,17 +5128,17 @@
           "r": "—",
           "w": 4,
           "t": 990000,
-          "a": 0,
-          "refund_amt": 0,
-          "post_refund": 0,
-          "v": 0,
-          "b": 0,
-          "aov": 0,
+          "a": 795613,
+          "refund_amt": 272460,
+          "post_refund": 523153,
+          "v": 79381,
+          "b": 492,
+          "aov": 1617,
           "ref": 0,
-          "y": null,
-          "cart_users": 0,
-          "cart_rate": 0,
-          "cart_conv": 0,
+          "y": -21.2,
+          "cart_users": 1550,
+          "cart_rate": 2.0,
+          "cart_conv": 31.7,
           "v_t": 73000,
           "b_t": 712,
           "aov_t": 1390,
@@ -5149,7 +5149,7 @@
           "cart_users_t": 2102,
           "cart_rate_t": 2.9,
           "cart_conv_t": 33.9,
-          "rr": 0.0,
+          "rr": 0.804,
           "ly_post_refund": 604967
         },
         {
@@ -5387,5 +5387,5 @@
       ]
     }
   },
-  "yearActual": 194022548
+  "yearActual": 194818161
 }
