@@ -221,17 +221,17 @@ def cleanup_headless():
             pass
 
 def cdp_new(url, timeout=20):
-    r = subprocess.run(["curl", "-s", "-X", "POST", "--data-raw", url,
-                        f"{CDP_PROXY}/new"], capture_output=True, text=True, timeout=timeout)
+    r = subprocess.run(["curl", "-s", "-m", str(timeout), "-X", "POST", "--data-raw", url,
+                        f"{CDP_PROXY}/new"], capture_output=True, text=True, timeout=timeout + 5)
     try:
         return json.loads(r.stdout).get("targetId", "")
     except (json.JSONDecodeError, KeyError, TypeError):
         return ""
 
 def cdp_eval(target_id, js, timeout=20):
-    r = subprocess.run(["curl", "-s", "-X", "POST",
+    r = subprocess.run(["curl", "-s", "-m", str(timeout), "-X", "POST",
                         f"{CDP_PROXY}/eval?target={target_id}",
-                        "-d", js], capture_output=True, text=True, timeout=timeout)
+                        "-d", js], capture_output=True, text=True, timeout=timeout + 5)
     try:
         return json.loads(r.stdout).get("value")
     except (json.JSONDecodeError, KeyError, TypeError):
@@ -526,23 +526,30 @@ def main():
         cleanup_headless()
         sys.exit(1)
 
-    # 打开飞书
-    print(f"  打开飞书页面...")
-    tid = cdp_new(FEISHU_URL)
-    if not tid:
-        print("  ✗ 飞书页面打开失败")
-        cleanup_headless()
-        sys.exit(1)
-    time.sleep(5)
-
-    try:
-        # 提取7月
+    # 打开飞书 + 提取，失败自动重试（页面加载慢/偶发NO_TAB）
+    MAX_RETRY = 3
+    july_days, err = None, "未尝试"
+    tid = ""
+    for attempt in range(1, MAX_RETRY + 1):
+        print(f"  打开飞书页面 (第{attempt}次尝试)...")
+        tid = cdp_new(FEISHU_URL)
+        if not tid:
+            print("  ✗ 飞书页面打开失败")
+            time.sleep(10)
+            continue
+        time.sleep(8)
         print(f"  提取7月数据...")
         july_days, err = extract_july_data(tid)
         cdp_close(tid)
+        if not err:
+            break
+        print(f"  ✗ 第{attempt}次失败: {err}")
+        if attempt < MAX_RETRY:
+            time.sleep(10)
 
+    try:
         if err:
-            print(f"  ✗ {err}")
+            print(f"  ✗ 最终失败: {err}")
             # 不退出 — 仍运行 fix_data.py 更新 timestamp
         elif july_days:
             print(f"  ✓ 提取到 {len(july_days)} 天 (含 {sum(1 for d in july_days if d['a']>0)} 天有实际值)")

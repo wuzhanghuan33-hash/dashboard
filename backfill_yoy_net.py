@@ -13,7 +13,7 @@ from pathlib import Path
 
 FEISHU_URL = "https://vcnrz1ae7b5x.feishu.cn/wiki/LkD9wO05BiZrSkkLYg7czErwn5e"
 CDP_PROXY = "http://localhost:3456"
-DATA_DIR = Path("/Users/luoxiaomin/Documents/知识库/1-工作/天猫运营/万家乐官旗业绩/dashboard")
+DATA_DIR = Path(__file__).parent
 DATA_JSON = DATA_DIR / "data.json"
 
 TABS = ["1月", "2-3月", "4月", "5-6月", "7月"]
