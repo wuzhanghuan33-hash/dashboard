@@ -1,5 +1,5 @@
 {
-  "lastUpdated": "2026-07-29",
+  "lastUpdated": "2026-07-31",
   "yearTarget": 210957500,
   "months": {
     "1": {
@@ -4463,8 +4463,8 @@
       "name": "7月",
       "label": "—",
       "target": 30000000,
-      "actual": 19483890,
-      "rate": 0.649,
+      "actual": 20912350,
+      "rate": 0.697,
       "days": [
         {
           "d": "01",
@@ -5121,7 +5121,8 @@
           "cart_rate_t": 2.5,
           "cart_conv_t": 27.8,
           "rr": 0.983,
-          "ly_post_refund": 808279
+          "ly_post_refund": 808279,
+          "y_net": -32.9
         },
         {
           "d": "23",
@@ -5150,7 +5151,8 @@
           "cart_rate_t": 2.9,
           "cart_conv_t": 33.9,
           "rr": 0.804,
-          "ly_post_refund": 604967
+          "ly_post_refund": 604967,
+          "y_net": -13.5
         },
         {
           "d": "24",
@@ -5179,7 +5181,8 @@
           "cart_rate_t": 2.6,
           "cart_conv_t": 41.2,
           "rr": 0.592,
-          "ly_post_refund": 556952
+          "ly_post_refund": 556952,
+          "y_net": -23.0
         },
         {
           "d": "25",
@@ -5208,7 +5211,8 @@
           "cart_rate_t": 2.5,
           "cart_conv_t": 35.1,
           "rr": 0.663,
-          "ly_post_refund": 582077
+          "ly_post_refund": 582077,
+          "y_net": -22.0
         },
         {
           "d": "26",
@@ -5237,7 +5241,8 @@
           "cart_rate_t": 2.4,
           "cart_conv_t": 33.4,
           "rr": 0.914,
-          "ly_post_refund": 587707
+          "ly_post_refund": 587707,
+          "y_net": 8.5
         },
         {
           "d": "27",
@@ -5266,7 +5271,8 @@
           "cart_rate_t": 2.6,
           "cart_conv_t": 27.1,
           "rr": 1.082,
-          "ly_post_refund": 792830
+          "ly_post_refund": 792830,
+          "y_net": -29.8
         },
         {
           "d": "28",
@@ -5295,24 +5301,25 @@
           "cart_rate_t": 2.1,
           "cart_conv_t": 33.2,
           "rr": 0.997,
-          "ly_post_refund": 446512
+          "ly_post_refund": 446512,
+          "y_net": 16.4
         },
         {
           "d": "29",
           "r": "—",
           "w": 3,
           "t": 870000,
-          "a": 0,
-          "refund_amt": 0,
-          "post_refund": 0,
-          "v": 0,
-          "b": 0,
-          "aov": 0,
+          "a": 607285,
+          "refund_amt": 228545,
+          "post_refund": 378740,
+          "v": 145959,
+          "b": 385,
+          "aov": 1577,
           "ref": 0,
-          "y": null,
-          "cart_users": 0,
-          "cart_rate": 0,
-          "cart_conv": 0,
+          "y": -35.9,
+          "cart_users": 1488,
+          "cart_rate": 1.0,
+          "cart_conv": 25.9,
           "v_t": 85000,
           "b_t": 626,
           "aov_t": 1390,
@@ -5323,25 +5330,26 @@
           "cart_users_t": 1955,
           "cart_rate_t": 2.3,
           "cart_conv_t": 32.0,
-          "rr": 0.0,
-          "ly_post_refund": 463230
+          "rr": 0.698,
+          "ly_post_refund": 463230,
+          "y_net": -18.2
         },
         {
           "d": "30",
           "r": "—",
           "w": 4,
           "t": 840000,
-          "a": 0,
-          "refund_amt": 0,
-          "post_refund": 0,
-          "v": 0,
-          "b": 0,
-          "aov": 0,
+          "a": 821175,
+          "refund_amt": 262797,
+          "post_refund": 558378,
+          "v": 178140,
+          "b": 466,
+          "aov": 1762,
           "ref": 0,
-          "y": null,
-          "cart_users": 0,
-          "cart_rate": 0,
-          "cart_conv": 0,
+          "y": -23.0,
+          "cart_users": 1570,
+          "cart_rate": 0.9,
+          "cart_conv": 29.7,
           "v_t": 79000,
           "b_t": 622,
           "aov_t": 1350,
@@ -5352,8 +5360,9 @@
           "cart_users_t": 1975,
           "cart_rate_t": 2.5,
           "cart_conv_t": 31.5,
-          "rr": 0.0,
-          "ly_post_refund": 638847
+          "rr": 0.978,
+          "ly_post_refund": 638847,
+          "y_net": -12.6
         },
         {
           "d": "31",
@@ -5382,10 +5391,11 @@
           "cart_rate_t": 2.6,
           "cart_conv_t": 26.8,
           "rr": 0.0,
-          "ly_post_refund": 596242
+          "ly_post_refund": 596242,
+          "y_net": null
         }
       ]
     }
   },
-  "yearActual": 198432906
+  "yearActual": 199861366
 }
