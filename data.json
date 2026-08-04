@@ -927,15 +927,15 @@
           "cart_users": 2338,
           "cart_rate": 3.4,
           "cart_conv": 34,
-          "v_t": 110000,
-          "b_t": 813,
-          "aov_t": 1230,
-          "refund_amt_t": 350000,
-          "post_refund_t": 650000,
-          "conv_t": 0.0074,
-          "cart_users_t": 3535,
-          "cart_rate_t": 3.2,
-          "cart_conv_t": 23.0
+          "v_t": 95000,
+          "b_t": 1094,
+          "aov_t": 1280,
+          "refund_amt_t": 500000,
+          "post_refund_t": 900000,
+          "conv_t": 0.0115,
+          "cart_users_t": 3325,
+          "cart_rate_t": 3.5,
+          "cart_conv_t": 32.9
         },
         {
           "d": "02",
@@ -956,15 +956,15 @@
           "cart_users": 2149,
           "cart_rate": 3.2,
           "cart_conv": 36.7,
-          "v_t": 120000,
-          "b_t": 720,
+          "v_t": 94000,
+          "b_t": 1080,
           "aov_t": 1250,
-          "refund_amt_t": 240000,
-          "post_refund_t": 660000,
-          "conv_t": 0.006,
-          "cart_users_t": 3360,
-          "cart_rate_t": 2.8,
-          "cart_conv_t": 21.4
+          "refund_amt_t": 510000,
+          "post_refund_t": 840000,
+          "conv_t": 0.0115,
+          "cart_users_t": 3290,
+          "cart_rate_t": 3.5,
+          "cart_conv_t": 32.8
         },
         {
           "d": "03",
@@ -985,15 +985,15 @@
           "cart_users": 2066,
           "cart_rate": 2.6,
           "cart_conv": 34.4,
-          "v_t": 130000,
-          "b_t": 1064,
-          "aov_t": 1410,
-          "refund_amt_t": 330000,
-          "post_refund_t": 1170000,
-          "conv_t": 0.0082,
-          "cart_users_t": 3640,
-          "cart_rate_t": 2.8,
-          "cart_conv_t": 29.2
+          "v_t": 94000,
+          "b_t": 1008,
+          "aov_t": 1240,
+          "refund_amt_t": 400000,
+          "post_refund_t": 850000,
+          "conv_t": 0.0107,
+          "cart_users_t": 3290,
+          "cart_rate_t": 3.5,
+          "cart_conv_t": 30.6
         },
         {
           "d": "04",
@@ -1014,15 +1014,15 @@
           "cart_users": 1967,
           "cart_rate": 3,
           "cart_conv": 36,
-          "v_t": 140000,
-          "b_t": 963,
-          "aov_t": 1350,
-          "refund_amt_t": 400000,
-          "post_refund_t": 900000,
-          "conv_t": 0.0069,
-          "cart_users_t": 3500,
-          "cart_rate_t": 2.5,
-          "cart_conv_t": 27.5
+          "v_t": 96000,
+          "b_t": 923,
+          "aov_t": 1300,
+          "refund_amt_t": 350000,
+          "post_refund_t": 850000,
+          "conv_t": 0.0096,
+          "cart_users_t": 2630,
+          "cart_rate_t": 2.7,
+          "cart_conv_t": 35.1
         },
         {
           "d": "05",
@@ -1747,7 +1747,16 @@
           "y_net": -18.6,
           "cart_users": 2035,
           "cart_rate": 2.5,
-          "cart_conv": 30.2
+          "cart_conv": 30.2,
+          "refund_amt_t": 350000,
+          "post_refund_t": 650000,
+          "v_t": 110000,
+          "b_t": 813,
+          "conv_t": 0.0074,
+          "aov_t": 1230,
+          "cart_users_t": 3535,
+          "cart_rate_t": 3.2,
+          "cart_conv_t": 23.0
         },
         {
           "d": "02",
@@ -1767,7 +1776,16 @@
           "y_net": -19.6,
           "cart_users": 2077,
           "cart_rate": 1.3,
-          "cart_conv": 28.2
+          "cart_conv": 28.2,
+          "refund_amt_t": 240000,
+          "post_refund_t": 660000,
+          "v_t": 120000,
+          "b_t": 720,
+          "conv_t": 0.006,
+          "aov_t": 1250,
+          "cart_users_t": 3360,
+          "cart_rate_t": 2.8,
+          "cart_conv_t": 21.4
         },
         {
           "d": "03",
@@ -1787,7 +1805,16 @@
           "y_net": -43.5,
           "cart_users": 1933,
           "cart_rate": 1.2,
-          "cart_conv": 32.7
+          "cart_conv": 32.7,
+          "refund_amt_t": 330000,
+          "post_refund_t": 1170000,
+          "v_t": 130000,
+          "b_t": 1064,
+          "conv_t": 0.0082,
+          "aov_t": 1410,
+          "cart_users_t": 3640,
+          "cart_rate_t": 2.8,
+          "cart_conv_t": 29.2
         },
         {
           "d": "04",
@@ -1807,7 +1834,16 @@
           "y_net": -32.8,
           "cart_users": 2221,
           "cart_rate": 1,
-          "cart_conv": 31.6
+          "cart_conv": 31.6,
+          "refund_amt_t": 400000,
+          "post_refund_t": 900000,
+          "v_t": 140000,
+          "b_t": 963,
+          "conv_t": 0.0069,
+          "aov_t": 1350,
+          "cart_users_t": 3500,
+          "cart_rate_t": 2.5,
+          "cart_conv_t": 27.5
         },
         {
           "d": "05",
@@ -1827,7 +1863,16 @@
           "y_net": -38.7,
           "cart_users": 2156,
           "cart_rate": 0.6,
-          "cart_conv": 29.2
+          "cart_conv": 29.2,
+          "refund_amt_t": 330000,
+          "post_refund_t": 920000,
+          "v_t": 150000,
+          "b_t": 940,
+          "conv_t": 0.0063,
+          "aov_t": 1330,
+          "cart_users_t": 3675,
+          "cart_rate_t": 2.5,
+          "cart_conv_t": 25.6
         },
         {
           "d": "06",
@@ -1847,7 +1892,16 @@
           "y_net": -40.5,
           "cart_users": 2158,
           "cart_rate": 0.7,
-          "cart_conv": 32
+          "cart_conv": 32,
+          "refund_amt_t": 360000,
+          "post_refund_t": 890000,
+          "v_t": 145000,
+          "b_t": 933,
+          "conv_t": 0.0064,
+          "aov_t": 1340,
+          "cart_users_t": 3408,
+          "cart_rate_t": 2.4,
+          "cart_conv_t": 27.4
         },
         {
           "d": "07",
@@ -1867,7 +1921,16 @@
           "y_net": 99.1,
           "cart_users": 2514,
           "cart_rate": 0.7,
-          "cart_conv": 40.6
+          "cart_conv": 40.6,
+          "refund_amt_t": 300000,
+          "post_refund_t": 1000000,
+          "v_t": 130000,
+          "b_t": 985,
+          "conv_t": 0.0076,
+          "aov_t": 1320,
+          "cart_users_t": 3770,
+          "cart_rate_t": 2.9,
+          "cart_conv_t": 26.1
         },
         {
           "d": "08",
@@ -1887,7 +1950,16 @@
           "y_net": -97.3,
           "cart_users": 2355,
           "cart_rate": 1.2,
-          "cart_conv": 26.7
+          "cart_conv": 26.7,
+          "refund_amt_t": 510000,
+          "post_refund_t": 1090000,
+          "v_t": 134000,
+          "b_t": 1127,
+          "conv_t": 0.0084,
+          "aov_t": 1420,
+          "cart_users_t": 3739,
+          "cart_rate_t": 2.8,
+          "cart_conv_t": 30.1
         },
         {
           "d": "09",
@@ -1907,7 +1979,16 @@
           "y_net": -64.8,
           "cart_users": 2173,
           "cart_rate": 1.2,
-          "cart_conv": 24.5
+          "cart_conv": 24.5,
+          "refund_amt_t": 280000,
+          "post_refund_t": 1020000,
+          "v_t": 100000,
+          "b_t": 744,
+          "conv_t": 0.0074,
+          "aov_t": 1250,
+          "cart_users_t": 2800,
+          "cart_rate_t": 2.8,
+          "cart_conv_t": 26.6
         },
         {
           "d": "10",
@@ -1927,7 +2008,16 @@
           "y_net": -46.3,
           "cart_users": 2067,
           "cart_rate": 0.6,
-          "cart_conv": 24.9
+          "cart_conv": 24.9,
+          "refund_amt_t": 310000,
+          "post_refund_t": 890000,
+          "v_t": 110000,
+          "b_t": 732,
+          "conv_t": 0.0067,
+          "aov_t": 1230,
+          "cart_users_t": 2695,
+          "cart_rate_t": 2.5,
+          "cart_conv_t": 27.2
         },
         {
           "d": "11",
@@ -1947,7 +2037,16 @@
           "y_net": -8.5,
           "cart_users": 1923,
           "cart_rate": 0.5,
-          "cart_conv": 31.2
+          "cart_conv": 31.2,
+          "refund_amt_t": 290000,
+          "post_refund_t": 810000,
+          "v_t": 120000,
+          "b_t": 963,
+          "conv_t": 0.008,
+          "aov_t": 1350,
+          "cart_users_t": 2940,
+          "cart_rate_t": 2.5,
+          "cart_conv_t": 32.8
         },
         {
           "d": "12",
@@ -1967,7 +2066,16 @@
           "y_net": 5.0,
           "cart_users": 2250,
           "cart_rate": 0.6,
-          "cart_conv": 29.7
+          "cart_conv": 29.7,
+          "refund_amt_t": 300000,
+          "post_refund_t": 700000,
+          "v_t": 100000,
+          "b_t": 923,
+          "conv_t": 0.0092,
+          "aov_t": 1300,
+          "cart_users_t": 2450,
+          "cart_rate_t": 2.5,
+          "cart_conv_t": 37.7
         },
         {
           "d": "13",
@@ -1987,7 +2095,16 @@
           "y_net": -85.8,
           "cart_users": 2063,
           "cart_rate": 0.6,
-          "cart_conv": 25
+          "cart_conv": 25,
+          "refund_amt_t": 260000,
+          "post_refund_t": 840000,
+          "v_t": 105000,
+          "b_t": 880,
+          "conv_t": 0.0084,
+          "aov_t": 1250,
+          "cart_users_t": 2573,
+          "cart_rate_t": 2.5,
+          "cart_conv_t": 34.2
         },
         {
           "d": "14",
@@ -2007,7 +2124,16 @@
           "y_net": -50.0,
           "cart_users": 2163,
           "cart_rate": 0.7,
-          "cart_conv": 24
+          "cart_conv": 24,
+          "refund_amt_t": 290000,
+          "post_refund_t": 710000,
+          "v_t": 103000,
+          "b_t": 806,
+          "conv_t": 0.0078,
+          "aov_t": 1240,
+          "cart_users_t": 2678,
+          "cart_rate_t": 2.6,
+          "cart_conv_t": 30.1
         },
         {
           "d": "15",
@@ -2027,7 +2153,16 @@
           "y_net": -24.3,
           "cart_users": 2446,
           "cart_rate": 0.8,
-          "cart_conv": 28
+          "cart_conv": 28,
+          "refund_amt_t": 280000,
+          "post_refund_t": 820000,
+          "v_t": 102000,
+          "b_t": 873,
+          "conv_t": 0.0086,
+          "aov_t": 1260,
+          "cart_users_t": 2856,
+          "cart_rate_t": 2.8,
+          "cart_conv_t": 30.6
         },
         {
           "d": "16",
@@ -2047,7 +2182,16 @@
           "y_net": -11.1,
           "cart_users": 2379,
           "cart_rate": 0.7,
-          "cart_conv": 26.6
+          "cart_conv": 26.6,
+          "refund_amt_t": 260000,
+          "post_refund_t": 590000,
+          "v_t": 93000,
+          "b_t": 708,
+          "conv_t": 0.0076,
+          "aov_t": 1200,
+          "cart_users_t": 2232,
+          "cart_rate_t": 2.4,
+          "cart_conv_t": 31.7
         },
         {
           "d": "17",
@@ -2067,7 +2211,16 @@
           "y_net": -54.0,
           "cart_users": 2275,
           "cart_rate": 0.7,
-          "cart_conv": 21.9
+          "cart_conv": 21.9,
+          "refund_amt_t": 260000,
+          "post_refund_t": 710000,
+          "v_t": 94000,
+          "b_t": 776,
+          "conv_t": 0.0083,
+          "aov_t": 1250,
+          "cart_users_t": 2444,
+          "cart_rate_t": 2.6,
+          "cart_conv_t": 31.8
         },
         {
           "d": "18",
@@ -2087,7 +2240,16 @@
           "y_net": -21.5,
           "cart_users": 2541,
           "cart_rate": 0.6,
-          "cart_conv": 24.6
+          "cart_conv": 24.6,
+          "refund_amt_t": 270000,
+          "post_refund_t": 650000,
+          "v_t": 96000,
+          "b_t": 742,
+          "conv_t": 0.0077,
+          "aov_t": 1240,
+          "cart_users_t": 2640,
+          "cart_rate_t": 2.8,
+          "cart_conv_t": 28.1
         },
         {
           "d": "19",
@@ -2107,7 +2269,16 @@
           "y_net": 1.9,
           "cart_users": 2202,
           "cart_rate": 0.7,
-          "cart_conv": 28.4
+          "cart_conv": 28.4,
+          "refund_amt_t": 280000,
+          "post_refund_t": 570000,
+          "v_t": 93000,
+          "b_t": 708,
+          "conv_t": 0.0076,
+          "aov_t": 1200,
+          "cart_users_t": 2260,
+          "cart_rate_t": 2.4,
+          "cart_conv_t": 31.3
         },
         {
           "d": "20",
@@ -2127,7 +2298,16 @@
           "y_net": -52.5,
           "cart_users": 1831,
           "cart_rate": 1.2,
-          "cart_conv": 24.7
+          "cart_conv": 24.7,
+          "refund_amt_t": 350000,
+          "post_refund_t": 750000,
+          "v_t": 105000,
+          "b_t": 786,
+          "conv_t": 0.0075,
+          "aov_t": 1400,
+          "cart_users_t": 3675,
+          "cart_rate_t": 3.5,
+          "cart_conv_t": 21.4
         },
         {
           "d": "21",
@@ -2147,7 +2327,16 @@
           "y_net": -31.1,
           "cart_users": 2050,
           "cart_rate": 1.9,
-          "cart_conv": 23.7
+          "cart_conv": 23.7,
+          "refund_amt_t": 320000,
+          "post_refund_t": 580000,
+          "v_t": 96000,
+          "b_t": 667,
+          "conv_t": 0.0069,
+          "aov_t": 1350,
+          "cart_users_t": 2976,
+          "cart_rate_t": 3.1,
+          "cart_conv_t": 22.4
         },
         {
           "d": "22",
@@ -2167,7 +2356,16 @@
           "y_net": -17.9,
           "cart_users": 2225,
           "cart_rate": 1.4,
-          "cart_conv": 25
+          "cart_conv": 25,
+          "refund_amt_t": 360000,
+          "post_refund_t": 540000,
+          "v_t": 93000,
+          "b_t": 682,
+          "conv_t": 0.0073,
+          "aov_t": 1320,
+          "cart_users_t": 2697,
+          "cart_rate_t": 2.9,
+          "cart_conv_t": 25.3
         },
         {
           "d": "23",
@@ -2187,7 +2385,16 @@
           "y_net": 21.9,
           "cart_users": 2310,
           "cart_rate": 2,
-          "cart_conv": 28.7
+          "cart_conv": 28.7,
+          "refund_amt_t": 350000,
+          "post_refund_t": 600000,
+          "v_t": 91000,
+          "b_t": 725,
+          "conv_t": 0.008,
+          "aov_t": 1310,
+          "cart_users_t": 2530,
+          "cart_rate_t": 2.8,
+          "cart_conv_t": 28.7
         },
         {
           "d": "24",
@@ -2207,7 +2414,16 @@
           "y_net": -5.5,
           "cart_users": 2218,
           "cart_rate": 2,
-          "cart_conv": 26.1
+          "cart_conv": 26.1,
+          "refund_amt_t": 350000,
+          "post_refund_t": 580000,
+          "v_t": 90000,
+          "b_t": 715,
+          "conv_t": 0.0079,
+          "aov_t": 1300,
+          "cart_users_t": 2214,
+          "cart_rate_t": 2.5,
+          "cart_conv_t": 32.3
         },
         {
           "d": "25",
@@ -2227,7 +2443,16 @@
           "y_net": -30.8,
           "cart_users": 2111,
           "cart_rate": 1.5,
-          "cart_conv": 27.9
+          "cart_conv": 27.9,
+          "refund_amt_t": 280000,
+          "post_refund_t": 620000,
+          "v_t": 93000,
+          "b_t": 720,
+          "conv_t": 0.0077,
+          "aov_t": 1250,
+          "cart_users_t": 2655,
+          "cart_rate_t": 2.9,
+          "cart_conv_t": 27.1
         },
         {
           "d": "26",
@@ -2247,7 +2472,16 @@
           "y_net": -40.0,
           "cart_users": 2079,
           "cart_rate": 1.8,
-          "cart_conv": 27.1
+          "cart_conv": 27.1,
+          "refund_amt_t": 450000,
+          "post_refund_t": 550000,
+          "v_t": 90000,
+          "b_t": 794,
+          "conv_t": 0.0088,
+          "aov_t": 1260,
+          "cart_users_t": 2205,
+          "cart_rate_t": 2.5,
+          "cart_conv_t": 36.0
         },
         {
           "d": "27",
@@ -2267,7 +2501,16 @@
           "y_net": -21.7,
           "cart_users": 1898,
           "cart_rate": 2.2,
-          "cart_conv": 26.4
+          "cart_conv": 26.4,
+          "refund_amt_t": 350000,
+          "post_refund_t": 550000,
+          "v_t": 96000,
+          "b_t": 709,
+          "conv_t": 0.0074,
+          "aov_t": 1270,
+          "cart_users_t": 2496,
+          "cart_rate_t": 2.6,
+          "cart_conv_t": 28.4
         },
         {
           "d": "28",
@@ -2287,7 +2530,16 @@
           "y_net": -22.9,
           "cart_users": 2003,
           "cart_rate": 2.5,
-          "cart_conv": 28.6
+          "cart_conv": 28.6,
+          "refund_amt_t": 330000,
+          "post_refund_t": 670000,
+          "v_t": 97000,
+          "b_t": 769,
+          "conv_t": 0.0079,
+          "aov_t": 1300,
+          "cart_users_t": 2377,
+          "cart_rate_t": 2.5,
+          "cart_conv_t": 32.4
         },
         {
           "d": "29",
@@ -2307,7 +2559,16 @@
           "y_net": -10.7,
           "cart_users": 2127,
           "cart_rate": 2.9,
-          "cart_conv": 26.4
+          "cart_conv": 26.4,
+          "refund_amt_t": 290000,
+          "post_refund_t": 710000,
+          "v_t": 94000,
+          "b_t": 769,
+          "conv_t": 0.0082,
+          "aov_t": 1300,
+          "cart_users_t": 2585,
+          "cart_rate_t": 2.8,
+          "cart_conv_t": 29.8
         },
         {
           "d": "30",
@@ -2327,7 +2588,16 @@
           "y_net": -40.0,
           "cart_users": 2165,
           "cart_rate": 2.7,
-          "cart_conv": 24.3
+          "cart_conv": 24.3,
+          "refund_amt_t": 270000,
+          "post_refund_t": 830000,
+          "v_t": 90000,
+          "b_t": 859,
+          "conv_t": 0.0095,
+          "aov_t": 1280,
+          "cart_users_t": 2520,
+          "cart_rate_t": 2.8,
+          "cart_conv_t": 34.1
         },
         {
           "d": "31",
@@ -2347,7 +2617,16 @@
           "y_net": 7.2,
           "cart_users": 2136,
           "cart_rate": 2.8,
-          "cart_conv": 30.7
+          "cart_conv": 30.7,
+          "refund_amt_t": 300000,
+          "post_refund_t": 800000,
+          "v_t": 90000,
+          "b_t": 853,
+          "conv_t": 0.0095,
+          "aov_t": 1290,
+          "cart_users_t": 2520,
+          "cart_rate_t": 2.8,
+          "cart_conv_t": 33.8
         }
       ]
     },
@@ -3246,7 +3525,16 @@
           "y_net": 36.1,
           "cart_users": 2102,
           "cart_rate": 2.8,
-          "cart_conv": 29.3
+          "cart_conv": 29.3,
+          "refund_amt_t": 280500,
+          "post_refund_t": 654500,
+          "v_t": 90000,
+          "b_t": 668,
+          "conv_t": 0.0074,
+          "aov_t": 1400,
+          "cart_users_t": 2610,
+          "cart_rate_t": 2.9,
+          "cart_conv_t": 25.6
         },
         {
           "d": "02",
@@ -3266,7 +3554,16 @@
           "y_net": -5.6,
           "cart_users": 2525,
           "cart_rate": 3.7,
-          "cart_conv": 22.6
+          "cart_conv": 22.6,
+          "refund_amt_t": 255000,
+          "post_refund_t": 595000,
+          "v_t": 85000,
+          "b_t": 607,
+          "conv_t": 0.0071,
+          "aov_t": 1400,
+          "cart_users_t": 3060,
+          "cart_rate_t": 3.6,
+          "cart_conv_t": 19.8
         },
         {
           "d": "03",
@@ -3286,7 +3583,16 @@
           "y_net": -5.3,
           "cart_users": 2571,
           "cart_rate": 2.9,
-          "cart_conv": 21.6
+          "cart_conv": 21.6,
+          "refund_amt_t": 255000,
+          "post_refund_t": 595000,
+          "v_t": 85000,
+          "b_t": 616,
+          "conv_t": 0.0072,
+          "aov_t": 1380,
+          "cart_users_t": 2975,
+          "cart_rate_t": 3.5,
+          "cart_conv_t": 20.7
         },
         {
           "d": "04",
@@ -3306,7 +3612,16 @@
           "y_net": 10.4,
           "cart_users": 2568,
           "cart_rate": 3.4,
-          "cart_conv": 20.2
+          "cart_conv": 20.2,
+          "refund_amt_t": 148750,
+          "post_refund_t": 446250,
+          "v_t": 80000,
+          "b_t": 595,
+          "conv_t": 0.0074,
+          "aov_t": 1000,
+          "cart_users_t": 3040,
+          "cart_rate_t": 3.8,
+          "cart_conv_t": 19.6
         },
         {
           "d": "05",
@@ -3326,7 +3641,16 @@
           "y_net": -21.9,
           "cart_users": 2850,
           "cart_rate": 3.1,
-          "cart_conv": 17.3
+          "cart_conv": 17.3,
+          "refund_amt_t": 127500,
+          "post_refund_t": 382500,
+          "v_t": 130000,
+          "b_t": 567,
+          "conv_t": 0.0044,
+          "aov_t": 900,
+          "cart_users_t": 3900,
+          "cart_rate_t": 3.0,
+          "cart_conv_t": 14.5
         },
         {
           "d": "06",
@@ -3346,7 +3670,16 @@
           "y_net": 104.7,
           "cart_users": 3048,
           "cart_rate": 3.5,
-          "cart_conv": 24.4
+          "cart_conv": 24.4,
+          "refund_amt_t": 884000,
+          "post_refund_t": 1326000,
+          "v_t": 150000,
+          "b_t": 1473,
+          "conv_t": 0.0098,
+          "aov_t": 1500,
+          "cart_users_t": 4050,
+          "cart_rate_t": 2.7,
+          "cart_conv_t": 36.4
         },
         {
           "d": "07",
@@ -3366,7 +3699,16 @@
           "y_net": -13.8,
           "cart_users": 2631,
           "cart_rate": 3.2,
-          "cart_conv": 23.3
+          "cart_conv": 23.3,
+          "refund_amt_t": 680000,
+          "post_refund_t": 1020000,
+          "v_t": 140000,
+          "b_t": 1172,
+          "conv_t": 0.0084,
+          "aov_t": 1450,
+          "cart_users_t": 3780,
+          "cart_rate_t": 2.7,
+          "cart_conv_t": 31.0
         },
         {
           "d": "08",
@@ -3386,7 +3728,16 @@
           "y_net": -27.4,
           "cart_users": 2719,
           "cart_rate": 3.4,
-          "cart_conv": 19.9
+          "cart_conv": 19.9,
+          "refund_amt_t": 565250,
+          "post_refund_t": 922250,
+          "v_t": 140000,
+          "b_t": 1026,
+          "conv_t": 0.0073,
+          "aov_t": 1450,
+          "cart_users_t": 3920,
+          "cart_rate_t": 2.8,
+          "cart_conv_t": 26.2
         },
         {
           "d": "09",
@@ -3406,7 +3757,16 @@
           "y_net": 7.2,
           "cart_users": 2728,
           "cart_rate": 3.6,
-          "cart_conv": 21
+          "cart_conv": 21,
+          "refund_amt_t": 646000,
+          "post_refund_t": 1054000,
+          "v_t": 150000,
+          "b_t": 1214,
+          "conv_t": 0.0081,
+          "aov_t": 1400,
+          "cart_users_t": 3900,
+          "cart_rate_t": 2.6,
+          "cart_conv_t": 31.1
         },
         {
           "d": "10",
@@ -3426,7 +3786,16 @@
           "y_net": 39.7,
           "cart_users": 2616,
           "cart_rate": 3.5,
-          "cart_conv": 21.8
+          "cart_conv": 21.8,
+          "refund_amt_t": 297500,
+          "post_refund_t": 552500,
+          "v_t": 130000,
+          "b_t": 708,
+          "conv_t": 0.0054,
+          "aov_t": 1200,
+          "cart_users_t": 3770,
+          "cart_rate_t": 2.9,
+          "cart_conv_t": 18.8
         },
         {
           "d": "11",
@@ -3446,7 +3815,16 @@
           "y_net": -19.8,
           "cart_users": 2763,
           "cart_rate": 3.7,
-          "cart_conv": 15.3
+          "cart_conv": 15.3,
+          "refund_amt_t": 214200,
+          "post_refund_t": 380800,
+          "v_t": 140000,
+          "b_t": 496,
+          "conv_t": 0.0035,
+          "aov_t": 1200,
+          "cart_users_t": 3920,
+          "cart_rate_t": 2.8,
+          "cart_conv_t": 12.6
         },
         {
           "d": "12",
@@ -3466,7 +3844,16 @@
           "y_net": 219.0,
           "cart_users": 2914,
           "cart_rate": 3.6,
-          "cart_conv": 19.8
+          "cart_conv": 19.8,
+          "refund_amt_t": 212500,
+          "post_refund_t": 637500,
+          "v_t": 150000,
+          "b_t": 708,
+          "conv_t": 0.0047,
+          "aov_t": 1200,
+          "cart_users_t": 3900,
+          "cart_rate_t": 2.6,
+          "cart_conv_t": 18.2
         },
         {
           "d": "13",
@@ -3486,7 +3873,16 @@
           "y_net": -13.8,
           "cart_users": 3562,
           "cart_rate": 3.9,
-          "cart_conv": 25.6
+          "cart_conv": 25.6,
+          "refund_amt_t": 850000,
+          "post_refund_t": 1275000,
+          "v_t": 190000,
+          "b_t": 1635,
+          "conv_t": 0.0086,
+          "aov_t": 1300,
+          "cart_users_t": 5130,
+          "cart_rate_t": 2.7,
+          "cart_conv_t": 31.9
         },
         {
           "d": "14",
@@ -3506,7 +3902,16 @@
           "y_net": -22.5,
           "cart_users": 2961,
           "cart_rate": 3.9,
-          "cart_conv": 20.5
+          "cart_conv": 20.5,
+          "refund_amt_t": 748000,
+          "post_refund_t": 1122000,
+          "v_t": 170000,
+          "b_t": 1438,
+          "conv_t": 0.0085,
+          "aov_t": 1300,
+          "cart_users_t": 4420,
+          "cart_rate_t": 2.6,
+          "cart_conv_t": 32.5
         },
         {
           "d": "15",
@@ -3526,7 +3931,16 @@
           "y_net": 0.2,
           "cart_users": 2843,
           "cart_rate": 3.7,
-          "cart_conv": 22.5
+          "cart_conv": 22.5,
+          "refund_amt_t": 714000,
+          "post_refund_t": 1071000,
+          "v_t": 170000,
+          "b_t": 1322,
+          "conv_t": 0.0078,
+          "aov_t": 1350,
+          "cart_users_t": 4420,
+          "cart_rate_t": 2.6,
+          "cart_conv_t": 29.9
         },
         {
           "d": "16",
@@ -3546,7 +3960,16 @@
           "y_net": -24.9,
           "cart_users": 2931,
           "cart_rate": 4.3,
-          "cart_conv": 21.4
+          "cart_conv": 21.4,
+          "refund_amt_t": 646000,
+          "post_refund_t": 1054000,
+          "v_t": 160000,
+          "b_t": 1278,
+          "conv_t": 0.008,
+          "aov_t": 1330,
+          "cart_users_t": 3840,
+          "cart_rate_t": 2.4,
+          "cart_conv_t": 33.3
         },
         {
           "d": "17",
@@ -3566,7 +3989,16 @@
           "y_net": 26.4,
           "cart_users": 3011,
           "cart_rate": 4.8,
-          "cart_conv": 19.6
+          "cart_conv": 19.6,
+          "refund_amt_t": 550800,
+          "post_refund_t": 979200,
+          "v_t": 160000,
+          "b_t": 1150,
+          "conv_t": 0.0072,
+          "aov_t": 1330,
+          "cart_users_t": 4160,
+          "cart_rate_t": 2.6,
+          "cart_conv_t": 27.7
         },
         {
           "d": "18",
@@ -3586,7 +4018,16 @@
           "y_net": -29.8,
           "cart_users": 2828,
           "cart_rate": 4.6,
-          "cart_conv": 17.8
+          "cart_conv": 17.8,
+          "refund_amt_t": 565250,
+          "post_refund_t": 922250,
+          "v_t": 150000,
+          "b_t": 1127,
+          "conv_t": 0.0075,
+          "aov_t": 1320,
+          "cart_users_t": 3900,
+          "cart_rate_t": 2.6,
+          "cart_conv_t": 28.9
         },
         {
           "d": "19",
@@ -3606,7 +4047,16 @@
           "y_net": -87.9,
           "cart_users": 2968,
           "cart_rate": 4.1,
-          "cart_conv": 13.9
+          "cart_conv": 13.9,
+          "refund_amt_t": 306000,
+          "post_refund_t": 544000,
+          "v_t": 150000,
+          "b_t": 708,
+          "conv_t": 0.0047,
+          "aov_t": 1200,
+          "cart_users_t": 3900,
+          "cart_rate_t": 2.6,
+          "cart_conv_t": 18.2
         },
         {
           "d": "20",
@@ -3626,7 +4076,16 @@
           "y_net": 76.3,
           "cart_users": 3449,
           "cart_rate": 4.2,
-          "cart_conv": 25.7
+          "cart_conv": 25.7,
+          "refund_amt_t": 1309000,
+          "post_refund_t": 1666000,
+          "v_t": 150000,
+          "b_t": 2324,
+          "conv_t": 0.0155,
+          "aov_t": 1280,
+          "cart_users_t": 4500,
+          "cart_rate_t": 3.0,
+          "cart_conv_t": 51.6
         },
         {
           "d": "21",
@@ -3646,7 +4105,16 @@
           "y_net": 126.6,
           "cart_users": 3716,
           "cart_rate": 5,
-          "cart_conv": 24.9
+          "cart_conv": 24.9,
+          "refund_amt_t": 807500,
+          "post_refund_t": 1317500,
+          "v_t": 200000,
+          "b_t": 1417,
+          "conv_t": 0.0071,
+          "aov_t": 1500,
+          "cart_users_t": 4802,
+          "cart_rate_t": 2.4,
+          "cart_conv_t": 29.5
         },
         {
           "d": "22",
@@ -3666,7 +4134,16 @@
           "y_net": -10.2,
           "cart_users": 2973,
           "cart_rate": 3,
-          "cart_conv": 20.3
+          "cart_conv": 20.3,
+          "refund_amt_t": 742900,
+          "post_refund_t": 1212100,
+          "v_t": 180000,
+          "b_t": 1348,
+          "conv_t": 0.0075,
+          "aov_t": 1450,
+          "cart_users_t": 4500,
+          "cart_rate_t": 2.5,
+          "cart_conv_t": 30.0
         },
         {
           "d": "23",
@@ -3686,7 +4163,16 @@
           "y_net": 2.0,
           "cart_users": 3202,
           "cart_rate": 2.3,
-          "cart_conv": 19.8
+          "cart_conv": 19.8,
+          "refund_amt_t": 696150,
+          "post_refund_t": 1088850,
+          "v_t": 170000,
+          "b_t": 1275,
+          "conv_t": 0.0075,
+          "aov_t": 1400,
+          "cart_users_t": 4335,
+          "cart_rate_t": 2.5,
+          "cart_conv_t": 29.4
         },
         {
           "d": "24",
@@ -3706,7 +4192,16 @@
           "y_net": 59.8,
           "cart_users": 3253,
           "cart_rate": 3.3,
-          "cart_conv": 21.2
+          "cart_conv": 21.2,
+          "refund_amt_t": 663000,
+          "post_refund_t": 1037000,
+          "v_t": 170000,
+          "b_t": 1197,
+          "conv_t": 0.007,
+          "aov_t": 1420,
+          "cart_users_t": 3740,
+          "cart_rate_t": 2.2,
+          "cart_conv_t": 32.0
         },
         {
           "d": "25",
@@ -3726,7 +4221,16 @@
           "y_net": -6.3,
           "cart_users": 3131,
           "cart_rate": 3.7,
-          "cart_conv": 21.8
+          "cart_conv": 21.8,
+          "refund_amt_t": 612000,
+          "post_refund_t": 1088000,
+          "v_t": 180000,
+          "b_t": 1259,
+          "conv_t": 0.007,
+          "aov_t": 1350,
+          "cart_users_t": 4590,
+          "cart_rate_t": 2.5,
+          "cart_conv_t": 27.4
         },
         {
           "d": "26",
@@ -3746,7 +4250,16 @@
           "y_net": -35.3,
           "cart_users": 3127,
           "cart_rate": 2.9,
-          "cart_conv": 19.9
+          "cart_conv": 19.9,
+          "refund_amt_t": 367200,
+          "post_refund_t": 652800,
+          "v_t": 160000,
+          "b_t": 756,
+          "conv_t": 0.0047,
+          "aov_t": 1350,
+          "cart_users_t": 3840,
+          "cart_rate_t": 2.4,
+          "cart_conv_t": 19.7
         },
         {
           "d": "27",
@@ -3766,7 +4279,16 @@
           "y_net": 251.5,
           "cart_users": 3078,
           "cart_rate": 2.9,
-          "cart_conv": 20.1
+          "cart_conv": 20.1,
+          "refund_amt_t": 306000,
+          "post_refund_t": 544000,
+          "v_t": 150000,
+          "b_t": 616,
+          "conv_t": 0.0041,
+          "aov_t": 1380,
+          "cart_users_t": 3900,
+          "cart_rate_t": 2.6,
+          "cart_conv_t": 15.8
         },
         {
           "d": "28",
@@ -3786,7 +4308,16 @@
           "y_net": -51.4,
           "cart_users": 2789,
           "cart_rate": 2.4,
-          "cart_conv": 18.9
+          "cart_conv": 18.9,
+          "refund_amt_t": 244800,
+          "post_refund_t": 435200,
+          "v_t": 150000,
+          "b_t": 515,
+          "conv_t": 0.0034,
+          "aov_t": 1320,
+          "cart_users_t": 3450,
+          "cart_rate_t": 2.3,
+          "cart_conv_t": 14.9
         },
         {
           "d": "29",
@@ -3806,7 +4337,16 @@
           "y_net": -60.7,
           "cart_users": 2643,
           "cart_rate": 2,
-          "cart_conv": 17.4
+          "cart_conv": 17.4,
+          "refund_amt_t": 202300,
+          "post_refund_t": 392700,
+          "v_t": 150000,
+          "b_t": 454,
+          "conv_t": 0.003,
+          "aov_t": 1310,
+          "cart_users_t": 3900,
+          "cart_rate_t": 2.6,
+          "cart_conv_t": 11.6
         },
         {
           "d": "30",
@@ -3826,7 +4366,16 @@
           "y_net": 95.5,
           "cart_users": 3326,
           "cart_rate": 1.6,
-          "cart_conv": 29.5
+          "cart_conv": 29.5,
+          "refund_amt_t": 1130500,
+          "post_refund_t": 1844500,
+          "v_t": 150000,
+          "b_t": 2237,
+          "conv_t": 0.0149,
+          "aov_t": 1330,
+          "cart_users_t": 3750,
+          "cart_rate_t": 2.5,
+          "cart_conv_t": 59.6
         },
         {
           "d": "31",
@@ -3846,7 +4395,16 @@
           "y_net": 7.0,
           "cart_users": 3593,
           "cart_rate": 2,
-          "cart_conv": 25.4
+          "cart_conv": 25.4,
+          "refund_amt_t": 1088000,
+          "post_refund_t": 1632000,
+          "v_t": 200000,
+          "b_t": 1813,
+          "conv_t": 0.0091,
+          "aov_t": 1500,
+          "cart_users_t": 4600,
+          "cart_rate_t": 2.3,
+          "cart_conv_t": 39.4
         }
       ]
     },
@@ -3875,7 +4433,16 @@
           "y_net": 127.3,
           "cart_users": 3178,
           "cart_rate": 2.2,
-          "cart_conv": 20.4
+          "cart_conv": 20.4,
+          "refund_amt_t": 775200,
+          "post_refund_t": 1264800,
+          "v_t": 200000,
+          "b_t": 1511,
+          "conv_t": 0.0076,
+          "aov_t": 1350,
+          "cart_users_t": 4600,
+          "cart_rate_t": 2.3,
+          "cart_conv_t": 32.9
         },
         {
           "d": "02",
@@ -3895,7 +4462,16 @@
           "y_net": -10.2,
           "cart_users": 3024,
           "cart_rate": 1.8,
-          "cart_conv": 21.6
+          "cart_conv": 21.6,
+          "refund_amt_t": 520200,
+          "post_refund_t": 924800,
+          "v_t": 180000,
+          "b_t": 1086,
+          "conv_t": 0.006,
+          "aov_t": 1330,
+          "cart_users_t": 3960,
+          "cart_rate_t": 2.2,
+          "cart_conv_t": 27.4
         },
         {
           "d": "03",
@@ -3915,7 +4491,16 @@
           "y_net": -29.3,
           "cart_users": 2865,
           "cart_rate": 1.6,
-          "cart_conv": 23.3
+          "cart_conv": 23.3,
+          "refund_amt_t": 516800,
+          "post_refund_t": 843200,
+          "v_t": 190000,
+          "b_t": 1007,
+          "conv_t": 0.0053,
+          "aov_t": 1350,
+          "cart_users_t": 3990,
+          "cart_rate_t": 2.1,
+          "cart_conv_t": 25.2
         },
         {
           "d": "04",
@@ -3935,7 +4520,16 @@
           "y_net": -56.4,
           "cart_users": 2740,
           "cart_rate": 1.4,
-          "cart_conv": 20.7
+          "cart_conv": 20.7,
+          "refund_amt_t": 516800,
+          "post_refund_t": 843200,
+          "v_t": 180000,
+          "b_t": 1046,
+          "conv_t": 0.0058,
+          "aov_t": 1300,
+          "cart_users_t": 3780,
+          "cart_rate_t": 2.1,
+          "cart_conv_t": 27.7
         },
         {
           "d": "05",
@@ -3955,7 +4549,16 @@
           "y_net": 68.1,
           "cart_users": 2609,
           "cart_rate": 1.4,
-          "cart_conv": 24.7
+          "cart_conv": 24.7,
+          "refund_amt_t": 474300,
+          "post_refund_t": 843200,
+          "v_t": 180000,
+          "b_t": 1006,
+          "conv_t": 0.0056,
+          "aov_t": 1310,
+          "cart_users_t": 3593,
+          "cart_rate_t": 2.0,
+          "cart_conv_t": 28.0
         },
         {
           "d": "06",
@@ -3975,7 +4578,16 @@
           "y_net": 21.7,
           "cart_users": 2767,
           "cart_rate": 1.5,
-          "cart_conv": 24.3
+          "cart_conv": 24.3,
+          "refund_amt_t": 487475,
+          "post_refund_t": 830025,
+          "v_t": 170000,
+          "b_t": 1054,
+          "conv_t": 0.0062,
+          "aov_t": 1250,
+          "cart_users_t": 3400,
+          "cart_rate_t": 2.0,
+          "cart_conv_t": 31.0
         },
         {
           "d": "07",
@@ -3995,7 +4607,16 @@
           "y_net": 34.0,
           "cart_users": 2685,
           "cart_rate": 1.7,
-          "cart_conv": 23
+          "cart_conv": 23,
+          "refund_amt_t": 459000,
+          "post_refund_t": 816000,
+          "v_t": 170000,
+          "b_t": 1012,
+          "conv_t": 0.006,
+          "aov_t": 1260,
+          "cart_users_t": 3400,
+          "cart_rate_t": 2.0,
+          "cart_conv_t": 29.8
         },
         {
           "d": "08",
@@ -4015,7 +4636,16 @@
           "y_net": 53.6,
           "cart_users": 2586,
           "cart_rate": 2.4,
-          "cart_conv": 21.4
+          "cart_conv": 21.4,
+          "refund_amt_t": 471750,
+          "post_refund_t": 803250,
+          "v_t": 160000,
+          "b_t": 1037,
+          "conv_t": 0.0065,
+          "aov_t": 1230,
+          "cart_users_t": 3200,
+          "cart_rate_t": 2.0,
+          "cart_conv_t": 32.4
         },
         {
           "d": "09",
@@ -4035,7 +4665,16 @@
           "y_net": -4.3,
           "cart_users": 2685,
           "cart_rate": 2,
-          "cart_conv": 21
+          "cart_conv": 21,
+          "refund_amt_t": 484500,
+          "post_refund_t": 790500,
+          "v_t": 160000,
+          "b_t": 1020,
+          "conv_t": 0.0064,
+          "aov_t": 1250,
+          "cart_users_t": 3200,
+          "cart_rate_t": 2.0,
+          "cart_conv_t": 31.9
         },
         {
           "d": "10",
@@ -4055,7 +4694,16 @@
           "y_net": 19.1,
           "cart_users": 3066,
           "cart_rate": 2.4,
-          "cart_conv": 23.8
+          "cart_conv": 23.8,
+          "refund_amt_t": 433500,
+          "post_refund_t": 841500,
+          "v_t": 150000,
+          "b_t": 1063,
+          "conv_t": 0.0071,
+          "aov_t": 1200,
+          "cart_users_t": 3300,
+          "cart_rate_t": 2.2,
+          "cart_conv_t": 32.2
         },
         {
           "d": "11",
@@ -4075,7 +4723,16 @@
           "y_net": 10.7,
           "cart_users": 2910,
           "cart_rate": 2.5,
-          "cart_conv": 26.9
+          "cart_conv": 26.9,
+          "refund_amt_t": 433500,
+          "post_refund_t": 841500,
+          "v_t": 150000,
+          "b_t": 1081,
+          "conv_t": 0.0072,
+          "aov_t": 1180,
+          "cart_users_t": 3450,
+          "cart_rate_t": 2.3,
+          "cart_conv_t": 31.3
         },
         {
           "d": "12",
@@ -4095,7 +4752,16 @@
           "y_net": -37.8,
           "cart_users": 2798,
           "cart_rate": 2.4,
-          "cart_conv": 20.6
+          "cart_conv": 20.6,
+          "refund_amt_t": 459000,
+          "post_refund_t": 816000,
+          "v_t": 160000,
+          "b_t": 1071,
+          "conv_t": 0.0067,
+          "aov_t": 1190,
+          "cart_users_t": 3360,
+          "cart_rate_t": 2.1,
+          "cart_conv_t": 31.9
         },
         {
           "d": "13",
@@ -4115,7 +4781,16 @@
           "y_net": -4.6,
           "cart_users": 2910,
           "cart_rate": 2.1,
-          "cart_conv": 20.7
+          "cart_conv": 20.7,
+          "refund_amt_t": 433500,
+          "post_refund_t": 841500,
+          "v_t": 160000,
+          "b_t": 1099,
+          "conv_t": 0.0069,
+          "aov_t": 1160,
+          "cart_users_t": 3200,
+          "cart_rate_t": 2.0,
+          "cart_conv_t": 34.3
         },
         {
           "d": "14",
@@ -4135,7 +4810,16 @@
           "y_net": 25.8,
           "cart_users": 3462,
           "cart_rate": 3.1,
-          "cart_conv": 26.2
+          "cart_conv": 26.2,
+          "refund_amt_t": 446250,
+          "post_refund_t": 828750,
+          "v_t": 180000,
+          "b_t": 1275,
+          "conv_t": 0.0071,
+          "aov_t": 1000,
+          "cart_users_t": 4050,
+          "cart_rate_t": 2.2,
+          "cart_conv_t": 31.5
         },
         {
           "d": "15",
@@ -4155,7 +4839,16 @@
           "y_net": 18.5,
           "cart_users": 3768,
           "cart_rate": 3.8,
-          "cart_conv": 30.4
+          "cart_conv": 30.4,
+          "refund_amt_t": 884000,
+          "post_refund_t": 1326000,
+          "v_t": 200000,
+          "b_t": 1473,
+          "conv_t": 0.0074,
+          "aov_t": 1500,
+          "cart_users_t": 4200,
+          "cart_rate_t": 2.1,
+          "cart_conv_t": 35.1
         },
         {
           "d": "16",
@@ -4175,7 +4868,16 @@
           "y_net": 19.9,
           "cart_users": 3554,
           "cart_rate": 2.4,
-          "cart_conv": 30.5
+          "cart_conv": 30.5,
+          "refund_amt_t": 850000,
+          "post_refund_t": 1275000,
+          "v_t": 200000,
+          "b_t": 1518,
+          "conv_t": 0.0076,
+          "aov_t": 1400,
+          "cart_users_t": 3700,
+          "cart_rate_t": 1.8,
+          "cart_conv_t": 41.0
         },
         {
           "d": "17",
@@ -4195,7 +4897,16 @@
           "y_net": 20.0,
           "cart_users": 4094,
           "cart_rate": 2.4,
-          "cart_conv": 33.8
+          "cart_conv": 33.8,
+          "refund_amt_t": 850000,
+          "post_refund_t": 1275000,
+          "v_t": 200000,
+          "b_t": 1518,
+          "conv_t": 0.0076,
+          "aov_t": 1400,
+          "cart_users_t": 3800,
+          "cart_rate_t": 1.9,
+          "cart_conv_t": 39.9
         },
         {
           "d": "18",
@@ -4215,7 +4926,16 @@
           "y_net": 31.0,
           "cart_users": 5636,
           "cart_rate": 4.9,
-          "cart_conv": 52.1
+          "cart_conv": 52.1,
+          "refund_amt_t": 1054000,
+          "post_refund_t": 1581000,
+          "v_t": 230000,
+          "b_t": 1757,
+          "conv_t": 0.0076,
+          "aov_t": 1500,
+          "cart_users_t": 4600,
+          "cart_rate_t": 2.0,
+          "cart_conv_t": 38.2
         },
         {
           "d": "19",
@@ -4235,7 +4955,16 @@
           "y_net": -68.1,
           "cart_users": 3380,
           "cart_rate": 2.8,
-          "cart_conv": 22.6
+          "cart_conv": 22.6,
+          "refund_amt_t": 952000,
+          "post_refund_t": 1428000,
+          "v_t": 220000,
+          "b_t": 1608,
+          "conv_t": 0.0073,
+          "aov_t": 1480,
+          "cart_users_t": 4400,
+          "cart_rate_t": 2.0,
+          "cart_conv_t": 36.5
         },
         {
           "d": "20",
@@ -4255,7 +4984,16 @@
           "y_net": -50.8,
           "cart_users": 3065,
           "cart_rate": 2.4,
-          "cart_conv": 23.1
+          "cart_conv": 23.1,
+          "refund_amt_t": 850000,
+          "post_refund_t": 1275000,
+          "v_t": 180000,
+          "b_t": 1466,
+          "conv_t": 0.0081,
+          "aov_t": 1450,
+          "cart_users_t": 3780,
+          "cart_rate_t": 2.1,
+          "cart_conv_t": 38.8
         },
         {
           "d": "21",
@@ -4275,7 +5013,16 @@
           "y_net": 777.6,
           "cart_users": 2632,
           "cart_rate": 2.1,
-          "cart_conv": 28.5
+          "cart_conv": 28.5,
+          "refund_amt_t": 850000,
+          "post_refund_t": 1275000,
+          "v_t": 200000,
+          "b_t": 1574,
+          "conv_t": 0.0079,
+          "aov_t": 1350,
+          "cart_users_t": 4000,
+          "cart_rate_t": 2.0,
+          "cart_conv_t": 39.4
         },
         {
           "d": "22",
@@ -4295,7 +5042,16 @@
           "y_net": 14.6,
           "cart_users": 1643,
           "cart_rate": 1.5,
-          "cart_conv": 23.6
+          "cart_conv": 23.6,
+          "refund_amt_t": 170000,
+          "post_refund_t": 255000,
+          "v_t": 50000,
+          "b_t": 304,
+          "conv_t": 0.0061,
+          "aov_t": 1400,
+          "cart_users_t": 1750,
+          "cart_rate_t": 3.5,
+          "cart_conv_t": 17.3
         },
         {
           "d": "23",
@@ -4315,7 +5071,16 @@
           "y_net": 45.3,
           "cart_users": 1506,
           "cart_rate": 1.2,
-          "cart_conv": 26.4
+          "cart_conv": 26.4,
+          "refund_amt_t": 116875,
+          "post_refund_t": 350625,
+          "v_t": 50000,
+          "b_t": 334,
+          "conv_t": 0.0067,
+          "aov_t": 1400,
+          "cart_users_t": 1725,
+          "cart_rate_t": 3.5,
+          "cart_conv_t": 19.4
         },
         {
           "d": "24",
@@ -4335,7 +5100,16 @@
           "y_net": 42.1,
           "cart_users": 1490,
           "cart_rate": 1.7,
-          "cart_conv": 29.3
+          "cart_conv": 29.3,
+          "refund_amt_t": 127500,
+          "post_refund_t": 382500,
+          "v_t": 60000,
+          "b_t": 359,
+          "conv_t": 0.006,
+          "aov_t": 1420,
+          "cart_users_t": 2100,
+          "cart_rate_t": 3.5,
+          "cart_conv_t": 17.1
         },
         {
           "d": "25",
@@ -4355,7 +5129,16 @@
           "y_net": -8.7,
           "cart_users": 1564,
           "cart_rate": 1.8,
-          "cart_conv": 24.6
+          "cart_conv": 24.6,
+          "refund_amt_t": 127500,
+          "post_refund_t": 382500,
+          "v_t": 60000,
+          "b_t": 378,
+          "conv_t": 0.0063,
+          "aov_t": 1350,
+          "cart_users_t": 1800,
+          "cart_rate_t": 3.0,
+          "cart_conv_t": 21.0
         },
         {
           "d": "26",
@@ -4375,7 +5158,16 @@
           "y_net": -9.0,
           "cart_users": 1433,
           "cart_rate": 1.7,
-          "cart_conv": 25.4
+          "cart_conv": 25.4,
+          "refund_amt_t": 127500,
+          "post_refund_t": 382500,
+          "v_t": 70000,
+          "b_t": 370,
+          "conv_t": 0.0053,
+          "aov_t": 1380,
+          "cart_users_t": 2310,
+          "cart_rate_t": 3.3,
+          "cart_conv_t": 16.0
         },
         {
           "d": "27",
@@ -4395,7 +5187,16 @@
           "y_net": 126.7,
           "cart_users": 1596,
           "cart_rate": 1.8,
-          "cart_conv": 26.3
+          "cart_conv": 26.3,
+          "refund_amt_t": 142800,
+          "post_refund_t": 367200,
+          "v_t": 70000,
+          "b_t": 375,
+          "conv_t": 0.0054,
+          "aov_t": 1360,
+          "cart_users_t": 2100,
+          "cart_rate_t": 3.0,
+          "cart_conv_t": 17.9
         },
         {
           "d": "28",
@@ -4415,7 +5216,16 @@
           "y_net": 8.7,
           "cart_users": 1679,
           "cart_rate": 2.1,
-          "cart_conv": 25.3
+          "cart_conv": 25.3,
+          "refund_amt_t": 142800,
+          "post_refund_t": 367200,
+          "v_t": 60000,
+          "b_t": 378,
+          "conv_t": 0.0063,
+          "aov_t": 1350,
+          "cart_users_t": 1800,
+          "cart_rate_t": 3.0,
+          "cart_conv_t": 21.0
         },
         {
           "d": "29",
@@ -4435,7 +5245,16 @@
           "y_net": 8.1,
           "cart_users": 1496,
           "cart_rate": 2,
-          "cart_conv": 28.8
+          "cart_conv": 28.8,
+          "refund_amt_t": 166600,
+          "post_refund_t": 428400,
+          "v_t": 65000,
+          "b_t": 434,
+          "conv_t": 0.0067,
+          "aov_t": 1370,
+          "cart_users_t": 2275,
+          "cart_rate_t": 3.5,
+          "cart_conv_t": 19.1
         },
         {
           "d": "30",
@@ -4455,7 +5274,16 @@
           "y_net": 69.4,
           "cart_users": 1577,
           "cart_rate": 2,
-          "cart_conv": 35.1
+          "cart_conv": 35.1,
+          "refund_amt_t": 166600,
+          "post_refund_t": 428400,
+          "v_t": 65000,
+          "b_t": 441,
+          "conv_t": 0.0068,
+          "aov_t": 1350,
+          "cart_users_t": 1300,
+          "cart_rate_t": 2.0,
+          "cart_conv_t": 33.9
         }
       ]
     },
@@ -5431,7 +6259,8 @@
           "cart_rate_t": 2.0,
           "cart_conv": 29.6,
           "cart_conv_t": 37.7,
-          "y_net": 68.0
+          "y_net": 68.3,
+          "ly_post_refund": 261699
         },
         {
           "d": "02",
@@ -5461,7 +6290,8 @@
           "cart_rate_t": 2.5,
           "cart_conv": 29.2,
           "cart_conv_t": 24.3,
-          "y_net": -31.0
+          "y_net": -30.7,
+          "ly_post_refund": 683595
         },
         {
           "d": "03",
@@ -5491,7 +6321,8 @@
           "cart_rate_t": 2.3,
           "cart_conv": 24.6,
           "cart_conv_t": 30.3,
-          "y_net": -29.0
+          "y_net": -29.4,
+          "ly_post_refund": 497855
         },
         {
           "d": "04",
@@ -5521,7 +6352,8 @@
           "cart_rate_t": 2.3,
           "cart_conv": 0,
           "cart_conv_t": 31.9,
-          "y_net": null
+          "y_net": null,
+          "ly_post_refund": 535056
         },
         {
           "d": "05",
@@ -5551,7 +6383,8 @@
           "cart_rate_t": 1.5,
           "cart_conv": 0,
           "cart_conv_t": 51.0,
-          "y_net": null
+          "y_net": null,
+          "ly_post_refund": 622127
         },
         {
           "d": "06",
@@ -5581,7 +6414,8 @@
           "cart_rate_t": 2.0,
           "cart_conv": 0,
           "cart_conv_t": 40.0,
-          "y_net": null
+          "y_net": null,
+          "ly_post_refund": 532277
         },
         {
           "d": "07",
@@ -5611,7 +6445,8 @@
           "cart_rate_t": 2.0,
           "cart_conv": 0,
           "cart_conv_t": 28.9,
-          "y_net": null
+          "y_net": null,
+          "ly_post_refund": 786296
         },
         {
           "d": "08",
@@ -5641,7 +6476,8 @@
           "cart_rate_t": 1.6,
           "cart_conv": 0,
           "cart_conv_t": 35.6,
-          "y_net": null
+          "y_net": null,
+          "ly_post_refund": 662287
         },
         {
           "d": "09",
@@ -5671,7 +6507,8 @@
           "cart_rate_t": 1.5,
           "cart_conv": 0,
           "cart_conv_t": 47.0,
-          "y_net": null
+          "y_net": null,
+          "ly_post_refund": 653714
         },
         {
           "d": "10",
@@ -5701,7 +6538,8 @@
           "cart_rate_t": 1.8,
           "cart_conv": 0,
           "cart_conv_t": 42.0,
-          "y_net": null
+          "y_net": null,
+          "ly_post_refund": 692374
         },
         {
           "d": "11",
@@ -5731,7 +6569,8 @@
           "cart_rate_t": 2.1,
           "cart_conv": 0,
           "cart_conv_t": 37.6,
-          "y_net": null
+          "y_net": null,
+          "ly_post_refund": 715071
         },
         {
           "d": "12",
@@ -5761,7 +6600,8 @@
           "cart_rate_t": 3.0,
           "cart_conv": 0,
           "cart_conv_t": 26.8,
-          "y_net": null
+          "y_net": null,
+          "ly_post_refund": 608538
         },
         {
           "d": "13",
@@ -5791,7 +6631,8 @@
           "cart_rate_t": 3.2,
           "cart_conv": 0,
           "cart_conv_t": 18.3,
-          "y_net": null
+          "y_net": null,
+          "ly_post_refund": 621394
         },
         {
           "d": "14",
@@ -5821,7 +6662,8 @@
           "cart_rate_t": 3.3,
           "cart_conv": 0,
           "cart_conv_t": 17.4,
-          "y_net": null
+          "y_net": null,
+          "ly_post_refund": 636103
         },
         {
           "d": "15",
@@ -5851,7 +6693,8 @@
           "cart_rate_t": 3.0,
           "cart_conv": 0,
           "cart_conv_t": 23.6,
-          "y_net": null
+          "y_net": null,
+          "ly_post_refund": 601570
         },
         {
           "d": "16",
@@ -5881,7 +6724,8 @@
           "cart_rate_t": 3.2,
           "cart_conv": 0,
           "cart_conv_t": 20.1,
-          "y_net": null
+          "y_net": null,
+          "ly_post_refund": 552972
         },
         {
           "d": "17",
@@ -5911,7 +6755,8 @@
           "cart_rate_t": 3.5,
           "cart_conv": 0,
           "cart_conv_t": 23.0,
-          "y_net": null
+          "y_net": null,
+          "ly_post_refund": 649487
         },
         {
           "d": "18",
@@ -5941,7 +6786,8 @@
           "cart_rate_t": 3.4,
           "cart_conv": 0,
           "cart_conv_t": 21.7,
-          "y_net": null
+          "y_net": null,
+          "ly_post_refund": 711420
         },
         {
           "d": "19",
@@ -5971,7 +6817,8 @@
           "cart_rate_t": 3.4,
           "cart_conv": 0,
           "cart_conv_t": 24.7,
-          "y_net": null
+          "y_net": null,
+          "ly_post_refund": 687438
         },
         {
           "d": "20",
@@ -6001,7 +6848,8 @@
           "cart_rate_t": 2.9,
           "cart_conv": 0,
           "cart_conv_t": 20.5,
-          "y_net": null
+          "y_net": null,
+          "ly_post_refund": 587973
         },
         {
           "d": "21",
@@ -6031,7 +6879,8 @@
           "cart_rate_t": 3.7,
           "cart_conv": 0,
           "cart_conv_t": 16.9,
-          "y_net": null
+          "y_net": null,
+          "ly_post_refund": 576933
         },
         {
           "d": "22",
@@ -6061,7 +6910,8 @@
           "cart_rate_t": 2.8,
           "cart_conv": 0,
           "cart_conv_t": 21.6,
-          "y_net": null
+          "y_net": null,
+          "ly_post_refund": 640314
         },
         {
           "d": "23",
@@ -6091,7 +6941,8 @@
           "cart_rate_t": 2.8,
           "cart_conv": 0,
           "cart_conv_t": 21.9,
-          "y_net": null
+          "y_net": null,
+          "ly_post_refund": 577857
         },
         {
           "d": "24",
@@ -6121,7 +6972,8 @@
           "cart_rate_t": 3.2,
           "cart_conv": 0,
           "cart_conv_t": 25.3,
-          "y_net": null
+          "y_net": null,
+          "ly_post_refund": 591951
         },
         {
           "d": "25",
@@ -6151,7 +7003,8 @@
           "cart_rate_t": 2.8,
           "cart_conv": 0,
           "cart_conv_t": 25.3,
-          "y_net": null
+          "y_net": null,
+          "ly_post_refund": 840292
         },
         {
           "d": "26",
@@ -6181,7 +7034,8 @@
           "cart_rate_t": 3.6,
           "cart_conv": 0,
           "cart_conv_t": 20.7,
-          "y_net": null
+          "y_net": null,
+          "ly_post_refund": 716631
         },
         {
           "d": "27",
@@ -6211,7 +7065,8 @@
           "cart_rate_t": 1.8,
           "cart_conv": 0,
           "cart_conv_t": 37.1,
-          "y_net": null
+          "y_net": null,
+          "ly_post_refund": 699462
         },
         {
           "d": "28",
@@ -6241,7 +7096,8 @@
           "cart_rate_t": 1.5,
           "cart_conv": 0,
           "cart_conv_t": 29.2,
-          "y_net": null
+          "y_net": null,
+          "ly_post_refund": 722014
         },
         {
           "d": "29",
@@ -6271,7 +7127,8 @@
           "cart_rate_t": 1.5,
           "cart_conv": 0,
           "cart_conv_t": 29.8,
-          "y_net": null
+          "y_net": null,
+          "ly_post_refund": 564097
         },
         {
           "d": "30",
@@ -6301,7 +7158,8 @@
           "cart_rate_t": 1.8,
           "cart_conv": 0,
           "cart_conv_t": 35.7,
-          "y_net": null
+          "y_net": null,
+          "ly_post_refund": 592877
         },
         {
           "d": "31",
@@ -6331,7 +7189,8 @@
           "cart_rate_t": 1.7,
           "cart_conv": 0,
           "cart_conv_t": 37.4,
-          "y_net": null
+          "y_net": null,
+          "ly_post_refund": 1050735
         }
       ]
     }
