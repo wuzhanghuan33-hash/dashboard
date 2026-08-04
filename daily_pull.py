@@ -736,7 +736,8 @@ def main():
         subprocess.run([sys.executable, str(DATA_DIR / "fix_data.py")],
                        cwd=str(DATA_DIR), capture_output=True)
     finally:
-        cleanup_headless()
+        # 保持专用 Chrome + Proxy 常驻（warm），供 backfill_yoy_net.py 复用，下次运行也免冷启动
+        # 失败路径（ensure_proxy 失败时）已在上面调用 cleanup_headless()
         cdp_close(tid)
 
     elapsed = time.time() - t0

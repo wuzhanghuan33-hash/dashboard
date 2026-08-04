@@ -21,12 +21,19 @@ git diff --cached --quiet || {
   git commit -m "auto: $(date '+%Y-%m-%d %H:%M') 数据更新" >> "$LOG" 2>&1
   # GitHub 走 ssh 无需代理
   git push origin main >> "$LOG" 2>&1
+
   # 同步到 gh-pages 分支
-  git checkout gh-pages
-  git checkout main -- data.json data.js index.html
-  git commit -m "auto: $(date '+%Y-%m-%d %H:%M') 同步" >> "$LOG" 2>&1
-  git push origin gh-pages >> "$LOG" 2>&1
-  git checkout main
+  # 未提交的代码改动会挡住 `git checkout gh-pages`，先 stash，同步后恢复
+  git stash push -m "daily-sync" >> "$LOG" 2>&1 || true
+  if git checkout gh-pages >> "$LOG" 2>&1; then
+    git checkout main -- data.json data.js index.html
+    git commit -m "auto: $(date '+%Y-%m-%d %H:%M') 同步" >> "$LOG" 2>&1
+    git push origin gh-pages >> "$LOG" 2>&1
+    git checkout main >> "$LOG" 2>&1
+  else
+    echo "⚠ gh-pages 同步失败（checkout gh-pages 出错），下次运行重试" >> "$LOG"
+  fi
+  if git stash list | grep -q "daily-sync"; then git stash pop >> "$LOG" 2>&1; fi
 }
 
 # 5. 日志超过 1MB 时截断
