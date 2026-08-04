@@ -16,7 +16,43 @@ CDP_PROXY = "http://localhost:3456"
 DATA_DIR = Path(__file__).parent
 DATA_JSON = DATA_DIR / "data.json"
 
-TABS = ["1月", "2-3月", "4月", "5-6月", "7月"]
+TABS = ["1月", "2-3月", "4月", "5-6月", "7月"]  # 8月 走 extract_aug_ly（新版引擎）
+
+
+def extract_aug_ly(target_id):
+    """8月：新版引擎 getValue 读 2025 段 col41(日期)/col49(去退金额达成)
+    1-7月 走 _dataModel，8月 旧引擎读不到该段，需单独处理。"""
+    result = activate_tab(target_id, "8月")
+    if result != "ACTIVATED":
+        print("  8月激活失败:", result)
+        return {}
+    time.sleep(15)
+    js = """
+    (function(){
+        var s = window.spread.getActiveSheet();
+        var out = {};
+        for (var r = 3; r <= 33; r++) {
+            var dv, v;
+            try { dv = s.getValue(r, 41); } catch(e) {}
+            try { v = s.getValue(r, 49); } catch(e) {}
+            if (typeof dv === 'number' && !isNaN(dv) && typeof v === 'number' && !isNaN(v) && v > 0) {
+                out[String(Math.round(dv))] = Math.round(v);
+            }
+        }
+        return JSON.stringify(out);
+    })()
+    """
+    raw = cdp_eval(target_id, js)
+    if not raw or raw.startswith("ERROR"):
+        print("  8月提取失败:", str(raw)[:100])
+        return {}
+    try:
+        data = json.loads(raw)
+    except json.JSONDecodeError as e:
+        print("  8月JSON解析失败:", e)
+        return {}
+    print(f"  ✓ 8月 {len(data)} 天 2025去退金额")
+    return data
 
 
 def excel_serial_to_date(serial):
@@ -190,6 +226,18 @@ def main():
         sample_dt = excel_serial_to_date(int(list(post_refund_data.keys())[0]))
         print(f"  ✓ {n} 天数据，入库 {filled} 天（首日期 {sample_dt.date()}）")
 
+    # 8月走新版引擎（getValue），其余走 _dataModel
+    print(f"======== 8月 ========")
+    aug_ly = extract_aug_ly(tid)
+    filled_aug = 0
+    for serial_str, post_val in aug_ly.items():
+        dt = excel_serial_to_date(int(serial_str))
+        key = f"{dt.month}-{dt.strftime('%d')}"
+        if key not in ly_data:
+            ly_data[key] = post_val
+            filled_aug += 1
+    print(f"  8月入库 {filled_aug} 天")
+
     cdp_close(tid)
 
     if not ly_data:
@@ -216,7 +264,7 @@ def main():
     # Summary
     print(f"\n已更新 {applied} 天的 ly_post_refund 和 y_net")
     print()
-    for m in ["1","2","3","4","5","6","7"]:
+    for m in ["1","2","3","4","5","6","7","8"]:
         days = data["months"][m]["days"]
         n = sum(1 for d in days if d.get("y_net") is not None)
         avg = sum(d["y_net"] for d in days if d.get("y_net")) / n if n else 0
