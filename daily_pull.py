@@ -2,8 +2,8 @@
 """每日自动从飞书维表拉取数据，更新业绩看板
 
 依赖:
-  - macOS Chrome 开启 --remote-debugging-port=9222
-  - CDP Proxy (check-deps.mjs 自动启动)
+  - 专用 headless Chrome（端口 9223，profile 在 ~/.local/share/dashboard/chrome-profile）
+  - CDP Proxy (cdp-proxy.mjs 自动启动, --browser=dashboard)
 
 运行: python3 daily_pull.py
 计划任务 (launchd): 每天 10:00 自动执行
@@ -21,6 +21,10 @@ FEISHU_URL = "https://vcnrz1ae7b5x.feishu.cn/wiki/LkD9wO05BiZrSkkLYg7czErwn5e"
 CDP_PROXY = "http://localhost:3456"
 DATA_DIR = Path(__file__).parent
 DATA_JSON = DATA_DIR / "data.json"
+
+# 专用无头浏览器（独立端口 + 独立 profile，绕开日常 Chrome 的失效 CDP）
+CHROME_PORT = 9223
+CHROME_PROFILE = Path(os.path.expanduser("~/.local/share/dashboard/chrome-profile"))
 
 SHEET_DOMAIN = "vcnrz1ae7b5x.feishu.cn"
 
@@ -66,6 +70,23 @@ SHEET7 = {
 
 WEEKDAY_MAP = {"一": 1, "二": 2, "三": 3, "四": 4, "五": 5, "六": 6, "日": 7}
 
+# 8月表：新版引擎，用 getValue 行式读取。row1=表头, row2-32=8月1-31日（每行一天）
+AUG_COLS = {
+    "date": 3, "rhythm": 0, "weekday": 2, "t": 4, "a": 5,
+    "y": 7,
+    "refund_amt": 9, "refund_amt_t": 8,
+    "post_refund": 11, "post_refund_t": 10,
+    "ref": 15, "ref_t": 14,
+    "v": 21, "v_t": 20, "b": 23, "b_t": 22,
+    "conv": 25, "conv_t": 24, "aov": 27, "aov_t": 26,
+    "cart_users": 29, "cart_users_t": 28, "cart_rate": 31, "cart_rate_t": 30,
+    "cart_conv": 33, "cart_conv_t": 32,
+    "y_net": 13,
+}
+AUG_FIRST_ROW = 2
+AUG_LAST_ROW = 32
+AUG_TARGET = 34000000  # 8月业绩目标（row0 汇总）
+
 # ==================== CDP 操作 ====================
 
 # 自动启动的 Chrome 进程，退出时清理
@@ -102,8 +123,8 @@ def start_headless_chrome():
         print("  ⚠ Chrome 未安装，无法启动无头模式")
         return None
 
-    port = 9222
-    # 检查端口是否已被占用
+    port = CHROME_PORT
+    # 检查端口是否已有可用的 Chrome（CDP 正常才复用）
     try:
         r = subprocess.run(["curl", "-s", "-o", "/dev/null", "-w", "%{http_code}",
                             f"http://localhost:{port}/json/version"], capture_output=True,
@@ -114,10 +135,12 @@ def start_headless_chrome():
         pass
 
     print(f"  启动无头 Chrome (port {port})...")
+    CHROME_PROFILE.mkdir(parents=True, exist_ok=True)
     proc = subprocess.Popen(
         [chrome_path,
          "--headless=new",
          f"--remote-debugging-port={port}",
+         f"--user-data-dir={CHROME_PROFILE}",
          "--no-first-run",
          "--no-default-browser-check",
          "--disable-gpu",
@@ -149,59 +172,53 @@ def start_headless_chrome():
     return None
 
 
+def proxy_connected():
+    """CDP Proxy 真正连上浏览器的标志：/targets 返回 JSON 数组。
+    仅返回 HTTP 200 不够——proxy 连不上浏览器时也会 200 但 body 是 {"error":...}。"""
+    try:
+        r = subprocess.run(["curl", "-s", "-m", "5", f"{CDP_PROXY}/targets"],
+                           capture_output=True, text=True, timeout=8)
+        return isinstance(json.loads(r.stdout), list)
+    except Exception:  # noqa
+        return False
+
+
 def ensure_proxy():
-    """确保 CDP Proxy 和 Chrome 已启动"""
+    """确保专用 headless Chrome 和 CDP Proxy 已启动"""
     global _auto_chrome_pid, _auto_proxy_pid
 
-    # 1) 先检查 CDP Proxy 是否可用
-    try:
-        subprocess.run(["curl", "-s", f"{CDP_PROXY}/targets"],
-                       capture_output=True, timeout=5)
-        return True
-    except:  # noqa
-        pass
-
-    # 2) 启动 CDP Proxy
-    if not _auto_proxy_pid:
-        proxy_script = "/Users/luoxiaomin/.claude/skills/web-access/scripts/cdp-proxy.mjs"
-        if Path(proxy_script).exists():
-            try:
-                proc = subprocess.Popen(["node", proxy_script],
-                                        stdout=subprocess.DEVNULL, stderr=subprocess.DEVNULL)
-                _auto_proxy_pid = proc.pid
-                for _ in range(15):
-                    time.sleep(1)
-                    try:
-                        subprocess.run(["curl", "-s", f"{CDP_PROXY}/targets"],
-                                       capture_output=True, timeout=3)
-                        return True
-                    except:  # noqa
-                        pass
-            except:  # noqa
-                pass
-
-    # 3) 启动无头 Chrome
+    # 1) 先启动（或复用）专用 headless Chrome，确保 CDP 端口就绪
     chrome_pid = start_headless_chrome()
     if chrome_pid:
         _auto_chrome_pid = chrome_pid
-        # 重试 proxy
-        if not _auto_proxy_pid:
-            proxy_script = "/Users/luoxiaomin/.claude/skills/web-access/scripts/cdp-proxy.mjs"
-            if Path(proxy_script).exists():
-                try:
-                    proc = subprocess.Popen(["node", proxy_script],
-                                            stdout=subprocess.DEVNULL, stderr=subprocess.DEVNULL)
-                    _auto_proxy_pid = proc.pid
-                except:  # noqa
-                    pass
-        for _ in range(15):
+
+    # 2) Proxy 已连上浏览器 → 直接可用
+    if proxy_connected():
+        return True
+
+    # 3) 有残留 proxy 但未连上浏览器（坏 proxy）→ 杀掉重启
+    try:
+        subprocess.run(["pkill", "-f", "cdp-proxy.mjs"], timeout=5)
+        time.sleep(1)
+    except Exception:  # noqa
+        pass
+    _auto_proxy_pid = None
+
+    # 4) 启动新 CDP Proxy，明确连接专用 Chrome
+    proxy_script = "/Users/luoxiaomin/.claude/skills/web-access/scripts/cdp-proxy.mjs"
+    if not Path(proxy_script).exists():
+        return False
+    try:
+        proc = subprocess.Popen(["node", proxy_script, "--browser=dashboard"],
+                                stdout=subprocess.DEVNULL, stderr=subprocess.DEVNULL)
+        _auto_proxy_pid = proc.pid
+        for _ in range(20):
             time.sleep(1)
-            try:
-                subprocess.run(["curl", "-s", f"{CDP_PROXY}/targets"],
-                               capture_output=True, timeout=3)
+            if proxy_connected():
+                print("  ✓ CDP Proxy 已连接无头 Chrome")
                 return True
-            except:  # noqa
-                pass
+    except Exception:  # noqa
+        pass
 
     return False
 
@@ -450,6 +467,119 @@ def extract_july_data(target_id):
     return days, None
 
 
+def extract_august_data(target_id):
+    """新版引擎（getValue 行式）读取8月逐日数据"""
+    js_activate = """
+    (function(){
+        var tabs = document.querySelectorAll('.tab-list > div');
+        var target = null;
+        tabs.forEach(function(t){
+            if (t.textContent.trim() === '8月') target = t;
+        });
+        if (!target) return 'NO_TAB';
+        var keys = Object.keys(target);
+        for (var i = 0; i < keys.length; i++) {
+            if (keys[i].startsWith('__reactEventHandlers')) {
+                var h = target[keys[i]];
+                if (h && h.onMouseDown) {
+                    h.onMouseDown({
+                        type:'mousedown', button:0, buttons:1,
+                        clientX:0, clientY:0,
+                        target:target, currentTarget:target,
+                        preventDefault:function(){},
+                        stopPropagation:function(){}
+                    });
+                    return 'ACTIVATED';
+                }
+            }
+        }
+        return 'NO_HANDLER';
+    })()
+    """
+    result = cdp_eval(target_id, js_activate)
+    if result != "ACTIVATED":
+        return None, f"激活8月tab失败: {result}"
+
+    print("   等待数据加载...")
+    time.sleep(15)
+
+    cols = ",".join(str(c) for c in sorted(set(AUG_COLS.values())))
+    js_read = (
+        "(function(){var s=window.spread.getActiveSheet();var out=[];"
+        "for(var r=" + str(AUG_FIRST_ROW) + ";r<=" + str(AUG_LAST_ROW) + ";r++){"
+        "var row={};var cols=[" + cols + "];"
+        "cols.forEach(function(c){var v;try{v=s.getValue(r,c);}catch(e){v='E';}"
+        "row['c'+c]=v===undefined||v===null?null:v;});out.push(row);}"
+        "return JSON.stringify(out);})()"
+    )
+    raw = cdp_eval(target_id, js_read)
+    if not raw or not raw.startswith("["):
+        return None, f"读取8月数据失败: {str(raw)[:100]}"
+    try:
+        rows = json.loads(raw)
+    except json.JSONDecodeError as e:
+        return None, f"8月JSON解析失败: {e}"
+
+    def gv(row, col):
+        v = row.get("c" + str(col))
+        return v if isinstance(v, (int, float)) else None
+
+    days = []
+    for row in rows:
+        d_date = gv(row, AUG_COLS["date"])
+        if d_date is None:
+            continue
+        dt = excel_serial_to_date(d_date)
+        day = {
+            "d": dt.strftime("%d"),
+            "r": gv(row, AUG_COLS["rhythm"]) or "—",
+            "w": WEEKDAY_MAP.get(str(gv(row, AUG_COLS["weekday"]) or ""), 0),
+            "t": int(gv(row, AUG_COLS["t"]) or 0),
+        }
+
+        day["a"] = int(gv(row, AUG_COLS["a"]) or 0)
+        day["rr"] = round(day["a"] / day["t"], 3) if day["t"] > 0 else 0
+
+        y = gv(row, AUG_COLS["y"])
+        day["y"] = round(y * 100, 1) if isinstance(y, (int, float)) and y > -0.999 else None
+
+        day["refund_amt"] = int(gv(row, AUG_COLS["refund_amt"]) or 0)
+        day["refund_amt_t"] = int(gv(row, AUG_COLS["refund_amt_t"]) or 0)
+        day["post_refund"] = int(gv(row, AUG_COLS["post_refund"]) or 0)
+        day["post_refund_t"] = int(gv(row, AUG_COLS["post_refund_t"]) or 0)
+
+        ref = gv(row, AUG_COLS["ref"])
+        day["ref"] = round(ref * 100, 1) if isinstance(ref, (int, float)) else 0
+        ref_t = gv(row, AUG_COLS["ref_t"])
+        day["ref_t"] = round(ref_t * 100, 1) if isinstance(ref_t, (int, float)) else 0
+
+        day["v"] = int(gv(row, AUG_COLS["v"]) or 0)
+        day["v_t"] = int(gv(row, AUG_COLS["v_t"]) or 0)
+        day["b"] = int(gv(row, AUG_COLS["b"]) or 0)
+        day["b_t"] = int(gv(row, AUG_COLS["b_t"]) or 0)
+        day["conv"] = gv(row, AUG_COLS["conv"])
+        day["conv_t"] = gv(row, AUG_COLS["conv_t"])
+        day["aov"] = int(gv(row, AUG_COLS["aov"]) or 0)
+        day["aov_t"] = int(gv(row, AUG_COLS["aov_t"]) or 0)
+        day["cart_users"] = int(gv(row, AUG_COLS["cart_users"]) or 0)
+        day["cart_users_t"] = int(gv(row, AUG_COLS["cart_users_t"]) or 0)
+        cart_rate = gv(row, AUG_COLS["cart_rate"])
+        day["cart_rate"] = round(cart_rate * 100, 1) if isinstance(cart_rate, (int, float)) else 0
+        cart_rate_t = gv(row, AUG_COLS["cart_rate_t"])
+        day["cart_rate_t"] = round(cart_rate_t * 100, 1) if isinstance(cart_rate_t, (int, float)) else 0
+        cart_conv = gv(row, AUG_COLS["cart_conv"])
+        day["cart_conv"] = round(cart_conv * 100, 1) if isinstance(cart_conv, (int, float)) else 0
+        cart_conv_t = gv(row, AUG_COLS["cart_conv_t"])
+        day["cart_conv_t"] = round(cart_conv_t * 100, 1) if isinstance(cart_conv_t, (int, float)) else 0
+
+        y_net = gv(row, AUG_COLS["y_net"])
+        day["y_net"] = round(y_net * 100, 1) if isinstance(y_net, (int, float)) and y_net > -0.999 else None
+
+        days.append(day)
+
+    return days, None
+
+
 def merge_days(existing_days, new_days):
     """合并新数据到已有数据，只覆盖非零实际值"""
     existing_map = {d["d"]: d for d in existing_days}
@@ -490,8 +620,8 @@ def merge_days(existing_days, new_days):
                 if ed.get(f) is not None and nd.get(f) is None:
                     nd[f] = ed[f]
 
-            # 目标始终更新
-            nd["t"] = ed.get("t", nd["t"])
+            # 目标优先用新值（真实目标），回退已有
+            nd["t"] = nd["t"] if nd["t"] > 0 else ed.get("t", nd["t"])
 
             # weekday始终更新
             if nd["w"] == 0:
@@ -528,7 +658,7 @@ def main():
 
     # 打开飞书 + 提取，失败自动重试（页面加载慢/偶发NO_TAB）
     MAX_RETRY = 3
-    july_days, err = None, "未尝试"
+    july_days, aug_days, err = None, None, "未尝试"
     tid = ""
     for attempt in range(1, MAX_RETRY + 1):
         print(f"  打开飞书页面 (第{attempt}次尝试)...")
@@ -539,10 +669,14 @@ def main():
             continue
         time.sleep(8)
         print(f"  提取7月数据...")
-        july_days, err = extract_july_data(tid)
+        july_days, july_err = extract_july_data(tid)
+        print(f"  提取8月数据...")
+        aug_days, aug_err = extract_august_data(tid)
         cdp_close(tid)
-        if not err:
+        if not july_err and not aug_err:
+            err = None
             break
+        err = july_err or aug_err
         print(f"  ✗ 第{attempt}次失败: {err}")
         if attempt < MAX_RETRY:
             time.sleep(10)
@@ -551,37 +685,51 @@ def main():
         if err:
             print(f"  ✗ 最终失败: {err}")
             # 不退出 — 仍运行 fix_data.py 更新 timestamp
-        elif july_days:
-            print(f"  ✓ 提取到 {len(july_days)} 天 (含 {sum(1 for d in july_days if d['a']>0)} 天有实际值)")
-
-            # 合并到 7月
-            month7 = data["months"]["7"]
-            month7["days"] = merge_days(month7["days"], july_days)
-
-            # 重算月汇总
-            total_a = sum(d["a"] for d in month7["days"])
-            total_t = month7["target"]
-            month7["actual"] = total_a
-            month7["rate"] = round(total_a / total_t, 3) if total_t > 0 else 0
-
-            # 重算年汇总
-            data["yearActual"] = sum(m["actual"] for m in data["months"].values())
-            data["lastUpdated"] = datetime.now().strftime("%Y-%m-%d")
-
-            # 保存
-            DATA_JSON.write_text(
-                json.dumps(data, ensure_ascii=False, indent=2) + "\n",
-                encoding="utf-8",
-            )
-
-            new_count = sum(len(m["days"]) for m in data["months"].values())
-            new_actual = sum(m["actual"] for m in data["months"].values())
-            print(f"  ✓ 保存: {len(data['months'])}月, {new_count}天, 年达成 {new_actual/10000:.0f}万")
-
-            if new_actual != old_actual:
-                print(f"  Δ 年达成变化: {old_actual/10000:.0f}万 → {new_actual/10000:.0f}万")
         else:
-            print("  7月无新数据")
+            saved = False
+
+            if july_days:
+                print(f"  ✓ 7月提取 {len(july_days)} 天 (含 {sum(1 for d in july_days if d['a']>0)} 天有实际值)")
+                month7 = data["months"]["7"]
+                month7["days"] = merge_days(month7["days"], july_days)
+                month7["actual"] = sum(d["a"] for d in month7["days"])
+                month7["rate"] = round(month7["actual"] / month7["target"], 3) if month7["target"] > 0 else 0
+                saved = True
+            else:
+                print("  7月无新数据")
+
+            if aug_days:
+                # 8月首次出现时初始化结构
+                if "8" not in data["months"]:
+                    data["months"]["8"] = {
+                        "name": "8月", "label": "8月",
+                        "target": AUG_TARGET, "actual": 0, "rate": 0,
+                        "days": [{"d": "%02d" % d, "r": "—", "w": 0,
+                                  "t": 0, "a": 0, "rr": 0} for d in range(1, 32)],
+                    }
+                    data["yearTarget"] = data.get("yearTarget", 0) + AUG_TARGET
+
+                print(f"  ✓ 8月提取 {len(aug_days)} 天 (含 {sum(1 for d in aug_days if d['a']>0)} 天有实际值)")
+                month8 = data["months"]["8"]
+                month8["days"] = merge_days(month8["days"], aug_days)
+                month8["actual"] = sum(d["a"] for d in month8["days"])
+                month8["rate"] = round(month8["actual"] / month8["target"], 3) if month8["target"] > 0 else 0
+                saved = True
+            else:
+                print("  8月无新数据")
+
+            if saved:
+                data["yearActual"] = sum(m["actual"] for m in data["months"].values())
+                data["lastUpdated"] = datetime.now().strftime("%Y-%m-%d")
+                DATA_JSON.write_text(
+                    json.dumps(data, ensure_ascii=False, indent=2) + "\n",
+                    encoding="utf-8",
+                )
+                new_count = sum(len(m["days"]) for m in data["months"].values())
+                new_actual = sum(m["actual"] for m in data["months"].values())
+                print(f"  ✓ 保存: {len(data['months'])}月, {new_count}天, 年达成 {new_actual/10000:.0f}万")
+                if new_actual != old_actual:
+                    print(f"  Δ 年达成变化: {old_actual/10000:.0f}万 → {new_actual/10000:.0f}万")
 
         # 运行 fix_data.py 生成 data.js
         print(f"  生成 data.js...")
