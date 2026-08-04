@@ -1,6 +1,6 @@
 # 专用无头浏览器 profile（含飞书登录态，切勿提交）
 chrome-profile/
 
-# 运行日志 / WPS 临时文件
+# 运行日志 / WPS 临时文件（. !<inode>!<filename> 是 WPS 在 macOS 生成的 0 字节残留）
 daily_pull.log
-.!*!
+.!*
