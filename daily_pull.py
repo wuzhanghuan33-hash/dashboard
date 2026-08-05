@@ -549,7 +549,7 @@ def extract_august_data(target_id):
         day["post_refund_t"] = int(gv(row, AUG_COLS["post_refund_t"]) or 0)
 
         ref = gv(row, AUG_COLS["ref"])
-        day["ref"] = round(ref * 100, 1) if isinstance(ref, (int, float)) else 0
+        day["ref"] = round(ref * 100, 1) if isinstance(ref, (int, float)) else None
         ref_t = gv(row, AUG_COLS["ref_t"])
         day["ref_t"] = round(ref_t * 100, 1) if isinstance(ref_t, (int, float)) else 0
 
@@ -564,16 +564,24 @@ def extract_august_data(target_id):
         day["cart_users"] = int(gv(row, AUG_COLS["cart_users"]) or 0)
         day["cart_users_t"] = int(gv(row, AUG_COLS["cart_users_t"]) or 0)
         cart_rate = gv(row, AUG_COLS["cart_rate"])
-        day["cart_rate"] = round(cart_rate * 100, 1) if isinstance(cart_rate, (int, float)) else 0
+        day["cart_rate"] = round(cart_rate * 100, 1) if isinstance(cart_rate, (int, float)) else None
         cart_rate_t = gv(row, AUG_COLS["cart_rate_t"])
         day["cart_rate_t"] = round(cart_rate_t * 100, 1) if isinstance(cart_rate_t, (int, float)) else 0
         cart_conv = gv(row, AUG_COLS["cart_conv"])
-        day["cart_conv"] = round(cart_conv * 100, 1) if isinstance(cart_conv, (int, float)) else 0
+        day["cart_conv"] = round(cart_conv * 100, 1) if isinstance(cart_conv, (int, float)) else None
         cart_conv_t = gv(row, AUG_COLS["cart_conv_t"])
         day["cart_conv_t"] = round(cart_conv_t * 100, 1) if isinstance(cart_conv_t, (int, float)) else 0
 
         y_net = gv(row, AUG_COLS["y_net"])
         day["y_net"] = round(y_net * 100, 1) if isinstance(y_net, (int, float)) and y_net > -0.999 else None
+
+        # 源表比率公式可能返回 #DIV/0! 等错误 → 用已有实际数据派生
+        if day["ref"] is None and day["a"] > 0 and day.get("refund_amt", 0) > 0:
+            day["ref"] = round(day["refund_amt"] / day["a"] * 100, 1)
+        if not day.get("cart_rate") and day.get("cart_users", 0) > 0 and day.get("v", 0) > 0:
+            day["cart_rate"] = round(day["cart_users"] / day["v"] * 100, 1)
+        if not day.get("cart_conv") and day.get("b", 0) > 0 and day.get("cart_users", 0) > 0:
+            day["cart_conv"] = round(day["b"] / day["cart_users"] * 100, 1)
 
         days.append(day)
 
@@ -597,8 +605,9 @@ def merge_days(existing_days, new_days):
             if nd["a"] == 0:
                 nd["a"] = 0
                 nd["rr"] = 0
-                for f in ("ref", "v", "b", "aov", "refund_amt", "post_refund",
-                           "cart_users", "cart_rate", "cart_conv"):
+                for f in ("ref", "cart_rate", "cart_conv"):
+                    nd[f] = None  # 无实际值 → 显示无数据，避免假 0%
+                for f in ("v", "b", "aov", "refund_amt", "post_refund", "cart_users"):
                     nd[f] = 0
                 nd["rr"] = round(nd["a"] / nd["t"], 3) if nd["t"] > 0 else 0
 
@@ -606,7 +615,7 @@ def merge_days(existing_days, new_days):
             if nd["a"] > 0:
                 for f in ("refund_amt", "post_refund", "v", "b", "aov", "ref",
                            "cart_users", "cart_rate", "cart_conv"):
-                    if nd.get(f) == 0 and ed.get(f, 0) > 0:
+                    if nd.get(f) in (0, None) and ed.get(f, 0) > 0:
                         nd[f] = ed[f]
 
             # 目标值始终保留（飞书目标行稳定，新数据可能为空）
