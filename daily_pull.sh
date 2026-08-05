@@ -15,6 +15,11 @@ cd "$DIR" || exit 1
 # 3. 生成 data.js
 /usr/bin/python3 fix_data.py >> "$LOG" 2>&1
 
+# 3.5 更新 index.html 的 data.js 版本号，破浏览器/CDN 静态缓存
+#    （否则版本号固定，用户浏览器会一直用缓存的旧 data.js）
+VER=$(date '+%Y%m%d%H%M')
+sed -i '' "s/data\.js?v=[0-9a-z]*/data.js?v=${VER}/" index.html
+
 # 4. 推送到 GitHub Pages
 git add data.json data.js index.html
 git diff --cached --quiet || {
