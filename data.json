@@ -1,5 +1,5 @@
 {
-  "lastUpdated": "2026-08-05",
+  "lastUpdated": "2026-08-06",
   "yearTarget": 244957500,
   "months": {
     "1": {
@@ -6228,8 +6228,8 @@
       "name": "8月",
       "label": "8月",
       "target": 34000000,
-      "actual": 2656413,
-      "rate": 0.078,
+      "actual": 3439178,
+      "rate": 0.101,
       "days": [
         {
           "d": "01",
@@ -6243,7 +6243,7 @@
           "refund_amt_t": 332500,
           "post_refund": 440437,
           "post_refund_t": 617500,
-          "ref": 29.0,
+          "ref": 28.8,
           "ref_t": 35.0,
           "v": 66118,
           "v_t": 76768,
@@ -6274,7 +6274,7 @@
           "refund_amt_t": 285000,
           "post_refund": 473636,
           "post_refund_t": 665000,
-          "ref": 25.0,
+          "ref": 25.3,
           "ref_t": 30.0,
           "v": 62311,
           "v_t": 98222,
@@ -6305,7 +6305,7 @@
           "refund_amt_t": 285000,
           "post_refund": 351379,
           "post_refund_t": 665000,
-          "ref": 32.0,
+          "ref": 32.5,
           "ref_t": 30.0,
           "v": 59912,
           "v_t": 87558,
@@ -6360,30 +6360,30 @@
           "r": "—",
           "w": 0,
           "t": 1200000,
-          "a": 0,
-          "rr": 0.0,
-          "y": null,
-          "refund_amt": 0,
+          "a": 782765,
+          "rr": 0.652,
+          "y": 2.8,
+          "refund_amt": 209719,
           "refund_amt_t": 400920,
-          "post_refund": 0,
+          "post_refund": 573046,
           "post_refund_t": 799080,
-          "ref": null,
+          "ref": 26.8,
           "ref_t": 33.0,
-          "v": 0,
+          "v": 56893,
           "v_t": 89054,
-          "b": 0,
+          "b": 492,
           "b_t": 686,
-          "conv": null,
+          "conv": 0.0086,
           "conv_t": 0.0077,
-          "aov": 0,
+          "aov": 1590,
           "aov_t": 1750,
-          "cart_users": 0,
+          "cart_users": 1504,
           "cart_users_t": 1345,
-          "cart_rate": null,
+          "cart_rate": 2.6,
           "cart_rate_t": 1.5,
-          "cart_conv": null,
+          "cart_conv": 32.7,
           "cart_conv_t": 51.0,
-          "y_net": null,
+          "y_net": -7.9,
           "ly_post_refund": 622127
         },
         {
@@ -7195,5 +7195,5 @@
       ]
     }
   },
-  "yearActual": 203314342
+  "yearActual": 204097107
 }
