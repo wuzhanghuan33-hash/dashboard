@@ -10,8 +10,8 @@
 <title>万家乐天猫官旗 · 2026 业绩看板</title>
 <script>/* Chart.js 异步加载，不阻塞页面渲染 */
 (function(){var d=document,s=d.createElement('script');s.src='https://cdn.bootcdn.net/ajax/libs/Chart.js/4.4.7/chart.umd.min.js';s.onerror=function(){var s2=d.createElement('script');s2.src='https://cdn.jsdelivr.net/npm/chart.js@4.4.7/dist/chart.umd.min.js';d.head.appendChild(s2);};d.head.appendChild(s);})();</script>
-<script src="data.js?v=202608121003"></script>
-<script src="category_data.js?v=202608121003"></script>
+<script src="data.js?v=202608121503"></script>
+<script src="category_data.js?v=202608121503"></script>
 <style>
 * { margin:0; padding:0; box-sizing:border-box; }
 body { font-family:-apple-system,BlinkMacSystemFont,"Segoe UI",Roboto,sans-serif; background:#eef1f5; color:#1e293b; }
@@ -859,16 +859,11 @@ function renderCatKPI(days) {
   const totalRefund = hasRefund ? days.reduce((s,r) => s + (r.refund||0), 0) : 0;
   const hasPost = days.some(r => r.post !== null && r.post !== undefined);
   const totalPost = hasPost ? days.reduce((s,r) => s + (r.post||0), 0) : 0;
-  // 同期业绩 (2025)
-  const hasLy = days.some(r => r.ly_a !== null && r.ly_a !== undefined);
-  const totalLy = hasLy ? days.reduce((s,r) => s + (r.ly_a||0), 0) : 0;
-  const lyYoy = hasLy && totalLy ? ((totalA/totalLy - 1) * 100) : null;
   const el = document.getElementById('catKPI');
   el.innerHTML = `
     <div class="kpi-card" style="border-left-color:#3b82f6"><div class="label">业绩目标</div><div class="value">${fmt(totalT)}</div><div class="sub">${days.length}天</div></div>
     <div class="kpi-card" style="border-left-color:#16a34a"><div class="label">业绩达成</div><div class="value">${fmt(totalA)}</div><div class="sub ${totalA>=totalT?'good':'bad'}">${totalA>=totalT?'超额 '+fmt(totalA-totalT):'差额 '+fmt(totalA-totalT)}</div></div>
     <div class="kpi-card" style="border-left-color:${rate>=1?'#16a34a':rate>=.8?'#d97706':'#dc2626'}"><div class="label">达成率</div><div class="value" style="color:${rate>=1?'#16a34a':rate>=.8?'#d97706':'#dc2626'}">${fmtPct(rate)}</div><div class="sub">目标口径</div></div>
-    ${hasLy?`<div class="kpi-card" style="border-left-color:#8b5cf6"><div class="label">同期业绩（2025）</div><div class="value">${fmt(totalLy)}</div><div class="sub ${lyYoy>=0?'good':'bad'}">同比 ${lyYoy>=0?'+':''}${lyYoy.toFixed(1)}% · 差额 ${fmt(totalA-totalLy)}</div></div>`:''}
     ${hasRefund?`<div class="kpi-card" style="border-left-color:#ef4444"><div class="label">退款金额</div><div class="value" style="color:#dc2626">${fmt(totalRefund)}</div><div class="sub">占达成 ${totalA?fmtPct(totalRefund/totalA):'—'}</div></div>`:''}
     ${hasPost?`<div class="kpi-card" style="border-left-color:#f97316"><div class="label">去退金额</div><div class="value">${fmt(totalPost)}</div><div class="sub">剔除退款后净额</div></div>`:''}
   `;
@@ -880,16 +875,13 @@ function renderCatChart(days) {
   const ctx = document.getElementById('catChart').getContext('2d');
   if (CHART_INSTANCES.cat) CHART_INSTANCES.cat.destroy();
   const rrData = days.map(r => (r.rr!==null&&r.rr!==undefined) ? r.rr*100 : null);
-  const hasLy = days.some(r => r.ly_a !== null && r.ly_a !== undefined);
-  const datasets = [
-    {label:'目标',data:days.map(r=>r.t),backgroundColor:'rgba(26,35,126,.12)',borderColor:'rgba(26,35,126,.25)',borderWidth:1,borderRadius:2,order:2},
-    {label:'达成',data:days.map(r=>r.a),backgroundColor:'rgba(18,183,106,.45)',borderColor:'#12b76a',borderWidth:1,borderRadius:2,order:2},
-    ...(hasLy?[{label:'同期(2025)',data:days.map(r=>r.ly_a),backgroundColor:'rgba(152,162,179,.3)',borderColor:'#98a2b3',borderWidth:1,borderRadius:2,order:2}]:[]),
-    {label:'达成率',data:rrData,type:'line',borderColor:'#f79009',backgroundColor:'rgba(247,144,9,.1)',fill:true,pointRadius:2,pointHoverRadius:5,borderWidth:2,tension:.3,yAxisID:'y1',spanGaps:false,order:1}
-  ];
   CHART_INSTANCES.cat = new Chart(ctx, {
     type:'bar',
-    data:{labels, datasets},
+    data:{labels, datasets:[
+      {label:'目标',data:days.map(r=>r.t),backgroundColor:'rgba(26,35,126,.12)',borderColor:'rgba(26,35,126,.25)',borderWidth:1,borderRadius:2,order:2},
+      {label:'达成',data:days.map(r=>r.a),backgroundColor:'rgba(18,183,106,.45)',borderColor:'#12b76a',borderWidth:1,borderRadius:2,order:2},
+      {label:'达成率',data:rrData,type:'line',borderColor:'#f79009',backgroundColor:'rgba(247,144,9,.1)',fill:true,pointRadius:2,pointHoverRadius:5,borderWidth:2,tension:.3,yAxisID:'y1',spanGaps:false,order:1}
+    ]},
     options:{
       responsive:true,maintainAspectRatio:false,
       interaction:{mode:'index',intersect:false},
@@ -905,18 +897,14 @@ function renderCatChart(days) {
 
 function renderCatTable(days) {
   const el = document.getElementById('catTable');
-  const hasLy = days.some(d => d.ly_a !== null && d.ly_a !== undefined);
   let html = `<table><thead><tr>
-    <th>日期</th><th>节奏</th><th>目标</th><th>达成</th>${hasLy?'<th>同期(2025)</th><th>同比</th>':''}<th>达成率</th><th>退款金额</th><th>去退金额</th>
+    <th>日期</th><th>节奏</th><th>目标</th><th>达成</th><th>达成率</th><th>退款金额</th><th>去退金额</th>
   </tr></thead><tbody>`;
   days.forEach(d => {
     const rateCls = (d.rr!==null&&d.rr>=1) ? 'high-achieve' : (d.rr!==null&&d.rr<.6) ? 'low-achieve' : '';
-    const yoy = (d.a!==null&&d.ly_a) ? ((d.a/d.ly_a - 1) * 100) : null;
-    const yoyCls = yoy!==null ? (yoy>=0?'high-achieve':'low-achieve') : '';
     html += `<tr>
       <td>${d.d}</td><td>${d.r||'—'}</td>
       <td>${fmt(d.t)}</td><td>${fmt(d.a)}</td>
-      ${hasLy?`<td style="color:#98a2b3">${d.ly_a!==null?fmt(d.ly_a):'—'}</td><td class="${yoyCls}">${yoy!==null?(yoy>=0?'+':'')+yoy.toFixed(1)+'%':'—'}</td>`:''}
       <td class="${rateCls}">${d.rr!==null?fmtPct(d.rr):'—'}</td>
       <td>${d.refund!==null?fmt(d.refund):'—'}</td>
       <td>${d.post!==null?fmt(d.post):'—'}</td>
