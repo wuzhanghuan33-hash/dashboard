@@ -11,7 +11,7 @@
 <script>/* Chart.js 异步加载，不阻塞页面渲染 */
 (function(){var d=document,s=d.createElement('script');s.src='https://cdn.bootcdn.net/ajax/libs/Chart.js/4.4.7/chart.umd.min.js';s.onerror=function(){var s2=d.createElement('script');s2.src='https://cdn.jsdelivr.net/npm/chart.js@4.4.7/dist/chart.umd.min.js';d.head.appendChild(s2);};d.head.appendChild(s);})();</script>
 <script src="data.js?v=202608121503"></script>
-<script src="category_data.js?v=202608121520"></script>
+<script src="category_data.js?v=202608121600"></script>
 <style>
 * { margin:0; padding:0; box-sizing:border-box; }
 body { font-family:-apple-system,BlinkMacSystemFont,"Segoe UI",Roboto,sans-serif; background:#eef1f5; color:#1e293b; }
@@ -867,14 +867,19 @@ function renderCatKPI(days) {
   const hasLy = days.some(r => r.ly_a !== null && r.ly_a !== undefined);
   const totalLy = hasLy ? days.reduce((s,r) => s + (r.ly_a||0), 0) : 0;
   const lyYoy = (hasLy && totalLy > 0 && totalA > 0) ? ((totalA/totalLy-1)*100) : null;
+  // 去退金额同期(2025)同比
+  const hasLyPost = days.some(r => r.ly_post !== null && r.ly_post !== undefined);
+  const totalLyPost = hasLyPost ? days.reduce((s,r) => s + (r.ly_post||0), 0) : 0;
+  const postLyYoy = (hasLyPost && totalLyPost > 0 && totalPost > 0) ? ((totalPost/totalLyPost-1)*100) : null;
+  const yoyStr = v => (v===null||v===undefined) ? '' : '同比 '+(v>=0?'+':'')+v.toFixed(1)+'%';
   const el = document.getElementById('catKPI');
   el.innerHTML = `
     <div class="kpi-card" style="border-left-color:#3b82f6"><div class="label">业绩目标</div><div class="value">${fmt(totalT)}</div><div class="sub">${days.length}天</div></div>
-    <div class="kpi-card" style="border-left-color:#16a34a"><div class="label">业绩达成</div><div class="value">${fmt(totalA)}</div><div class="sub ${totalA>=totalT?'good':'bad'}">${totalA>=totalT?'超额 '+fmt(totalA-totalT):'差额 '+fmt(totalA-totalT)}</div></div>
+    <div class="kpi-card" style="border-left-color:#16a34a"><div class="label">业绩达成</div><div class="value">${fmt(totalA)}</div><div class="sub ${totalA>=totalT?'good':'bad'}">${totalA>=totalT?'超额 '+fmt(totalA-totalT):'差额 '+fmt(totalA-totalT)}${lyYoy!==null?' · '+yoyStr(lyYoy):''}</div></div>
     <div class="kpi-card" style="border-left-color:${rate>=1?'#16a34a':rate>=.8?'#d97706':'#dc2626'}"><div class="label">达成率</div><div class="value" style="color:${rate>=1?'#16a34a':rate>=.8?'#d97706':'#dc2626'}">${fmtPct(rate)}</div><div class="sub">目标口径</div></div>
-    ${hasLy?`<div class="kpi-card" style="border-left-color:#8b5cf6"><div class="label">同期业绩（2025）</div><div class="value">${fmt(totalLy)}</div><div class="sub ${lyYoy!==null&&lyYoy>=0?'good':'bad'}">${lyYoy!==null?'同比 '+(lyYoy>=0?'+':'')+lyYoy.toFixed(1)+'%':'—'}</div></div>`:''}
+    ${hasLy?`<div class="kpi-card" style="border-left-color:#8b5cf6"><div class="label">同期业绩（2025）</div><div class="value">${fmt(totalLy)}</div><div class="sub ${lyYoy!==null&&lyYoy>=0?'good':'bad'}">${yoyStr(lyYoy)}</div></div>`:''}
     ${hasRefund?`<div class="kpi-card" style="border-left-color:#ef4444"><div class="label">退款金额</div><div class="value" style="color:#dc2626">${fmt(totalRefund)}</div><div class="sub">占达成 ${totalA?fmtPct(totalRefund/totalA):'—'}</div></div>`:''}
-    ${hasPost?`<div class="kpi-card" style="border-left-color:#f97316"><div class="label">去退金额</div><div class="value">${fmt(totalPost)}</div><div class="sub">剔除退款后净额</div></div>`:''}
+    ${hasPost?`<div class="kpi-card" style="border-left-color:#f97316"><div class="label">去退金额</div><div class="value">${fmt(totalPost)}</div><div class="sub ${postLyYoy!==null&&postLyYoy>=0?'good':'bad'}">剔除退款后净额${postLyYoy!==null?' · '+yoyStr(postLyYoy):''}</div></div>`:''}
   `;
 }
 
