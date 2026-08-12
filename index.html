@@ -10,7 +10,8 @@
 <title>万家乐天猫官旗 · 2026 业绩看板</title>
 <script>/* Chart.js 异步加载，不阻塞页面渲染 */
 (function(){var d=document,s=d.createElement('script');s.src='https://cdn.bootcdn.net/ajax/libs/Chart.js/4.4.7/chart.umd.min.js';s.onerror=function(){var s2=d.createElement('script');s2.src='https://cdn.jsdelivr.net/npm/chart.js@4.4.7/dist/chart.umd.min.js';d.head.appendChild(s2);};d.head.appendChild(s);})();</script>
-<script src="data.js?v=202608111503"></script>
+<script src="data.js?v=202608121003"></script>
+<script src="category_data.js?v=202608121003"></script>
 <style>
 * { margin:0; padding:0; box-sizing:border-box; }
 body { font-family:-apple-system,BlinkMacSystemFont,"Segoe UI",Roboto,sans-serif; background:#eef1f5; color:#1e293b; }
@@ -89,6 +90,10 @@ tbody tr.weekend td { color:#94a3b8; }
 .high-achieve { color:#16a34a; font-weight:600; }
 .low-achieve { color:#dc2626; font-weight:600; }
 td .tgt { font-size:8px; color:#94a3b8; font-weight:400; }
+.m-main { line-height:1.35; }
+.m-ly { font-size:8.5px; color:#94a3b8; font-weight:400; margin-top:1px; line-height:1.3; }
+.m-ly .yoy { font-weight:600; }
+.m-ly .ly-val { color:#64748b; }
 
 /* Insights */
 .insights { background:#fff; border-radius:8px; padding:10px 12px; box-shadow:0 1px 2px rgba(0,0,0,.04); }
@@ -98,6 +103,13 @@ td .tgt { font-size:8px; color:#94a3b8; font-weight:400; }
 .insights li::before { content:""; position:absolute; left:0; top:6px; width:5px; height:5px; border-radius:50%; background:#1e293b; }
 .insights li.pos::before { background:#16a34a; }
 .insights li.neg::before { background:#dc2626; }
+
+/* Category Tabs */
+.cat-tabs { display:flex; gap:4px; margin-bottom:-1px; }
+.cat-tab { padding:6px 20px; border-radius:6px 6px 0 0; border:1px solid #e2e8f0; border-bottom:none; background:#f1f5f9; cursor:pointer; font-size:12px; font-weight:600; color:#64748b; transition:all .15s; }
+.cat-tab:hover { color:#3b82f6; background:#e8f0fe; }
+.cat-tab.active { background:#fff; color:#0f172a; border-color:#3b82f6; box-shadow:inset 0 2px 0 #3b82f6; }
+.cat-panel { background:#fff; border:1px solid #e2e8f0; border-radius:0 6px 6px 6px; padding:10px 12px; }
 
 /* Footer */
 .footer { text-align:center; padding:12px; font-size:10px; color:#94a3b8; }
@@ -147,6 +159,26 @@ td .tgt { font-size:8px; color:#94a3b8; font-weight:400; }
           <h3>逐日业绩走势 <small>蓝色=目标 / 绿色=达成 / 灰色=同期 / 橙线=达成率</small></h3>
           <canvas id="dailyChart"></canvas>
         </div>
+      </div>
+    </div>
+  </div>
+
+  <!-- Section 1.5: 类目目标拆解 -->
+  <div class="section">
+    <div class="section-title"><span class="dot" style="background:#10b981"></span> 类目目标拆解 <small style="font-weight:400;font-size:10px;color:#94a3b8">燃热/电热/厨电 · 数据源：腾讯文档各类目目标拆解</small></div>
+    <div class="section-body">
+      <div class="cat-tabs">
+        <button class="cat-tab active" data-cat="燃热">燃热</button>
+        <button class="cat-tab" data-cat="电热">电热</button>
+        <button class="cat-tab" data-cat="厨电">厨电</button>
+      </div>
+      <div class="cat-panel">
+        <div class="kpi-grid cols-auto" id="catKPI"></div>
+        <div class="chart-box" style="margin-top:6px">
+          <h3>逐日目标 vs 达成 <small>蓝色=目标 / 绿色=达成 / 橙线=达成率</small></h3>
+          <canvas id="catChart"></canvas>
+        </div>
+        <div class="table-wrap" style="margin-top:6px" id="catTable"></div>
       </div>
     </div>
   </div>
@@ -220,6 +252,7 @@ td .tgt { font-size:8px; color:#94a3b8; font-weight:400; }
 // ==================== DATA LOADING ====================
 let DB = null;
 let CHART_INSTANCES = {};
+let activeCat = '燃热';
 
 function fmt(n) { return n==null?"—":Math.abs(n)>=10000?(n/10000).toFixed(1)+"万":n.toLocaleString(); }
 function fmtPct(n) { return (n*100).toFixed(1)+"%"; }
@@ -247,6 +280,15 @@ function calcLastYear(a, y) {
   // y is the 同比% change. last year value = a / (1 + y/100)
   if (y === 0 || y === null || y === undefined) return null;
   return Math.round(a / (1 + y / 100));
+}
+
+function lyCell(cur, ly, fmt) {
+  // 同期值 + 同比 子行（指标单元格第二行）
+  if (ly == null || ly === '') return '<span class="ly-val">同期 —</span>';
+  const yoy = (cur != null && cur !== 0) ? (cur - ly) / ly * 100 : null;
+  const yoyStr = (yoy != null && isFinite(yoy)) ? (yoy >= 0 ? '+' : '') + yoy.toFixed(1) + '%' : '—';
+  const cls = (yoy == null || !isFinite(yoy)) ? '' : (yoy >= 0 ? 'good' : 'bad');
+  return `<span class="ly-val">同期 ${fmt(ly)}</span> <span class="yoy ${cls}">同比 ${yoyStr}</span>`;
 }
 
 function filterDays(allDays, startStr, endStr) {
@@ -309,6 +351,9 @@ function init() {
   document.getElementById('startDate').addEventListener('change', updateFromDates);
   document.getElementById('endDate').addEventListener('change', updateFromDates);
 
+  // Category tabs
+  initCategoryTabs();
+
   // Auto-refresh
   let refreshTimer;
   document.getElementById('autoRefresh').addEventListener('change', function() {
@@ -341,6 +386,8 @@ function renderAll() {
   const end = document.getElementById('endDate').value;
   const allDays = getAllDays();
   const days = filterDays(allDays, start, end);
+
+  renderCategory();
 
   if (!days.length) {
     document.getElementById('kpiOverview').innerHTML = '<div class="kpi-card"><div class="label">⚠️</div><div class="value">无数据</div><div class="sub">请选择其他日期范围</div></div>';
@@ -563,7 +610,8 @@ function renderRateChart(days) {
     data:{labels,
       datasets:[
         {label:'达成率',data:days.map(r=>r.rr*100),borderColor:'#12b76a',backgroundColor:'rgba(18,183,106,.1)',fill:true,pointRadius:2,tension:.3,borderWidth:2},
-        {label:'退款率',data:days.map(r=>r.ref!==null?r.ref:null),borderColor:'#f04438',backgroundColor:'rgba(240,68,56,.1)',fill:true,pointRadius:2,tension:.3,borderWidth:2,spanGaps:false}
+        {label:'退款率',data:days.map(r=>r.ref!==null?r.ref:null),borderColor:'#f04438',backgroundColor:'rgba(240,68,56,.1)',fill:true,pointRadius:2,tension:.3,borderWidth:2,spanGaps:false},
+        {label:'退款率同期(2025)',data:days.map(r=>r.ly_ref??null),borderColor:'#98a2b3',backgroundColor:'transparent',borderDash:[4,4],pointRadius:0,tension:.3,borderWidth:1.5,spanGaps:false}
       ]
     },
     options:{
@@ -589,7 +637,9 @@ function renderTrafficChart(days) {
       datasets:[
         {label:'访客',data:days.map(r=>r.v),backgroundColor:'rgba(69,100,255,.35)',borderColor:'rgba(69,100,255,.6)',borderWidth:1,borderRadius:2,order:2},
         {label:'买家',data:days.map(r=>r.b),backgroundColor:'rgba(247,144,9,.45)',borderColor:'#f79009',borderWidth:1,borderRadius:2,order:2},
-        {label:'客单价',data:days.map(r=>r.aov),type:'line',borderColor:'#12b76a',pointRadius:2,tension:.3,borderWidth:2,yAxisID:'y1',order:1}
+        {label:'客单价',data:days.map(r=>r.aov),type:'line',borderColor:'#12b76a',pointRadius:2,tension:.3,borderWidth:2,yAxisID:'y1',order:1},
+        {label:'访客同期(2025)',data:days.map(r=>r.ly_v??null),type:'line',borderColor:'#98a2b3',backgroundColor:'transparent',borderDash:[4,4],pointRadius:0,borderWidth:1.5,order:1},
+        {label:'买家同期(2025)',data:days.map(r=>r.ly_b??null),type:'line',borderColor:'#cbd5e1',backgroundColor:'transparent',borderDash:[4,4],pointRadius:0,borderWidth:1.5,order:1}
       ]
     },
     options:{
@@ -615,7 +665,8 @@ function renderAOVChart(days) {
     data:{labels,
       datasets:[
         {label:'客单价',data:days.map(r=>r.aov),borderColor:'#455eff',backgroundColor:'rgba(69,94,255,.08)',fill:true,pointRadius:2,tension:.3,borderWidth:2},
-        {label:'买家数',data:days.map(r=>r.b),borderColor:'#f79009',backgroundColor:'rgba(247,144,9,.05)',fill:true,pointRadius:2,tension:.3,borderWidth:2,yAxisID:'y1'}
+        {label:'买家数',data:days.map(r=>r.b),borderColor:'#f79009',backgroundColor:'rgba(247,144,9,.05)',fill:true,pointRadius:2,tension:.3,borderWidth:2,yAxisID:'y1'},
+        {label:'客单价同期(2025)',data:days.map(r=>r.ly_aov??null),borderColor:'#98a2b3',backgroundColor:'transparent',borderDash:[4,4],pointRadius:0,tension:.3,borderWidth:1.5}
       ]
     },
     options:{
@@ -640,7 +691,9 @@ function renderCartChart(days) {
   const hasCartConv = days.some(r => r.cart_conv !== undefined && r.cart_conv > 0);
   const datasets = [];
   if (hasCartRate) datasets.push({label:'加购率(%)',data:days.map(r=>r.cart_rate||null),borderColor:'#8b5cf6',backgroundColor:'rgba(139,92,246,.1)',fill:true,pointRadius:2,tension:.3,borderWidth:2});
+  if (hasCartRate) datasets.push({label:'加购率同期(2025)',data:days.map(r=>r.ly_cart_rate??null),borderColor:'#c4b5fd',backgroundColor:'transparent',borderDash:[4,4],pointRadius:0,tension:.3,borderWidth:1.5});
   if (hasCartConv) datasets.push({label:'加购转化率(%)',data:days.map(r=>r.cart_conv||null),borderColor:'#06b6d4',backgroundColor:'rgba(6,182,212,.1)',fill:true,pointRadius:2,tension:.3,borderWidth:2,yAxisID:hasCartRate?'y1':undefined});
+  if (hasCartConv) datasets.push({label:'加购转化率同期(2025)',data:days.map(r=>r.ly_cart_conv??null),borderColor:'#99f6e4',backgroundColor:'transparent',borderDash:[4,4],pointRadius:0,tension:.3,borderWidth:1.5,yAxisID:hasCartRate?'y1':undefined});
   if (!datasets.length) {
     document.getElementById('cartChart').parentElement.innerHTML = '<div style="text-align:center;padding:24px;color:#94a3b8;font-size:12px">本区间无加购数据</div>';
     return;
@@ -723,8 +776,9 @@ function renderInsights(days) {
 function renderTable(days) {
   const el = document.getElementById('dailyTable');
   let html = `<table><thead><tr>
-    <th>日期</th><th>节奏</th><th>目标</th><th>达成</th><th>达成率</th><th>同期(2025)</th><th>前同比</th><th>退款率</th><th>退款金额</th><th>去退金额</th><th>访客</th><th>买家</th><th>客单价</th><th>加购人数</th><th>加购率</th><th>加购转化率</th>
-  </tr></thead><tbody>`;
+    <th>日期</th><th>节奏</th><th>目标</th><th>达成</th><th>达成率</th><th>同期(2025)</th><th>前同比</th><th>退款率</th><th>退款金额</th><th>去退金额</th><th>访客</th><th>买家</th><th>转化率</th><th>客单价</th><th>加购人数</th><th>加购率</th><th>加购转化率</th>
+  </tr></thead><tbody>
+  <tr style="background:#f8fafc;color:#94a3b8"><td></td><td></td><td></td><td></td><td></td><td></td><td></td><td colspan="10" style="text-align:left;font-size:9px;letter-spacing:.3px">每指标格第二行 = 2025同期 · 同比（数据源：飞书 2025 段）</td></tr>`;
   days.forEach(d => {
     const rateCls = d.rr >= 1 ? 'high-achieve' : d.rr < .6 ? 'low-achieve' : '';
     const yoyCls = d.y >= 0 ? 'high-achieve' : d.y !== null && d.y < 0 ? 'low-achieve' : '';
@@ -734,21 +788,126 @@ function renderTable(days) {
     const postRef = d.post_refund !== undefined ? fmt(d.post_refund) : '—';
     const refStr = d.ref !== null ? d.ref + '%' : '—';
     const yStr = d.y !== null ? (d.y >= 0 ? '+' : '') + d.y + '%' : '—';
+    const cell2 = (main, sub) => `<div class="m-main">${main}</div><div class="m-ly">${sub}</div>`;
+    const cRef = lyCell(d.ref, d.ly_ref, v => v == null ? '—' : v + '%');
+    const cRefund = lyCell(d.refund_amt, d.ly_refund_amt, fmt);
+    const cPost = lyCell(d.post_refund, d.ly_post_refund, fmt);
+    const cV = lyCell(d.v, d.ly_v, v => v == null ? '—' : v.toLocaleString());
+    const cB = lyCell(d.b, d.ly_b, v => v == null ? '—' : v.toLocaleString());
+    const cConv = lyCell(d.conv, d.ly_conv, v => v == null ? '—' : (v * 100).toFixed(2) + '%');
+    const cAov = lyCell(d.aov, d.ly_aov, v => v == null ? '—' : v.toLocaleString());
+    const cCart = lyCell(d.cart_users, d.ly_cart_users, v => v == null ? '—' : v.toLocaleString());
+    const cCartRate = lyCell(d.cart_rate, d.ly_cart_rate, v => v == null ? '—' : v + '%');
+    const cCartConv = lyCell(d.cart_conv, d.ly_cart_conv, v => v == null ? '—' : v + '%');
     html += `<tr class="${isWeekend?'weekend':''}">
       <td>${d.date.slice(5)}</td><td>${d.r}</td>
       <td>${fmt(d.t)}</td><td>${fmt(d.a)}</td>
       <td class="${rateCls}">${fmtPct(d.rr)}</td>
       <td style="color:#98a2b3">${ly!==null?fmt(ly):'—'}</td>
       <td class="${yoyCls}">${yStr}</td>
-      <td>${refStr}</td>
-      <td>${refAmt}</td>
-      <td>${postRef}</td>
-      <td class="${d.v_t>0?(d.v>=d.v_t?'high-achieve':'low-achieve'):''}">${d.v.toLocaleString()}<span class="tgt">${d.v_t>0?'/'+d.v_t.toLocaleString():''}</span></td>
-      <td class="${d.b_t>0?(d.b>=d.b_t?'high-achieve':'low-achieve'):''}">${d.b.toLocaleString()}<span class="tgt">${d.b_t>0?'/'+d.b_t.toLocaleString():''}</span></td>
-      <td class="${d.aov_t>0?(d.aov>=d.aov_t?'high-achieve':'low-achieve'):''}">${d.aov.toLocaleString()}<span class="tgt">${d.aov_t>0?'/'+d.aov_t.toLocaleString():''}</span></td>
-      <td>${d.cart_users!==undefined?d.cart_users.toLocaleString():'—'}</td>
-      <td>${d.cart_rate!==undefined&&d.cart_rate>0?d.cart_rate+'%':'—'}</td>
-      <td>${d.cart_conv!==undefined&&d.cart_conv>0?d.cart_conv+'%':'—'}</td>
+      <td>${cell2(refStr, cRef)}</td>
+      <td>${cell2(refAmt, cRefund)}</td>
+      <td>${cell2(postRef, cPost)}</td>
+      <td class="${d.v_t>0?(d.v>=d.v_t?'high-achieve':'low-achieve'):''}">${cell2(d.v.toLocaleString() + (d.v_t>0?`<span class="tgt">/${d.v_t.toLocaleString()}</span>`:''), cV)}</td>
+      <td class="${d.b_t>0?(d.b>=d.b_t?'high-achieve':'low-achieve'):''}">${cell2(d.b.toLocaleString() + (d.b_t>0?`<span class="tgt">/${d.b_t.toLocaleString()}</span>`:''), cB)}</td>
+      <td class="${d.conv_t>0?(d.conv>=d.conv_t?'high-achieve':'low-achieve'):''}">${cell2(d.conv!==undefined?((d.conv*100).toFixed(2)+'%'+(d.conv_t>0?`<span class="tgt">/${(d.conv_t*100).toFixed(2)}%</span>`:'')):'—', cConv)}</td>
+      <td class="${d.aov_t>0?(d.aov>=d.aov_t?'high-achieve':'low-achieve'):''}">${cell2(d.aov.toLocaleString() + (d.aov_t>0?`<span class="tgt">/${d.aov_t.toLocaleString()}</span>`:''), cAov)}</td>
+      <td>${cell2(d.cart_users!==undefined?d.cart_users.toLocaleString():'—', cCart)}</td>
+      <td>${cell2(d.cart_rate!==undefined&&d.cart_rate>0?d.cart_rate+'%':'—', cCartRate)}</td>
+      <td>${cell2(d.cart_conv!==undefined&&d.cart_conv>0?d.cart_conv+'%':'—', cCartConv)}</td>
+    </tr>`;
+  });
+  html += '</tbody></table>';
+  el.innerHTML = html;
+}
+
+// ==================== CATEGORY (类目目标拆解) ====================
+function initCategoryTabs() {
+  document.querySelectorAll('.cat-tab').forEach(btn => {
+    btn.addEventListener('click', () => {
+      document.querySelectorAll('.cat-tab').forEach(b => b.classList.remove('active'));
+      btn.classList.add('active');
+      activeCat = btn.dataset.cat;
+      renderCategory();
+    });
+  });
+}
+
+function getCatDays(cat, startStr, endStr) {
+  const list = CATEGORY_DATA[cat] || [];
+  const start = new Date(startStr), end = new Date(endStr);
+  return list.filter(d => {
+    const dt = new Date('2026-' + d.d);
+    return dt >= start && dt <= end;
+  });
+}
+
+function renderCategory() {
+  const start = document.getElementById('startDate').value;
+  const end = document.getElementById('endDate').value;
+  const days = getCatDays(activeCat, start, end);
+  renderCatKPI(days);
+  renderCatChart(days);
+  renderCatTable(days);
+}
+
+function renderCatKPI(days) {
+  const totalT = days.reduce((s,r) => s + (r.t||0), 0);
+  const totalA = days.reduce((s,r) => s + (r.a||0), 0);
+  const rate = totalT ? totalA/totalT : 0;
+  const hasRefund = days.some(r => r.refund !== null && r.refund !== undefined);
+  const totalRefund = hasRefund ? days.reduce((s,r) => s + (r.refund||0), 0) : 0;
+  const hasPost = days.some(r => r.post !== null && r.post !== undefined);
+  const totalPost = hasPost ? days.reduce((s,r) => s + (r.post||0), 0) : 0;
+  const el = document.getElementById('catKPI');
+  el.innerHTML = `
+    <div class="kpi-card" style="border-left-color:#3b82f6"><div class="label">业绩目标</div><div class="value">${fmt(totalT)}</div><div class="sub">${days.length}天</div></div>
+    <div class="kpi-card" style="border-left-color:#16a34a"><div class="label">业绩达成</div><div class="value">${fmt(totalA)}</div><div class="sub ${totalA>=totalT?'good':'bad'}">${totalA>=totalT?'超额 '+fmt(totalA-totalT):'差额 '+fmt(totalA-totalT)}</div></div>
+    <div class="kpi-card" style="border-left-color:${rate>=1?'#16a34a':rate>=.8?'#d97706':'#dc2626'}"><div class="label">达成率</div><div class="value" style="color:${rate>=1?'#16a34a':rate>=.8?'#d97706':'#dc2626'}">${fmtPct(rate)}</div><div class="sub">目标口径</div></div>
+    ${hasRefund?`<div class="kpi-card" style="border-left-color:#ef4444"><div class="label">退款金额</div><div class="value" style="color:#dc2626">${fmt(totalRefund)}</div><div class="sub">占达成 ${totalA?fmtPct(totalRefund/totalA):'—'}</div></div>`:''}
+    ${hasPost?`<div class="kpi-card" style="border-left-color:#f97316"><div class="label">去退金额</div><div class="value">${fmt(totalPost)}</div><div class="sub">剔除退款后净额</div></div>`:''}
+  `;
+}
+
+function renderCatChart(days) {
+  if (typeof Chart === 'undefined') return;
+  const labels = days.map(r => r.d);
+  const ctx = document.getElementById('catChart').getContext('2d');
+  if (CHART_INSTANCES.cat) CHART_INSTANCES.cat.destroy();
+  const rrData = days.map(r => (r.rr!==null&&r.rr!==undefined) ? r.rr*100 : null);
+  CHART_INSTANCES.cat = new Chart(ctx, {
+    type:'bar',
+    data:{labels, datasets:[
+      {label:'目标',data:days.map(r=>r.t),backgroundColor:'rgba(26,35,126,.12)',borderColor:'rgba(26,35,126,.25)',borderWidth:1,borderRadius:2,order:2},
+      {label:'达成',data:days.map(r=>r.a),backgroundColor:'rgba(18,183,106,.45)',borderColor:'#12b76a',borderWidth:1,borderRadius:2,order:2},
+      {label:'达成率',data:rrData,type:'line',borderColor:'#f79009',backgroundColor:'rgba(247,144,9,.1)',fill:true,pointRadius:2,pointHoverRadius:5,borderWidth:2,tension:.3,yAxisID:'y1',spanGaps:false,order:1}
+    ]},
+    options:{
+      responsive:true,maintainAspectRatio:false,
+      interaction:{mode:'index',intersect:false},
+      plugins:{legend:{position:'top',labels:{boxWidth:12,font:{size:10}}}},
+      scales:{
+        x:{grid:{display:false},ticks:{font:{size:9},maxTicksLimit:25}},
+        y:{type:'linear',position:'left',title:{display:true,text:'销售额(元)',font:{size:9}},ticks:{callback:v=>v>=10000?(v/10000)+'万':v,font:{size:9}}},
+        y1:{type:'linear',position:'right',min:0,max:Math.max(...days.map(r=>r.rr||0))*1.3,grid:{display:false},title:{display:true,text:'达成率(%)',font:{size:9}},ticks:{callback:v=>v+'%',font:{size:9}}}
+      }
+    }
+  });
+}
+
+function renderCatTable(days) {
+  const el = document.getElementById('catTable');
+  let html = `<table><thead><tr>
+    <th>日期</th><th>节奏</th><th>目标</th><th>达成</th><th>达成率</th><th>退款金额</th><th>去退金额</th>
+  </tr></thead><tbody>`;
+  days.forEach(d => {
+    const rateCls = (d.rr!==null&&d.rr>=1) ? 'high-achieve' : (d.rr!==null&&d.rr<.6) ? 'low-achieve' : '';
+    html += `<tr>
+      <td>${d.d}</td><td>${d.r||'—'}</td>
+      <td>${fmt(d.t)}</td><td>${fmt(d.a)}</td>
+      <td class="${rateCls}">${d.rr!==null?fmtPct(d.rr):'—'}</td>
+      <td>${d.refund!==null?fmt(d.refund):'—'}</td>
+      <td>${d.post!==null?fmt(d.post):'—'}</td>
     </tr>`;
   });
   html += '</tbody></table>';
