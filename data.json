@@ -6228,8 +6228,8 @@
       "name": "8月",
       "label": "8月",
       "target": 34000000,
-      "actual": 6982717,
-      "rate": 0.205,
+      "actual": 7707888,
+      "rate": 0.227,
       "days": [
         {
           "d": "01",
@@ -6546,30 +6546,30 @@
           "r": "—",
           "w": 0,
           "t": 1200000,
-          "a": 0,
-          "rr": 0.0,
-          "y": null,
-          "refund_amt": 0,
+          "a": 725171,
+          "rr": 0.604,
+          "y": -21.6,
+          "refund_amt": 247803,
           "refund_amt_t": 396000,
-          "post_refund": 0,
+          "post_refund": 477368,
           "post_refund_t": 804000,
-          "ref": null,
+          "ref": 34.2,
           "ref_t": 33.0,
-          "v": 0,
+          "v": 76470,
           "v_t": 89054,
-          "b": 0,
+          "b": 444,
           "b_t": 686,
-          "conv": null,
+          "conv": 0.0058,
           "conv_t": 0.0077,
-          "aov": 0,
+          "aov": 1633,
           "aov_t": 1750,
-          "cart_users": 0,
+          "cart_users": 1606,
           "cart_users_t": 1826,
-          "cart_rate": null,
+          "cart_rate": 2.1,
           "cart_rate_t": 2.1,
-          "cart_conv": null,
+          "cart_conv": 27.6,
           "cart_conv_t": 37.6,
-          "y_net": null,
+          "y_net": -33.2,
           "ly_post_refund": 715071
         },
         {
@@ -7195,5 +7195,5 @@
       ]
     }
   },
-  "yearActual": 207640646
+  "yearActual": 208365817
 }
