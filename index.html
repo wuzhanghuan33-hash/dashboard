@@ -180,7 +180,7 @@ td .tgt { font-size:8px; color:#94a3b8; font-weight:400; }
       <div class="cat-panel">
         <div class="kpi-grid cols-auto" id="catKPI"></div>
         <div class="chart-box" style="margin-top:6px">
-          <h3>逐日目标 vs 达成 <small>蓝色=目标 / 绿色=达成 / 橙线=达成率</small></h3>
+          <h3>逐日目标 vs 达成 <small>蓝色=目标 / 绿色=达成 / 灰色=同期(2025) / 橙线=达成率</small></h3>
           <canvas id="catChart"></canvas>
         </div>
         <div class="table-wrap" style="margin-top:6px" id="catTable"></div>
@@ -864,11 +864,15 @@ function renderCatKPI(days) {
   const totalRefund = hasRefund ? days.reduce((s,r) => s + (r.refund||0), 0) : 0;
   const hasPost = days.some(r => r.post !== null && r.post !== undefined);
   const totalPost = hasPost ? days.reduce((s,r) => s + (r.post||0), 0) : 0;
+  const hasLy = days.some(r => r.ly_a !== null && r.ly_a !== undefined);
+  const totalLy = hasLy ? days.reduce((s,r) => s + (r.ly_a||0), 0) : 0;
+  const lyYoy = (hasLy && totalLy > 0 && totalA > 0) ? ((totalA/totalLy-1)*100) : null;
   const el = document.getElementById('catKPI');
   el.innerHTML = `
     <div class="kpi-card" style="border-left-color:#3b82f6"><div class="label">业绩目标</div><div class="value">${fmt(totalT)}</div><div class="sub">${days.length}天</div></div>
     <div class="kpi-card" style="border-left-color:#16a34a"><div class="label">业绩达成</div><div class="value">${fmt(totalA)}</div><div class="sub ${totalA>=totalT?'good':'bad'}">${totalA>=totalT?'超额 '+fmt(totalA-totalT):'差额 '+fmt(totalA-totalT)}</div></div>
     <div class="kpi-card" style="border-left-color:${rate>=1?'#16a34a':rate>=.8?'#d97706':'#dc2626'}"><div class="label">达成率</div><div class="value" style="color:${rate>=1?'#16a34a':rate>=.8?'#d97706':'#dc2626'}">${fmtPct(rate)}</div><div class="sub">目标口径</div></div>
+    ${hasLy?`<div class="kpi-card" style="border-left-color:#8b5cf6"><div class="label">同期业绩（2025）</div><div class="value">${fmt(totalLy)}</div><div class="sub ${lyYoy!==null&&lyYoy>=0?'good':'bad'}">${lyYoy!==null?'同比 '+(lyYoy>=0?'+':'')+lyYoy.toFixed(1)+'%':'—'}</div></div>`:''}
     ${hasRefund?`<div class="kpi-card" style="border-left-color:#ef4444"><div class="label">退款金额</div><div class="value" style="color:#dc2626">${fmt(totalRefund)}</div><div class="sub">占达成 ${totalA?fmtPct(totalRefund/totalA):'—'}</div></div>`:''}
     ${hasPost?`<div class="kpi-card" style="border-left-color:#f97316"><div class="label">去退金额</div><div class="value">${fmt(totalPost)}</div><div class="sub">剔除退款后净额</div></div>`:''}
   `;
@@ -880,13 +884,16 @@ function renderCatChart(days) {
   const ctx = document.getElementById('catChart').getContext('2d');
   if (CHART_INSTANCES.cat) CHART_INSTANCES.cat.destroy();
   const rrData = days.map(r => (r.rr!==null&&r.rr!==undefined) ? r.rr*100 : null);
+  const hasLy = days.some(r => r.ly_a !== null && r.ly_a !== undefined);
+  const datasets = [
+    {label:'目标',data:days.map(r=>r.t),backgroundColor:'rgba(26,35,126,.12)',borderColor:'rgba(26,35,126,.25)',borderWidth:1,borderRadius:2,order:2},
+    {label:'达成',data:days.map(r=>r.a),backgroundColor:'rgba(18,183,106,.45)',borderColor:'#12b76a',borderWidth:1,borderRadius:2,order:2},
+    {label:'达成率',data:rrData,type:'line',borderColor:'#f79009',backgroundColor:'rgba(247,144,9,.1)',fill:true,pointRadius:2,pointHoverRadius:5,borderWidth:2,tension:.3,yAxisID:'y1',spanGaps:false,order:1}
+  ];
+  if (hasLy) datasets.push({label:'同期(2025)',data:days.map(r=>r.ly_a??null),backgroundColor:'rgba(152,162,179,.35)',borderColor:'#98a2b3',borderWidth:1,borderRadius:2,order:3});
   CHART_INSTANCES.cat = new Chart(ctx, {
     type:'bar',
-    data:{labels, datasets:[
-      {label:'目标',data:days.map(r=>r.t),backgroundColor:'rgba(26,35,126,.12)',borderColor:'rgba(26,35,126,.25)',borderWidth:1,borderRadius:2,order:2},
-      {label:'达成',data:days.map(r=>r.a),backgroundColor:'rgba(18,183,106,.45)',borderColor:'#12b76a',borderWidth:1,borderRadius:2,order:2},
-      {label:'达成率',data:rrData,type:'line',borderColor:'#f79009',backgroundColor:'rgba(247,144,9,.1)',fill:true,pointRadius:2,pointHoverRadius:5,borderWidth:2,tension:.3,yAxisID:'y1',spanGaps:false,order:1}
-    ]},
+    data:{labels, datasets},
     options:{
       responsive:true,maintainAspectRatio:false,
       interaction:{mode:'index',intersect:false},
@@ -912,21 +919,26 @@ function renderCatTable(days) {
   const el = document.getElementById('catTable');
   const rows = days.map(d => {
     const rateCls = (d.rr!==null&&d.rr>=1) ? 'high-achieve' : (d.rr!==null&&d.rr<.6) ? 'low-achieve' : '';
-    // 去退金额: 第一行当期，第二行同期(2025)+同比（仅当有同期数据）
+    // 达成: 第一行当期，第二行同期(2025)+同比（仅当有同期数据）
+    let aCell = fmt(d.a);
+    if (d.ly_a!==null && d.ly_a!==undefined) {
+      aCell = `<div class="m-main">${fmt(d.a)}</div><div class="m-ly">${lyCell(d.a, d.ly_a, fmt)}</div>`;
+    }
+    // 去退金额: 第一行当期，第二行同期(2025)+同比
     let postCell = d.post!==null ? fmt(d.post) : '—';
     if (d.ly_post!==null && d.ly_post!==undefined) {
       postCell = `<div class="m-main">${d.post!==null?fmt(d.post):'—'}</div><div class="m-ly">${lyCell(d.post, d.ly_post, fmt)}</div>`;
     }
     return `<tr>
       <td>${d.d}</td><td>${d.r||'—'}</td>
-      <td>${fmt(d.t)}</td><td>${fmt(d.a)}</td>
+      <td>${fmt(d.t)}</td><td>${aCell}</td>
       <td class="${rateCls}">${d.rr!==null?fmtPct(d.rr):'—'}</td>
       <td>${d.refund!==null?fmt(d.refund):'—'}</td>
       <td>${postCell}</td>
     </tr>`;
   }).join('');
   el.innerHTML = `
-    <div class="cat-table-toggle" onclick="toggleCatDetail()">逐日明细 <small>${days.length}天 · 去退金额第二行=2025同期·同比</small><span class="caret" id="catDetailCaret">${catDetailOpen?'▾':'▸'}</span></div>
+    <div class="cat-table-toggle" onclick="toggleCatDetail()">逐日明细 <small>${days.length}天 · 达成/去退第二行=2025同期·同比</small><span class="caret" id="catDetailCaret">${catDetailOpen?'▾':'▸'}</span></div>
     <div class="cat-table-body" id="catDetailBody" style="${catDetailOpen?'':'display:none'}">
       <table><thead><tr>
         <th>日期</th><th>节奏</th><th>目标</th><th>达成</th><th>达成率</th><th>退款金额</th><th>去退金额</th>
