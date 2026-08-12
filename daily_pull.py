@@ -624,8 +624,13 @@ def merge_days(existing_days, new_days):
                 if nd.get(f) in (0, None, 0.0) and ed.get(f, 0) > 0:
                     nd[f] = ed[f]
 
-            # 保留来自 backfill_yoy_net.py 的外部注入字段
-            for f in ("ly_post_refund", "y_net"):
+            # 保留来自 backfill_yoy_net.py / backfill_ly_metrics.py 的外部注入字段
+            # （ly_* 同期字段由 backfill_ly_metrics.py 从飞书 2025 段提取，
+            #  新提取的 days 不含这些字段，必须从已有数据保留，否则看板同期全空）
+            for f in ("ly_post_refund", "y_net",
+                      "ly_a", "ly_v", "ly_b", "ly_conv", "ly_aov", "ly_ref",
+                      "ly_refund_amt", "ly_cart_users", "ly_cart_rate",
+                      "ly_cart_conv"):
                 if ed.get(f) is not None and nd.get(f) is None:
                     nd[f] = ed[f]
 
