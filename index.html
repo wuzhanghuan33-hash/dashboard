@@ -440,15 +440,16 @@ function renderOverview(days) {
     if (ly !== null) { totalLastYear += ly; hasLastYear = true; }
   });
 
-  // 剔退净额与同比
-  const hasPostRefund = days.some(r => r.post_refund !== undefined);
-  const totalPostRefund = hasPostRefund ? days.reduce((s,r) => s + (r.post_refund||0), 0) : 0;
+  // 剔退净额与同比（同期仅累计当期有净额的天，避免未过完月份的未来天虚增分母）
+  const postDays = days.filter(r => r.post_refund !== null && r.post_refund !== undefined && r.post_refund > 0);
+  const hasPostRefund = postDays.length > 0;
+  const totalPostRefund = hasPostRefund ? postDays.reduce((s,r) => s + r.post_refund, 0) : 0;
   const refundLoss = totalA - totalPostRefund;
-  const hasNetYoY = days.some(r => r.y_net !== null);
+  const hasNetYoY = hasPostRefund && postDays.some(r => r.ly_post_refund > 0);
   let totalLyPostRefund = 0, netYearOverYear = null;
   if (hasNetYoY) {
-    totalLyPostRefund = days.reduce((s,r) => s + (r.ly_post_refund||0), 0);
-    netYearOverYear = ((totalPostRefund - totalLyPostRefund) / totalLyPostRefund * 100).toFixed(1);
+    totalLyPostRefund = postDays.reduce((s,r) => s + (r.ly_post_refund||0), 0);
+    if (totalLyPostRefund > 0) netYearOverYear = ((totalPostRefund - totalLyPostRefund) / totalLyPostRefund * 100).toFixed(1);
   }
 
   const el = document.getElementById('kpiOverview');
@@ -548,15 +549,14 @@ function renderCompare(days) {
     if (ly !== null) { hasLastYear = true; totalA += d.a; totalLy += ly; }
   });
 
-  // Net YoY
-  const hasNetYoY = days.some(r => r.y_net !== null);
+  // Net YoY（同期仅累计当期有净额的天）
+  const netDays = days.filter(d => d.post_refund !== null && d.post_refund !== undefined && d.post_refund > 0);
+  const hasNetYoY = netDays.length > 0 && netDays.some(d => d.ly_post_refund > 0);
   let totalNet = 0, totalLyNet = 0;
-  if (hasNetYoY) {
-    days.forEach(d => {
-      totalNet += d.post_refund || 0;
-      totalLyNet += d.ly_post_refund || 0;
-    });
-  }
+  netDays.forEach(d => {
+    totalNet += d.post_refund;
+    totalLyNet += d.ly_post_refund || 0;
+  });
 
   const el = document.getElementById('compareGrid');
 
@@ -893,12 +893,15 @@ function renderCatKPI(days) {
   const totalRefund = hasRefund ? days.reduce((s,r) => s + (r.refund||0), 0) : 0;
   const hasPost = days.some(r => r.post !== null && r.post !== undefined);
   const totalPost = hasPost ? days.reduce((s,r) => s + (r.post||0), 0) : 0;
-  const hasLy = days.some(r => r.ly_a !== null && r.ly_a !== undefined);
-  const totalLy = hasLy ? days.reduce((s,r) => s + (r.ly_a||0), 0) : 0;
+  // 同比按日期对齐：同期仅累计当期有达成/净额的天，避免未过完月份的未来天虚增分母
+  const aDays = days.filter(r => r.a !== null && r.a !== undefined && r.a > 0);
+  const postDays = days.filter(r => r.post !== null && r.post !== undefined && r.post > 0);
+  const hasLy = aDays.some(r => r.ly_a !== null && r.ly_a !== undefined);
+  const totalLy = hasLy ? aDays.reduce((s,r) => s + (r.ly_a||0), 0) : 0;
   const lyYoy = (hasLy && totalLy > 0 && totalA > 0) ? ((totalA/totalLy-1)*100) : null;
   // 去退金额同期(2025)同比
-  const hasLyPost = days.some(r => r.ly_post !== null && r.ly_post !== undefined);
-  const totalLyPost = hasLyPost ? days.reduce((s,r) => s + (r.ly_post||0), 0) : 0;
+  const hasLyPost = postDays.some(r => r.ly_post !== null && r.ly_post !== undefined);
+  const totalLyPost = hasLyPost ? postDays.reduce((s,r) => s + (r.ly_post||0), 0) : 0;
   const postLyYoy = (hasLyPost && totalLyPost > 0 && totalPost > 0) ? ((totalPost/totalLyPost-1)*100) : null;
   const yoyStr = v => (v===null||v===undefined) ? '' : '同比 '+(v>=0?'+':'')+v.toFixed(1)+'%';
   const el = document.getElementById('catKPI');
