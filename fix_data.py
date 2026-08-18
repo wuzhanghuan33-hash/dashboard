@@ -60,6 +60,23 @@ def fix_and_generate(data_path='data.json'):
     year_actual = sum(m['actual'] for m in data['months'].values())
     data['yearActual'] = year_actual
 
+    # 同期对齐硬校验（部署闸门）：归一后若有任何「当期无数据的天残留 ly_*」→ 直接抛错中止。
+    # 无论谁调用 fix_data.py（daily_pull.sh / 手动），错位数据都到不了 data.js / 线上。
+    LY_FIELDS = ("ly_a", "ly_v", "ly_b", "ly_conv", "ly_aov", "ly_ref",
+                 "ly_refund_amt", "ly_post_refund", "ly_cart_users",
+                 "ly_cart_rate", "ly_cart_conv", "y_net")
+    viol = []
+    for m_key, month in data['months'].items():
+        for d in month['days']:
+            if not d.get('a'):
+                for f in LY_FIELDS:
+                    if d.get(f) is not None:
+                        viol.append(f"{m_key}月{d.get('d')} {f}={d.get(f)}")
+    if viol:
+        raise SystemExit(f"✗ 同期对齐校验失败（{len(viol)}处）：未来天残留同期 → 同比会虚增。\n  "
+                         + "\n  ".join(viol[:10])
+                         + "\n  数据未生成，请检查归一逻辑。")
+
     # Write proper JSON
     with open(data_path, 'w') as f:
         json.dump(data, f, ensure_ascii=False, indent=2)

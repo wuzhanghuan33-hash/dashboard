@@ -12,14 +12,8 @@ cd "$DIR" || exit 1
 # 2. 补剔退同比
 /usr/bin/python3 backfill_yoy_net.py >> "$LOG" 2>&1
 
-# 3. 生成 data.js
+# 3. 生成 data.js（内含同期对齐硬校验：错位直接抛错中止，错位数据不会进入 data.js）
 /usr/bin/python3 fix_data.py >> "$LOG" 2>&1
-
-# 3.2 防回归校验：同期(ly_*)必须与当期对齐，错位则中止部署（错位数据不会上线）
-if ! /usr/bin/python3 verify_yoy.py --no-cat >> "$LOG" 2>&1; then
-  echo "⚠ 同期对齐校验失败，中止部署（错位数据不会提交/推送）" >> "$LOG"
-  exit 1
-fi
 
 # 3.5 更新 index.html 的 data.js 版本号，破浏览器/CDN 静态缓存
 #    （否则版本号固定，用户浏览器会一直用缓存的旧 data.js）
