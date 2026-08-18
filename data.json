@@ -1,5 +1,5 @@
 {
-  "lastUpdated": "2026-08-17",
+  "lastUpdated": "2026-08-18",
   "yearTarget": 244957500,
   "months": {
     "1": {
@@ -9037,7 +9037,6 @@
           "cart_conv": null,
           "cart_conv_t": 23.0,
           "y_net": null,
-          "ly_post_refund": null,
           "ly_a": null,
           "ly_v": null,
           "ly_b": null,
@@ -9045,6 +9044,7 @@
           "ly_aov": null,
           "ly_ref": null,
           "ly_refund_amt": null,
+          "ly_post_refund": null,
           "ly_cart_users": null,
           "ly_cart_rate": null,
           "ly_cart_conv": null
@@ -9078,7 +9078,6 @@
           "cart_conv": null,
           "cart_conv_t": 21.7,
           "y_net": null,
-          "ly_post_refund": null,
           "ly_a": null,
           "ly_v": null,
           "ly_b": null,
@@ -9086,6 +9085,7 @@
           "ly_aov": null,
           "ly_ref": null,
           "ly_refund_amt": null,
+          "ly_post_refund": null,
           "ly_cart_users": null,
           "ly_cart_rate": null,
           "ly_cart_conv": null
@@ -9119,7 +9119,6 @@
           "cart_conv": null,
           "cart_conv_t": 24.7,
           "y_net": null,
-          "ly_post_refund": null,
           "ly_a": null,
           "ly_v": null,
           "ly_b": null,
@@ -9127,6 +9126,7 @@
           "ly_aov": null,
           "ly_ref": null,
           "ly_refund_amt": null,
+          "ly_post_refund": null,
           "ly_cart_users": null,
           "ly_cart_rate": null,
           "ly_cart_conv": null
@@ -9160,7 +9160,6 @@
           "cart_conv": null,
           "cart_conv_t": 20.5,
           "y_net": null,
-          "ly_post_refund": null,
           "ly_a": null,
           "ly_v": null,
           "ly_b": null,
@@ -9168,6 +9167,7 @@
           "ly_aov": null,
           "ly_ref": null,
           "ly_refund_amt": null,
+          "ly_post_refund": null,
           "ly_cart_users": null,
           "ly_cart_rate": null,
           "ly_cart_conv": null
@@ -9201,7 +9201,6 @@
           "cart_conv": null,
           "cart_conv_t": 16.9,
           "y_net": null,
-          "ly_post_refund": null,
           "ly_a": null,
           "ly_v": null,
           "ly_b": null,
@@ -9209,6 +9208,7 @@
           "ly_aov": null,
           "ly_ref": null,
           "ly_refund_amt": null,
+          "ly_post_refund": null,
           "ly_cart_users": null,
           "ly_cart_rate": null,
           "ly_cart_conv": null
@@ -9242,7 +9242,6 @@
           "cart_conv": null,
           "cart_conv_t": 21.6,
           "y_net": null,
-          "ly_post_refund": null,
           "ly_a": null,
           "ly_v": null,
           "ly_b": null,
@@ -9250,6 +9249,7 @@
           "ly_aov": null,
           "ly_ref": null,
           "ly_refund_amt": null,
+          "ly_post_refund": null,
           "ly_cart_users": null,
           "ly_cart_rate": null,
           "ly_cart_conv": null
@@ -9283,7 +9283,6 @@
           "cart_conv": null,
           "cart_conv_t": 21.9,
           "y_net": null,
-          "ly_post_refund": null,
           "ly_a": null,
           "ly_v": null,
           "ly_b": null,
@@ -9291,6 +9290,7 @@
           "ly_aov": null,
           "ly_ref": null,
           "ly_refund_amt": null,
+          "ly_post_refund": null,
           "ly_cart_users": null,
           "ly_cart_rate": null,
           "ly_cart_conv": null
@@ -9324,7 +9324,6 @@
           "cart_conv": null,
           "cart_conv_t": 25.3,
           "y_net": null,
-          "ly_post_refund": null,
           "ly_a": null,
           "ly_v": null,
           "ly_b": null,
@@ -9332,6 +9331,7 @@
           "ly_aov": null,
           "ly_ref": null,
           "ly_refund_amt": null,
+          "ly_post_refund": null,
           "ly_cart_users": null,
           "ly_cart_rate": null,
           "ly_cart_conv": null
@@ -9365,7 +9365,6 @@
           "cart_conv": null,
           "cart_conv_t": 25.3,
           "y_net": null,
-          "ly_post_refund": null,
           "ly_a": null,
           "ly_v": null,
           "ly_b": null,
@@ -9373,6 +9372,7 @@
           "ly_aov": null,
           "ly_ref": null,
           "ly_refund_amt": null,
+          "ly_post_refund": null,
           "ly_cart_users": null,
           "ly_cart_rate": null,
           "ly_cart_conv": null
@@ -9406,7 +9406,6 @@
           "cart_conv": null,
           "cart_conv_t": 20.7,
           "y_net": null,
-          "ly_post_refund": null,
           "ly_a": null,
           "ly_v": null,
           "ly_b": null,
@@ -9414,6 +9413,7 @@
           "ly_aov": null,
           "ly_ref": null,
           "ly_refund_amt": null,
+          "ly_post_refund": null,
           "ly_cart_users": null,
           "ly_cart_rate": null,
           "ly_cart_conv": null
@@ -9447,7 +9447,6 @@
           "cart_conv": null,
           "cart_conv_t": 37.1,
           "y_net": null,
-          "ly_post_refund": null,
           "ly_a": null,
           "ly_v": null,
           "ly_b": null,
@@ -9455,6 +9454,7 @@
           "ly_aov": null,
           "ly_ref": null,
           "ly_refund_amt": null,
+          "ly_post_refund": null,
           "ly_cart_users": null,
           "ly_cart_rate": null,
           "ly_cart_conv": null
@@ -9488,7 +9488,6 @@
           "cart_conv": null,
           "cart_conv_t": 29.2,
           "y_net": null,
-          "ly_post_refund": null,
           "ly_a": null,
           "ly_v": null,
           "ly_b": null,
@@ -9496,6 +9495,7 @@
           "ly_aov": null,
           "ly_ref": null,
           "ly_refund_amt": null,
+          "ly_post_refund": null,
           "ly_cart_users": null,
           "ly_cart_rate": null,
           "ly_cart_conv": null
@@ -9529,7 +9529,6 @@
           "cart_conv": null,
           "cart_conv_t": 29.8,
           "y_net": null,
-          "ly_post_refund": null,
           "ly_a": null,
           "ly_v": null,
           "ly_b": null,
@@ -9537,6 +9536,7 @@
           "ly_aov": null,
           "ly_ref": null,
           "ly_refund_amt": null,
+          "ly_post_refund": null,
           "ly_cart_users": null,
           "ly_cart_rate": null,
           "ly_cart_conv": null
@@ -9570,7 +9570,6 @@
           "cart_conv": null,
           "cart_conv_t": 35.7,
           "y_net": null,
-          "ly_post_refund": null,
           "ly_a": null,
           "ly_v": null,
           "ly_b": null,
@@ -9578,6 +9577,7 @@
           "ly_aov": null,
           "ly_ref": null,
           "ly_refund_amt": null,
+          "ly_post_refund": null,
           "ly_cart_users": null,
           "ly_cart_rate": null,
           "ly_cart_conv": null
@@ -9611,7 +9611,6 @@
           "cart_conv": null,
           "cart_conv_t": 37.4,
           "y_net": null,
-          "ly_post_refund": null,
           "ly_a": null,
           "ly_v": null,
           "ly_b": null,
@@ -9619,6 +9618,7 @@
           "ly_aov": null,
           "ly_ref": null,
           "ly_refund_amt": null,
+          "ly_post_refund": null,
           "ly_cart_users": null,
           "ly_cart_rate": null,
           "ly_cart_conv": null
