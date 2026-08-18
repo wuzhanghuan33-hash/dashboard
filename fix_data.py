@@ -44,6 +44,18 @@ def fix_and_generate(data_path='data.json'):
         month['actual'] = total_a
         month['rate'] = round(total_a / total_t, 3) if total_t > 0 else 0
 
+    # 同期对齐归一：凡当期无实际业绩(a 空/0)的天，清除该天所有同期字段(ly_*)。
+    # 防止「月份未过完，同期却整月计入」导致同比分母虚增（8月中曾出 -59.3% 假同比）。
+    # 放在 backfill 注入之后，无论 backfill 怎么灌未来天 ly_*，最终 data.js 天然对齐。
+    LY_FIELDS = ("ly_a", "ly_v", "ly_b", "ly_conv", "ly_aov", "ly_ref",
+                 "ly_refund_amt", "ly_post_refund", "ly_cart_users",
+                 "ly_cart_rate", "ly_cart_conv", "y_net")
+    for m_key, month in data['months'].items():
+        for d in month['days']:
+            if not d.get('a'):
+                for f in LY_FIELDS:
+                    d[f] = None
+
     # Recalculate year total
     year_actual = sum(m['actual'] for m in data['months'].values())
     data['yearActual'] = year_actual
