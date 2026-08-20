@@ -9098,7 +9098,8 @@
           "cart_rate_t": 3.4,
           "cart_conv": 30.4,
           "cart_conv_t": 24.7,
-          "y_net": -18.0
+          "y_net": -18.0,
+          "ly_post_refund": 687438
         },
         {
           "d": "20",
