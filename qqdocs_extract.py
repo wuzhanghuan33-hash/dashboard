@@ -312,6 +312,16 @@ def main():
                         rec[k] = v * scale
             clean.append(rec)
         clean = aggregate_by_date(clean)
+
+        # 已知源数据脏点修正（不改源表，仅在读取层修正）。
+        # 厨电 2026-08-01 源表「扣退款」填 16552，明显少一位(应 ~165520)——
+        # 全月其他天 ly_post/ly_a 稳定 64%~85%，该天仅 7.6%，补位后 76.4% 吻合。
+        # 精确匹配值：源表若以后改对，值变化则规则自动失效，不误伤。
+        for rec in clean:
+            if (name == "厨电" and rec["date"] == "2026-08-01"
+                    and isinstance(rec["ly_post"], (int, float)) and rec["ly_post"] == 16552):
+                rec["ly_post"] = 165520
+
         result[name] = {"header_row": header_row, "days": clean}
 
     cdp_close(tid)
