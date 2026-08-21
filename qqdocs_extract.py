@@ -92,9 +92,12 @@ def get_col_map(tid, sheet_id, header_row):
           "  if(v!==null&&typeof v==='string'&&v!=='')out[v]=c;\n"
           "}\nreturn JSON.stringify(out);})()")
     raw = cdp_eval(tid, js, timeout=25)
+    if not raw:
+        # 页面未就绪/SPA 未加载 → 返回空，由上层重试而非崩溃
+        return {}
     try:
         return json.loads(raw)
-    except json.JSONDecodeError:
+    except (json.JSONDecodeError, TypeError):
         return {}
 
 
@@ -228,8 +231,10 @@ def main():
     time.sleep(15)
 
     result = {}
-    # 类目数据量下限（全量应在 200 天以上，低于此判定懒加载未完成需重试）
-    MIN_DAYS = {"燃热": 200, "电热": 200, "厨电": 200}
+    # 类目数据量下限（全量 242-243 天：1-7月约211-212天 + 8月31天）。
+    # 不能设太低——本次实测懒加载未完成时燃热只读到 232 天(8月缺未来行)，
+    # 用 200 会误判成功。贴近全量强制重试到完整。
+    MIN_DAYS = {"燃热": 240, "电热": 240, "厨电": 240}
     for sheet_id, name, header_row, yoy_cols, total_block_only in SHEETS:
         col_map = None
         days = []
@@ -237,6 +242,11 @@ def main():
             click_tab(tid, name)
             time.sleep(8)
             col_map = get_col_map(tid, sheet_id, header_row)
+            if "日期" not in col_map:
+                # 表头行未读到(页面懒加载未就绪) → 明确重试，避免「0天」误导或直接崩溃
+                print(f"  ⚠ {name} 表头未就绪(col_map 空/缺日期列)，页面未加载完成，重试...")
+                time.sleep(12)
+                continue
             # 电热退款金额达成列表头为「实际退款金额」，别名映射到标准名
             if name == "电热" and "实际退款金额" in col_map and "退款金额达成" not in col_map:
                 col_map["退款金额达成"] = col_map["实际退款金额"]
@@ -259,7 +269,9 @@ def main():
             else:
                 print("  ⚠ 天数不足，懒加载未完成，重试...")
         if len(days) < MIN_DAYS.get(name, 200):
-            print(f"  ✗ {name} 多次重试仍不达标({len(days)}天)，跳过")
+            # 重试耗尽仍不达标 → 中止写入，避免空/残缺数据覆盖 qqdocs_category.json
+            print(f"  ✗ {name} 多次重试仍不达标({len(days)}天)，本次提取中止，不写入文件")
+            return 3
         if len(serials) - len(set(serials)) > 0:
             # 总块重复日期仍在 → 说明懒加载始终未完成，本次提取不可信。
             # 中止写入，避免污染 qqdocs_category.json（a 翻倍 + ly_a 丢失）。
