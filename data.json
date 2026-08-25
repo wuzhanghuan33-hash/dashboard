@@ -1,5 +1,5 @@
 {
-  "lastUpdated": "2026-08-25",
+  "lastUpdated": "2026-08-26",
   "yearTarget": 244957500,
   "months": {
     "1": {
@@ -9160,7 +9160,8 @@
           "cart_rate_t": 3.7,
           "cart_conv": 28.8,
           "cart_conv_t": 16.9,
-          "y_net": -11.5
+          "y_net": -11.5,
+          "ly_post_refund": 576933
         },
         {
           "d": "22",
@@ -9190,7 +9191,8 @@
           "cart_rate_t": 2.8,
           "cart_conv": 26.6,
           "cart_conv_t": 21.6,
-          "y_net": -25.2
+          "y_net": -25.2,
+          "ly_post_refund": 640314
         },
         {
           "d": "23",
@@ -9220,7 +9222,8 @@
           "cart_rate_t": 2.8,
           "cart_conv": 25.4,
           "cart_conv_t": 21.9,
-          "y_net": -23.0
+          "y_net": -23.0,
+          "ly_post_refund": 577857
         },
         {
           "d": "24",
