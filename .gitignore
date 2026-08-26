@@ -1,9 +1,10 @@
 # 专用无头浏览器 profile（含飞书/天猫登录态，切勿提交）
 chrome-profile/
 chrome-profile-sycm/
+chrome-profile-tmall-buyer/
 
-# 生意参谋登录 cookie（含淘宝会话，敏感，切勿提交）
-sycm_cookies.json
+# 登录 cookie（含淘宝会话，敏感，切勿提交）
+*_cookies.json
 
 # 运行日志 / WPS 临时文件（. !<inode>!<filename> 是 WPS 在 macOS 生成的 0 字节残留）
 daily_pull.log
