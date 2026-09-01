@@ -1,5 +1,5 @@
 {
-  "lastUpdated": "2026-08-31",
+  "lastUpdated": "2026-09-01",
   "yearTarget": 244957500,
   "months": {
     "1": {
@@ -8349,8 +8349,8 @@
       "name": "8月",
       "label": "8月",
       "target": 34000000,
-      "actual": 21901251,
-      "rate": 0.644,
+      "actual": 22921013,
+      "rate": 0.674,
       "days": [
         {
           "d": "01",
@@ -9557,44 +9557,33 @@
           "r": "—",
           "w": 0,
           "t": 950000,
-          "a": 0,
-          "rr": 0.0,
-          "y": null,
-          "refund_amt": 0,
+          "a": 1019762,
+          "rr": 1.073,
+          "y": -24.9,
+          "refund_amt": 369463,
           "refund_amt_t": 304000,
-          "post_refund": 0,
+          "post_refund": 650299,
           "post_refund_t": 646000,
-          "ref": null,
+          "ref": 36.2,
           "ref_t": 32.0,
-          "v": 0,
+          "v": 67024,
           "v_t": 100796,
-          "b": 0,
+          "b": 465,
           "b_t": 655,
-          "conv": null,
+          "conv": 0.0069,
           "conv_t": 0.0065,
-          "aov": 0,
+          "aov": 2193,
           "aov_t": 1450,
-          "cart_users": 0,
+          "cart_users": 1631,
           "cart_users_t": 1754,
-          "cart_rate": null,
+          "cart_rate": 2.4,
           "cart_rate_t": 1.7,
-          "cart_conv": null,
+          "cart_conv": 28.5,
           "cart_conv_t": 37.4,
-          "y_net": null,
-          "ly_a": null,
-          "ly_v": null,
-          "ly_b": null,
-          "ly_conv": null,
-          "ly_aov": null,
-          "ly_ref": null,
-          "ly_refund_amt": null,
-          "ly_post_refund": null,
-          "ly_cart_users": null,
-          "ly_cart_rate": null,
-          "ly_cart_conv": null
+          "y_net": -38.1
         }
       ]
     }
   },
-  "yearActual": 222559180
+  "yearActual": 223578942
 }
