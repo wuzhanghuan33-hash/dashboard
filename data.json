@@ -9580,7 +9580,8 @@
           "cart_rate_t": 1.7,
           "cart_conv": 28.5,
           "cart_conv_t": 37.4,
-          "y_net": -38.1
+          "y_net": -38.1,
+          "ly_post_refund": 1050735
         }
       ]
     }
