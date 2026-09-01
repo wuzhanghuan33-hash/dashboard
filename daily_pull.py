@@ -293,37 +293,53 @@ def get_cell(table, row_idx_str, col_str):
         return None
     return cell.get("value") if cell else None
 
-def extract_july_data(target_id):
-    """激活7月tab并提取第2区块的每日数据"""
-    # 激活 7月 tab
-    js_activate = """
-    (function(){
-        var tabs = document.querySelectorAll('.tab-list > div');
-        var target = null;
-        tabs.forEach(function(t){
-            if (t.textContent.trim() === '7月') target = t;
-        });
-        if (!target) return 'NO_TAB';
-        var keys = Object.keys(target);
-        for (var i = 0; i < keys.length; i++) {
-            if (keys[i].startsWith('__reactEventHandlers')) {
-                var h = target[keys[i]];
-                if (h && h.onMouseDown) {
-                    h.onMouseDown({
-                        type:'mousedown', button:0, buttons:1,
-                        clientX:0, clientY:0,
-                        target:target, currentTarget:target,
-                        preventDefault:function(){},
-                        stopPropagation:function(){}
-                    });
-                    return 'ACTIVATED';
-                }
+# 激活飞书 sheet tab：页面加载慢时 tab 渲染/React handler 延迟就绪
+# （实测 NO_TAB→NO_HANDLER→ACTIVATED），轮询重试直到就绪，避免定时任务偶发漏读
+_JS_ACTIVATE_TAB = """
+(function(){
+    var tabs = document.querySelectorAll('.tab-list > div');
+    var target = null;
+    tabs.forEach(function(t){
+        if (t.textContent.trim() === '%TAB%') target = t;
+    });
+    if (!target) return 'NO_TAB';
+    var keys = Object.keys(target);
+    for (var i = 0; i < keys.length; i++) {
+        if (keys[i].startsWith('__reactEventHandlers')) {
+            var h = target[keys[i]];
+            if (h && h.onMouseDown) {
+                h.onMouseDown({
+                    type:'mousedown', button:0, buttons:1,
+                    clientX:0, clientY:0,
+                    target:target, currentTarget:target,
+                    preventDefault:function(){},
+                    stopPropagation:function(){}
+                });
+                return 'ACTIVATED';
             }
         }
-        return 'NO_HANDLER';
-    })()
-    """
-    result = cdp_eval(target_id, js_activate)
+    }
+    return 'NO_HANDLER';
+})()
+"""
+
+
+def activate_tab_retry(target_id, tab_name, max_wait=90, interval=5):
+    """激活飞书 sheet tab，轮询等待就绪。返回 'ACTIVATED' 或最后一次失败原因。"""
+    last = "NO_TAB"
+    waited = 0
+    while waited < max_wait:
+        last = cdp_eval(target_id, _JS_ACTIVATE_TAB.replace("%TAB%", tab_name), timeout=20)
+        if last == "ACTIVATED":
+            return last
+        time.sleep(interval)
+        waited += interval
+    return last
+
+
+def extract_july_data(target_id):
+    """激活7月tab并提取第2区块的每日数据"""
+    result = activate_tab_retry(target_id, "7月")
     if result != "ACTIVATED":
         return None, f"激活7月tab失败: {result}"
 
@@ -469,34 +485,7 @@ def extract_july_data(target_id):
 
 def extract_august_data(target_id):
     """新版引擎（getValue 行式）读取8月逐日数据"""
-    js_activate = """
-    (function(){
-        var tabs = document.querySelectorAll('.tab-list > div');
-        var target = null;
-        tabs.forEach(function(t){
-            if (t.textContent.trim() === '8月') target = t;
-        });
-        if (!target) return 'NO_TAB';
-        var keys = Object.keys(target);
-        for (var i = 0; i < keys.length; i++) {
-            if (keys[i].startsWith('__reactEventHandlers')) {
-                var h = target[keys[i]];
-                if (h && h.onMouseDown) {
-                    h.onMouseDown({
-                        type:'mousedown', button:0, buttons:1,
-                        clientX:0, clientY:0,
-                        target:target, currentTarget:target,
-                        preventDefault:function(){},
-                        stopPropagation:function(){}
-                    });
-                    return 'ACTIVATED';
-                }
-            }
-        }
-        return 'NO_HANDLER';
-    })()
-    """
-    result = cdp_eval(target_id, js_activate)
+    result = activate_tab_retry(target_id, "8月")
     if result != "ACTIVATED":
         return None, f"激活8月tab失败: {result}"
 

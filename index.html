@@ -172,8 +172,8 @@ td .tgt { font-size:8px; color:#94a3b8; font-weight:400; }
       <div class="kpi-grid cols-auto" id="kpiOverview"></div>
       <div class="chart-row">
         <div class="chart-box full">
-          <h3>逐日业绩走势 <small>蓝色=目标 / 绿色=达成 / 灰色=同期 / 橙线=达成率</small></h3>
-          <canvas id="dailyChart"></canvas>
+          <h3>逐月业绩走势 <small>蓝色=目标 / 绿色=达成 / 灰色=同期 / 橙线=达成率</small></h3>
+          <canvas id="monthlyChart"></canvas>
         </div>
       </div>
     </div>
@@ -415,7 +415,7 @@ function renderAll() {
   renderRefundKPI(days);
   renderTrafficKPI(days);
   renderCompare(days);
-  renderDailyChart(days);
+  renderMonthlyChart(days);
   renderRateChart(days);
   renderTrafficChart(days);
   renderAOVChart(days);
@@ -604,23 +604,37 @@ function renderCompare(days) {
 }
 
 // ==================== CHARTS ====================
-function renderDailyChart(days) {
+function renderMonthlyChart(days) {
   if (typeof Chart === 'undefined') return;
-  const labels = days.map(r => r.date.slice(5));
-  const ctx = document.getElementById('dailyChart').getContext('2d');
-  if (CHART_INSTANCES.daily) CHART_INSTANCES.daily.destroy();
+  // 按月份聚合选中日期范围的天数
+  const byMonth = {};
+  days.forEach(r => {
+    if (!byMonth[r.month]) byMonth[r.month] = { t:0, a:0, ly:0, lyDays:0 };
+    const b = byMonth[r.month];
+    b.t += r.t || 0;
+    b.a += r.a || 0;
+    const ly = calcLastYear(r.a, r.y);
+    if (ly != null) { b.ly += ly; b.lyDays++; }
+  });
+  const months = Object.keys(byMonth).sort((a,b)=>a-b);
+  const labels = months.map(m => m + '月');
+  const ctx = document.getElementById('monthlyChart').getContext('2d');
+  if (CHART_INSTANCES.monthly) CHART_INSTANCES.monthly.destroy();
 
-  const lyData = days.map(r => calcLastYear(r.a, r.y));
+  const tData = months.map(m => byMonth[m].t);
+  const aData = months.map(m => byMonth[m].a);
+  const lyData = months.map(m => byMonth[m].lyDays ? Math.round(byMonth[m].ly) : null);
+  const rrData = months.map(m => byMonth[m].t ? Math.round(byMonth[m].a / byMonth[m].t * 1000) / 10 : null);
 
-  CHART_INSTANCES.daily = new Chart(ctx, {
+  CHART_INSTANCES.monthly = new Chart(ctx, {
     type:'bar',
     data:{
       labels,
       datasets:[
-        {label:'目标',data:days.map(r=>r.t),backgroundColor:'rgba(26,35,126,.12)',borderColor:'rgba(26,35,126,.25)',borderWidth:1,borderRadius:2,order:3},
-        {label:'达成',data:days.map(r=>r.a),backgroundColor:'rgba(18,183,106,.45)',borderColor:'#12b76a',borderWidth:1,borderRadius:2,order:3},
+        {label:'目标',data:tData,backgroundColor:'rgba(26,35,126,.12)',borderColor:'rgba(26,35,126,.25)',borderWidth:1,borderRadius:2,order:3},
+        {label:'达成',data:aData,backgroundColor:'rgba(18,183,106,.45)',borderColor:'#12b76a',borderWidth:1,borderRadius:2,order:3},
         {label:'同期(2025)',data:lyData,backgroundColor:'rgba(152,162,179,.3)',borderColor:'#98a2b3',borderWidth:1,borderRadius:2,order:3,type:'bar'},
-        {label:'达成率',data:days.map(r=>r.rr*100),type:'line',borderColor:'#f79009',backgroundColor:'rgba(247,144,9,.1)',fill:true,pointRadius:2,pointHoverRadius:5,borderWidth:2,tension:.3,yAxisID:'y1',order:1}
+        {label:'达成率',data:rrData,type:'line',borderColor:'#f79009',backgroundColor:'rgba(247,144,9,.1)',fill:true,pointRadius:2,pointHoverRadius:5,borderWidth:2,tension:.3,yAxisID:'y1',order:1}
       ]
     },
     options:{
@@ -628,9 +642,9 @@ function renderDailyChart(days) {
       interaction:{mode:'index',intersect:false},
       plugins:{legend:{position:'top',labels:{boxWidth:12,font:{size:10}}}},
       scales:{
-        x:{grid:{display:false},ticks:{font:{size:9},maxTicksLimit:25}},
+        x:{grid:{display:false},ticks:{font:{size:9}}},
         y:{type:'linear',position:'left',title:{display:true,text:'销售额(元)',font:{size:9}},ticks:{callback:v=>v>=10000?(v/10000)+'万':v,font:{size:9}}},
-        y1:{type:'linear',position:'right',min:0,max:Math.max(...days.map(r=>r.rr*100))*1.3,grid:{display:false},title:{display:true,text:'达成率(%)',font:{size:9}},ticks:{callback:v=>v+'%',font:{size:9}}}
+        y1:{type:'linear',position:'right',min:0,max:Math.max(...(rrData.filter(v=>v!=null)),0)*1.3,grid:{display:false},title:{display:true,text:'达成率(%)',font:{size:9}},ticks:{callback:v=>v+'%',font:{size:9}}}
       }
     }
   });
