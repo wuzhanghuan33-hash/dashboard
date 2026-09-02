@@ -60,6 +60,10 @@ def fix_and_generate(data_path='data.json'):
     year_actual = sum(m['actual'] for m in data['months'].values())
     data['yearActual'] = year_actual
 
+    # yearTarget 由已配置各月 target 之和决定（历史字段曾只含 1-6+8月漏 7/9月，口径存疑；
+    # 但看板界面不读它，仅 fix_data 日志/ data.js 字段。现自动对齐月节点，杜绝未来误导）
+    data['yearTarget'] = sum(m['target'] for m in data['months'].values())
+
     # 同期对齐硬校验（部署闸门）：归一后若有任何「当期无数据的天残留 ly_*」→ 直接抛错中止。
     # 无论谁调用 fix_data.py（daily_pull.sh / 手动），错位数据都到不了 data.js / 线上。
     LY_FIELDS = ("ly_a", "ly_v", "ly_b", "ly_conv", "ly_aov", "ly_ref",
@@ -91,7 +95,7 @@ def fix_and_generate(data_path='data.json'):
 
     days_count = sum(len(m['days']) for m in data['months'].values())
     print(f"✓ 更新完成！{len(data['months'])}个月, {days_count}天数据")
-    print(f"  H1目标: {data['yearTarget']/10000:.0f}万, H1达成: {year_actual/10000:.0f}万")
+    print(f"  累计目标: {data['yearTarget']/10000:.0f}万, 累计达成: {year_actual/10000:.0f}万")
     print(f"  data.json ✓   data.js ✓")
     print(f"  → 刷新浏览器 http://localhost:8080")
 
