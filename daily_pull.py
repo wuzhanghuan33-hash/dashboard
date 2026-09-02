@@ -87,6 +87,16 @@ AUG_FIRST_ROW = 2
 AUG_LAST_ROW = 32
 AUG_TARGET = 34000000  # 8月业绩目标（row0 汇总）
 
+# 9月表：与 8月同引擎，但飞书该 tab 多一行 —— row1=月汇总、row2=表头、
+# row3-32=9月1-30日（每行一天）。目标 3000万 从 row1 col4 读到。
+# 列映射与 8月基本相同，仅访客目标错位：8月有 col19"预估出库控比"，9月无此列，
+# 访客目标左移到 col19（9月表头实测 col19=访客目标、col21=商品访客访客达成）。
+SEP_COLS = dict(AUG_COLS)
+SEP_COLS["v_t"] = 19
+SEP_FIRST_ROW = 3
+SEP_LAST_ROW = 32
+SEP_TARGET = 30000000  # 9月业绩目标（飞书 row1 汇总）
+
 # ==================== CDP 操作 ====================
 
 # 自动启动的 Chrome 进程，退出时清理
@@ -483,31 +493,32 @@ def extract_july_data(target_id):
     return days, None
 
 
-def extract_august_data(target_id):
-    """新版引擎（getValue 行式）读取8月逐日数据"""
-    result = activate_tab_retry(target_id, "8月")
+def extract_month_data(target_id, tab_name, first_row, last_row, cols=None):
+    """新版引擎（getValue 行式）读取某月逐日数据。8月/9月表同结构同列映射。"""
+    cols = cols or AUG_COLS
+    result = activate_tab_retry(target_id, tab_name)
     if result != "ACTIVATED":
-        return None, f"激活8月tab失败: {result}"
+        return None, f"激活{tab_name}tab失败: {result}"
 
     print("   等待数据加载...")
     time.sleep(15)
 
-    cols = ",".join(str(c) for c in sorted(set(AUG_COLS.values())))
+    cols_csv = ",".join(str(c) for c in sorted(set(cols.values())))
     js_read = (
         "(function(){var s=window.spread.getActiveSheet();var out=[];"
-        "for(var r=" + str(AUG_FIRST_ROW) + ";r<=" + str(AUG_LAST_ROW) + ";r++){"
-        "var row={};var cols=[" + cols + "];"
+        "for(var r=" + str(first_row) + ";r<=" + str(last_row) + ";r++){"
+        "var row={};var cols=[" + cols_csv + "];"
         "cols.forEach(function(c){var v;try{v=s.getValue(r,c);}catch(e){v='E';}"
         "row['c'+c]=v===undefined||v===null?null:v;});out.push(row);}"
         "return JSON.stringify(out);})()"
     )
     raw = cdp_eval(target_id, js_read)
     if not raw or not raw.startswith("["):
-        return None, f"读取8月数据失败: {str(raw)[:100]}"
+        return None, f"读取{tab_name}数据失败: {str(raw)[:100]}"
     try:
         rows = json.loads(raw)
     except json.JSONDecodeError as e:
-        return None, f"8月JSON解析失败: {e}"
+        return None, f"{tab_name}JSON解析失败: {e}"
 
     def gv(row, col):
         v = row.get("c" + str(col))
@@ -515,53 +526,53 @@ def extract_august_data(target_id):
 
     days = []
     for row in rows:
-        d_date = gv(row, AUG_COLS["date"])
+        d_date = gv(row, cols["date"])
         if d_date is None:
             continue
         dt = excel_serial_to_date(d_date)
         day = {
             "d": dt.strftime("%d"),
-            "r": gv(row, AUG_COLS["rhythm"]) or "—",
-            "w": WEEKDAY_MAP.get(str(gv(row, AUG_COLS["weekday"]) or ""), 0),
-            "t": int(gv(row, AUG_COLS["t"]) or 0),
+            "r": gv(row, cols["rhythm"]) or "—",
+            "w": WEEKDAY_MAP.get(str(gv(row, cols["weekday"]) or ""), 0),
+            "t": int(gv(row, cols["t"]) or 0),
         }
 
-        day["a"] = int(gv(row, AUG_COLS["a"]) or 0)
+        day["a"] = int(gv(row, cols["a"]) or 0)
         day["rr"] = round(day["a"] / day["t"], 3) if day["t"] > 0 else 0
 
-        y = gv(row, AUG_COLS["y"])
+        y = gv(row, cols["y"])
         day["y"] = round(y * 100, 1) if isinstance(y, (int, float)) and y > -0.999 else None
 
-        day["refund_amt"] = int(gv(row, AUG_COLS["refund_amt"]) or 0)
-        day["refund_amt_t"] = int(gv(row, AUG_COLS["refund_amt_t"]) or 0)
-        day["post_refund"] = int(gv(row, AUG_COLS["post_refund"]) or 0)
-        day["post_refund_t"] = int(gv(row, AUG_COLS["post_refund_t"]) or 0)
+        day["refund_amt"] = int(gv(row, cols["refund_amt"]) or 0)
+        day["refund_amt_t"] = int(gv(row, cols["refund_amt_t"]) or 0)
+        day["post_refund"] = int(gv(row, cols["post_refund"]) or 0)
+        day["post_refund_t"] = int(gv(row, cols["post_refund_t"]) or 0)
 
-        ref = gv(row, AUG_COLS["ref"])
+        ref = gv(row, cols["ref"])
         day["ref"] = round(ref * 100, 1) if isinstance(ref, (int, float)) else None
-        ref_t = gv(row, AUG_COLS["ref_t"])
+        ref_t = gv(row, cols["ref_t"])
         day["ref_t"] = round(ref_t * 100, 1) if isinstance(ref_t, (int, float)) else 0
 
-        day["v"] = int(gv(row, AUG_COLS["v"]) or 0)
-        day["v_t"] = int(gv(row, AUG_COLS["v_t"]) or 0)
-        day["b"] = int(gv(row, AUG_COLS["b"]) or 0)
-        day["b_t"] = int(gv(row, AUG_COLS["b_t"]) or 0)
-        day["conv"] = gv(row, AUG_COLS["conv"])
-        day["conv_t"] = gv(row, AUG_COLS["conv_t"])
-        day["aov"] = int(gv(row, AUG_COLS["aov"]) or 0)
-        day["aov_t"] = int(gv(row, AUG_COLS["aov_t"]) or 0)
-        day["cart_users"] = int(gv(row, AUG_COLS["cart_users"]) or 0)
-        day["cart_users_t"] = int(gv(row, AUG_COLS["cart_users_t"]) or 0)
-        cart_rate = gv(row, AUG_COLS["cart_rate"])
+        day["v"] = int(gv(row, cols["v"]) or 0)
+        day["v_t"] = int(gv(row, cols["v_t"]) or 0)
+        day["b"] = int(gv(row, cols["b"]) or 0)
+        day["b_t"] = int(gv(row, cols["b_t"]) or 0)
+        day["conv"] = gv(row, cols["conv"])
+        day["conv_t"] = gv(row, cols["conv_t"])
+        day["aov"] = int(gv(row, cols["aov"]) or 0)
+        day["aov_t"] = int(gv(row, cols["aov_t"]) or 0)
+        day["cart_users"] = int(gv(row, cols["cart_users"]) or 0)
+        day["cart_users_t"] = int(gv(row, cols["cart_users_t"]) or 0)
+        cart_rate = gv(row, cols["cart_rate"])
         day["cart_rate"] = round(cart_rate * 100, 1) if isinstance(cart_rate, (int, float)) else None
-        cart_rate_t = gv(row, AUG_COLS["cart_rate_t"])
+        cart_rate_t = gv(row, cols["cart_rate_t"])
         day["cart_rate_t"] = round(cart_rate_t * 100, 1) if isinstance(cart_rate_t, (int, float)) else 0
-        cart_conv = gv(row, AUG_COLS["cart_conv"])
+        cart_conv = gv(row, cols["cart_conv"])
         day["cart_conv"] = round(cart_conv * 100, 1) if isinstance(cart_conv, (int, float)) else None
-        cart_conv_t = gv(row, AUG_COLS["cart_conv_t"])
+        cart_conv_t = gv(row, cols["cart_conv_t"])
         day["cart_conv_t"] = round(cart_conv_t * 100, 1) if isinstance(cart_conv_t, (int, float)) else 0
 
-        y_net = gv(row, AUG_COLS["y_net"])
+        y_net = gv(row, cols["y_net"])
         day["y_net"] = round(y_net * 100, 1) if isinstance(y_net, (int, float)) and y_net > -0.999 else None
 
         # 源表比率公式可能返回 #DIV/0! 等错误 → 用已有实际数据派生
@@ -661,7 +672,7 @@ def main():
 
     # 打开飞书 + 提取，失败自动重试（页面加载慢/偶发NO_TAB）
     MAX_RETRY = 3
-    july_days, aug_days, err = None, None, "未尝试"
+    july_days, aug_days, sep_days, err = None, None, None, "未尝试"
     tid = ""
     for attempt in range(1, MAX_RETRY + 1):
         print(f"  打开飞书页面 (第{attempt}次尝试)...")
@@ -674,12 +685,14 @@ def main():
         print(f"  提取7月数据...")
         july_days, july_err = extract_july_data(tid)
         print(f"  提取8月数据...")
-        aug_days, aug_err = extract_august_data(tid)
+        aug_days, aug_err = extract_month_data(tid, "8月", AUG_FIRST_ROW, AUG_LAST_ROW, AUG_COLS)
+        print(f"  提取9月数据...")
+        sep_days, sep_err = extract_month_data(tid, "9月", SEP_FIRST_ROW, SEP_LAST_ROW, SEP_COLS)
         cdp_close(tid)
-        if not july_err and not aug_err:
+        if not july_err and not aug_err and not sep_err:
             err = None
             break
-        err = july_err or aug_err
+        err = july_err or aug_err or sep_err
         print(f"  ✗ 第{attempt}次失败: {err}")
         if attempt < MAX_RETRY:
             time.sleep(10)
@@ -720,6 +733,25 @@ def main():
                 saved = True
             else:
                 print("  8月无新数据")
+
+            if sep_days:
+                # 9月首次出现时初始化结构（30天）
+                if "9" not in data["months"]:
+                    data["months"]["9"] = {
+                        "name": "9月", "label": "9月",
+                        "target": SEP_TARGET, "actual": 0, "rate": 0,
+                        "days": [{"d": "%02d" % d, "r": "—", "w": 0,
+                                  "t": 0, "a": 0, "rr": 0} for d in range(1, 31)],
+                    }
+
+                print(f"  ✓ 9月提取 {len(sep_days)} 天 (含 {sum(1 for d in sep_days if d['a']>0)} 天有实际值)")
+                month9 = data["months"]["9"]
+                month9["days"] = merge_days(month9["days"], sep_days)
+                month9["actual"] = sum(d["a"] for d in month9["days"])
+                month9["rate"] = round(month9["actual"] / month9["target"], 3) if month9["target"] > 0 else 0
+                saved = True
+            else:
+                print("  9月无新数据")
 
             if saved:
                 data["yearActual"] = sum(m["actual"] for m in data["months"].values())
