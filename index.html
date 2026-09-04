@@ -10,8 +10,8 @@
 <title>万家乐天猫官旗 · 2026 业绩看板</title>
 <script>/* Chart.js 异步加载，不阻塞页面渲染 */
 (function(){var d=document,s=d.createElement('script');s.src='https://cdn.bootcdn.net/ajax/libs/Chart.js/4.4.7/chart.umd.min.js';s.onerror=function(){var s2=d.createElement('script');s2.src='https://cdn.jsdelivr.net/npm/chart.js@4.4.7/dist/chart.umd.min.js';d.head.appendChild(s2);};d.head.appendChild(s);})();</script>
-<script src="data.js?v=202609031503"></script>
-<script src="category_data.js?v=202609031503"></script>
+<script src="data.js?v=202609041017"></script>
+<script src="category_data.js?v=202609041017"></script>
 <style>
 * { margin:0; padding:0; box-sizing:border-box; }
 html { -webkit-font-smoothing:antialiased; }
@@ -299,6 +299,13 @@ function calcLastYear(a, y) {
   return Math.round(a / (1 + y / 100));
 }
 
+function lySales(d) {
+  // 同期业绩(2025)：优先用飞书2025段提取的真值 ly_a；
+  // 缺失（如 8/28-31 尚未补、9月无去年数据）时回退到前同比%反推，保持同期天数与当期对齐。
+  if (d.ly_a !== null && d.ly_a !== undefined && d.ly_a > 0) return d.ly_a;
+  return calcLastYear(d.a, d.y);
+}
+
 function lyCell(cur, ly, fmt) {
   // 同期值 + 同比 子行（指标单元格第二行）
   if (ly == null || ly === '') return '<span class="ly-val">同期 —</span>';
@@ -433,11 +440,11 @@ function renderOverview(days) {
   const rate = totalA / totalT;
   const daysAbove = days.filter(r => r.rr >= 1).length;
 
-  // 同期 total
-  let totalLastYear = 0, hasLastYear = false;
+  // 同期 total（ly_a 真值优先，缺则前同比%反推兜底；同比仅对比双方都有值的天）
+  let totalLastYear = 0, matchedA = 0, matchedDays = 0;
   days.forEach(d => {
-    const ly = calcLastYear(d.a, d.y);
-    if (ly !== null) { totalLastYear += ly; hasLastYear = true; }
+    const ly = lySales(d);
+    if (ly !== null) { totalLastYear += ly; matchedA += d.a; matchedDays++; }
   });
 
   // 剔退净额与同比（同期仅累计当期有净额的天，避免未过完月份的未来天虚增分母）
@@ -459,7 +466,7 @@ function renderOverview(days) {
     <div class="kpi-card" style="border-left-color:#3b82f6"><div class="label">业绩目标</div><div class="value">${fmt(totalT)}</div><div class="sub">${days.length}天</div></div>
     <div class="kpi-card" style="border-left-color:#16a34a"><div class="label">业绩达成</div><div class="value">${fmt(totalA)}</div><div class="sub ${rate>=.85?'good':'bad'}">${totalA>=totalT?'超额 '+fmt(totalA-totalT):'差额 '+fmt(totalA-totalT)}</div></div>
     <div class="kpi-card" style="border-left-color:${rate>=1?'#16a34a':rate>=.8?'#d97706':'#dc2626'}"><div class="label">达成率</div><div class="value" style="color:${rate>=1?'#16a34a':rate>=.8?'#d97706':'#dc2626'}">${fmtPct(rate)}</div><div class="sub">超目标 ${daysAbove}/${days.length} 天</div></div>
-    ${hasLastYear?`<div class="kpi-card" style="border-left-color:#8b5cf6"><div class="label">同期业绩（2025）</div><div class="value">${fmt(totalLastYear)}</div><div class="sub ${totalA>=totalLastYear?'good':'bad'}">同比 ${((totalA/totalLastYear-1)*100).toFixed(1)}%</div></div>`:''}
+    ${totalLastYear>0?`<div class="kpi-card" style="border-left-color:#8b5cf6"><div class="label">同期业绩（2025）</div><div class="value">${fmt(totalLastYear)}</div><div class="sub ${matchedA>=totalLastYear?'good':'bad'}">同比 ${((matchedA/totalLastYear-1)*100).toFixed(1)}%（${matchedDays}天可比）</div></div>`:''}
     ${hasPostRefund?`<div class="kpi-card" style="border-left-color:#f97316"><div class="label">净达成（剔退）</div><div class="value">${fmt(totalPostRefund)}</div><div class="sub ${netYearOverYear!==null?(parseFloat(netYearOverYear)>=0?'good':'bad'):''}">剔退 ${fmt(refundLoss)} | 净达成率 ${totalPostT>0?fmtPct(totalPostRefund/totalPostT):'—'}${netYearOverYear!==null?' | 同比 '+netYearOverYear+'%':''}</div></div>`:''}
   `;
 }
@@ -547,7 +554,7 @@ function renderCompare(days) {
   let totalA = 0, totalLy = 0;
 
   days.forEach(d => {
-    const ly = calcLastYear(d.a, d.y);
+    const ly = lySales(d);
     if (ly !== null) { hasLastYear = true; totalA += d.a; totalLy += ly; }
   });
 
@@ -574,7 +581,7 @@ function renderCompare(days) {
     ${hasLastYear?`<div class="compare-card">
       <h4>GMV 同比（2025）</h4>
       <div class="stat"><span>2026 达成</span><span class="val">${fmt(totalA)}</span></div>
-      <div class="stat"><span>2025 同期</span><span class="val">${fmt(totalLy)}（计算值）</span></div>
+      <div class="stat"><span>2025 同期</span><span class="val">${fmt(totalLy)}（真值）</span></div>
       <div class="stat"><span>同比增长</span><span class="val ${parseFloat(yoySales)>=0?'good':'bad'}">${yoySales}%</span></div>
       <div class="stat"><span>差额</span><span class="val ${parseFloat(yoySales)>=0?'good':'bad'}">${totalA>=totalLy?'+':''}${fmt(totalA-totalLy)}</span></div>
     </div>`:''}
@@ -587,15 +594,15 @@ function renderCompare(days) {
     </div>`:''}
     <div class="compare-card">
       <h4>增长幅度</h4>
-      <div class="stat"><span>GMV 增长天数</span><span class="val good">${hasLastYear?days.filter(d=>d.y!==null&&d.y>0).length:0}天</span></div>
-      <div class="stat"><span>GMV 下降天数</span><span class="val bad">${hasLastYear?days.filter(d=>d.y!==null&&d.y<0).length:0}天</span></div>
+      <div class="stat"><span>GMV 增长天数</span><span class="val good">${hasLastYear?days.filter(d=>{const ly=lySales(d);return ly!==null&&d.a>ly;}).length:0}天</span></div>
+      <div class="stat"><span>GMV 下降天数</span><span class="val bad">${hasLastYear?days.filter(d=>{const ly=lySales(d);return ly!==null&&d.a<ly;}).length:0}天</span></div>
       <div class="stat"><span>剔退最高同比</span><span class="val good">${(()=>{const v=days.filter(d=>d.y_net!==null&&d.y_net>0).map(d=>d.y_net);return v.length?Math.max(...v).toFixed(1):'—';})()}%</span></div>
       <div class="stat"><span>剔退最低同比</span><span class="val bad">${(()=>{const v=days.filter(d=>d.y_net!==null&&!isNaN(d.y_net)).map(d=>d.y_net);return v.length?Math.min(...v).toFixed(1):'—';})()}%</span></div>
     </div>
     <div class="compare-card">
       <h4>备注</h4>
       <div style="font-size:10px;color:#64748b;line-height:1.6">
-        GMV 同期根据前同比%反向计算；<br>
+        GMV 同期以飞书 2025 段真值 ly_a 为准，缺失天用前同比%反推；<br>
         剔退净额同比从飞书 2025 段逐日提取，<br>
         春节期间同比暴涨（1月底-2月初）因2025年春节在1月底，存在错位。
       </div>
@@ -615,7 +622,7 @@ function renderMonthlyChart(days) {
     b.a += r.a || 0;
     b.pst += r.post_refund || 0;
     b.pst_t += r.post_refund_t || 0;
-    const ly = calcLastYear(r.a, r.y);
+    const ly = lySales(r);
     if (ly != null) { b.ly += ly; b.lyDays++; }
   });
   const months = Object.keys(byMonth).sort((a,b)=>a-b);
@@ -839,7 +846,7 @@ function renderTable(days) {
     const rateCls = d.rr >= 1 ? 'high-achieve' : d.rr < .6 ? 'low-achieve' : '';
     const yoyCls = d.y >= 0 ? 'high-achieve' : d.y !== null && d.y < 0 ? 'low-achieve' : '';
     const isWeekend = d.w === 6 || d.w === 7;
-    const ly = calcLastYear(d.a, d.y);
+    const ly = lySales(d);
     const refAmt = d.refund_amt !== undefined ? fmt(d.refund_amt) : '—';
     const postRef = d.post_refund !== undefined ? fmt(d.post_refund) : '—';
     const refStr = d.ref !== null ? d.ref + '%' : '—';
