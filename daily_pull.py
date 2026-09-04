@@ -89,10 +89,19 @@ AUG_TARGET = 34000000  # 8月业绩目标（row0 汇总）
 
 # 9月表：与 8月同引擎，但飞书该 tab 多一行 —— row1=月汇总、row2=表头、
 # row3-32=9月1-30日（每行一天）。目标 3000万 从 row1 col4 读到。
-# 列映射与 8月基本相同，仅访客目标错位：8月有 col19"预估出库控比"，9月无此列，
-# 访客目标左移到 col19（9月表头实测 col19=访客目标、col21=商品访客访客达成）。
+# 列映射：9月无 8月 col19"预估出库控比"，故从访客列起比 8月左移 1 列
+# （表头实测 col19=访客目标、col20=访客达成、col21=买家目标、col22=买家达成，
+#  col23=转化率目标、col24=转化率达成、col25=客单价目标、col26=客单价达成、
+#  col27=加购人数目标、col28=加购人数达成、col29=加购率目标、col30=加购率达成、
+#  col31=加购转化率目标、col32=加购转化率达成）。<19 的列与 8月一致。
 SEP_COLS = dict(AUG_COLS)
-SEP_COLS["v_t"] = 19
+for _k, _c in {
+    "v_t": 19, "v": 20, "b_t": 21, "b": 22,
+    "conv_t": 23, "conv": 24, "aov_t": 25, "aov": 26,
+    "cart_users_t": 27, "cart_users": 28, "cart_rate_t": 29, "cart_rate": 30,
+    "cart_conv_t": 31, "cart_conv": 32,
+}.items():
+    SEP_COLS[_k] = _c
 SEP_FIRST_ROW = 3
 SEP_LAST_ROW = 32
 SEP_TARGET = 30000000  # 9月业绩目标（飞书 row1 汇总）
