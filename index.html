@@ -307,10 +307,10 @@ function lySales(d) {
 }
 
 function lyNet(d) {
-  // 同期剔退净额(2025)：真值 ly_post_refund 优先，缺则用剔退前同比 y_net 反推，
-  // 与 lySales 同一口径，保证当期有净额的天总能对上同期，避免同比分母缺失。
-  if (d.ly_post_refund !== null && d.ly_post_refund !== undefined && d.ly_post_refund > 0) return d.ly_post_refund;
-  return calcLastYear(d.post_refund, d.y_net);
+  // 剔退净额同期(2025)一律取飞书 2025 段真值 ly_post_refund（含负异常点，口径与源表一致）；
+  // 无真值的天不计入同比。不再用剔退前同比%反推，避免合成值失真。
+  if (d.ly_post_refund !== null && d.ly_post_refund !== undefined) return d.ly_post_refund;
+  return null;
 }
 
 function lyCell(cur, ly, fmt) {
@@ -461,8 +461,8 @@ function renderOverview(days) {
   // 去退金额目标合计（分母与达成率同一口径；缺目标的月末天按 0 计）
   const totalPostT = days.reduce((s,r) => s + (r.post_refund_t||0), 0);
   const refundLoss = totalA - totalPostRefund;
-  // 剔退净额同比：真值 ly_post_refund 优先、缺(9月暂无去年净额字段)用剔退前同比%反推，
-  // 当期/同期每天一一对应(同比分子用有同期的天)，避免当期有、同期无的天虚增
+  // 剔退净额同比：一律按飞书 2025 段真值 ly_post_refund 求和（当期/同期同天成对计入），
+  // 无真值的天不计入，避免合成反推失真
   const netMatched = postDays.filter(r => lyNet(r) !== null);
   const totalNetMatched = netMatched.reduce((s,r) => s + r.post_refund, 0);
   const hasNetYoY = netMatched.length > 0;
@@ -579,7 +579,7 @@ function renderCompare(days) {
     if (ly !== null) { hasLastYear = true; totalA += d.a; totalLy += ly; }
   });
 
-  // Net YoY（当期有净额且能取到 2025 同期净额的天；缺真值用剔退前同比%反推）
+  // Net YoY（当期有净额且 2025 段有真值去退净额的天，二者同天成对计入；缺真值天不计入）
   const netDays = days.filter(d => d.post_refund !== null && d.post_refund !== undefined && d.post_refund > 0 && lyNet(d) !== null);
   const hasNetYoY = netDays.length > 0;
   let totalNet = 0, totalLyNet = 0;
@@ -609,7 +609,7 @@ function renderCompare(days) {
     ${hasNetYoY?`<div class="compare-card">
       <h4>剔退后净额同比（2025）</h4>
       <div class="stat"><span>2026 去退净额</span><span class="val">${fmt(totalNet)}</span></div>
-      <div class="stat"><span>2025 去退净额</span><span class="val">${fmt(totalLyNet)}（真值/前同比反推）</span></div>
+      <div class="stat"><span>2025 去退净额</span><span class="val">${fmt(totalLyNet)}（飞书2025段真值）</span></div>
       <div class="stat"><span>同比增长</span><span class="val ${parseFloat(yoyNet)>=0?'good':'bad'}">${yoyNet}%</span></div>
       <div class="stat"><span>差额</span><span class="val ${parseFloat(yoyNet)>=0?'good':'bad'}">${totalNet>=totalLyNet?'+':''}${fmt(totalNet-totalLyNet)}</span></div>
     </div>`:''}
@@ -624,7 +624,7 @@ function renderCompare(days) {
       <h4>备注</h4>
       <div style="font-size:10px;color:#64748b;line-height:1.6">
         GMV 同期以飞书 2025 段真值 ly_a 为准，缺失天用前同比%反推；<br>
-        剔退净额同期以真值 ly_post_refund 为准，缺失天（9月暂无去年字段）用剔退前同比%反推；<br>
+        剔退净额同期以飞书 2025 段真值 ly_post_refund 为准，无真值天不计入同比（不作%反推）；<br>
         流量指标（访客/买家/加购/转化）同期无双端值的天不计入，避免同比虚高；<br>
         春节期间同比暴涨（1月底-2月初）因2025年春节在1月底，存在错位。
       </div>
