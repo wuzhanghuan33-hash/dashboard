@@ -38,6 +38,11 @@ cd "$DIR" || exit 1
 VER=$(date '+%Y%m%d%H%M')
 sed -i '' "s/data\.js?v=[0-9a-z]*/data.js?v=${VER}/" index.html
 
+# 3.75 数据校验防呆：覆盖率（快，data.json 自检）+ 抽样对账（开飞书读源表比对）。
+#   失败不阻断 push，但会打印原因 + macOS 通知（verify_data.py 内部），人工需看 LOG。
+/usr/bin/python3 verify_data.py --coverage >> "$LOG" 2>&1 || echo "⚠ coverage 校验异常，见上方输出" >> "$LOG"
+/usr/bin/python3 verify_data.py --reconcile >> "$LOG" 2>&1 || echo "⚠ reconcile 对账不一致，见上方输出" >> "$LOG"
+
 # 4. 推送到 GitHub Pages
 git add data.json data.js index.html
 git diff --cached --quiet || {
