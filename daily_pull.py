@@ -106,6 +106,23 @@ SEP_FIRST_ROW = 3
 SEP_LAST_ROW = 32
 SEP_TARGET = 30000000  # 9月业绩目标（飞书 row1 汇总）
 
+# 9月 tab 2025 段：与 2026 当期行错 2 行并排（2026 日行 +2 = 2025 同日行，行5-34），列自 37 起。
+# 列(0-indexed)实测见表头；单位 int=整数、pct=源小数×100存百分数、dec=存小数。
+SEP_LY_ROW_OFFSET = 2
+SEP_LY_COLS = {
+    "ly_a":              (42, "int"),    # 2025 业绩达成
+    "ly_refund_amt":     (46, "int"),    # 2025 退款金额达成
+    "ly_post_refund":    (48, "int"),    # 2025 去退金额达成 (AW列)
+    "ly_ref":            (52, "pct"),    # 2025 退款率(实际)
+    "ly_v":              (57, "int"),    # 2025 访客达成
+    "ly_b":              (63, "int"),    # 2025 买家达成
+    "ly_conv":           (65, "dec"),    # 2025 转化率达成
+    "ly_aov":            (67, "int"),    # 2025 客单价达成
+    "ly_cart_users":     (69, "int"),    # 2025 加购人数达成
+    "ly_cart_rate":      (71, "pct"),    # 2025 加购率达成
+    "ly_cart_conv":      (73, "pct"),    # 2025 加购转化率达成
+}
+
 # ==================== CDP 操作 ====================
 
 # 自动启动的 Chrome 进程，退出时清理
@@ -502,8 +519,14 @@ def extract_july_data(target_id):
     return days, None
 
 
-def extract_month_data(target_id, tab_name, first_row, last_row, cols=None):
-    """新版引擎（getValue 行式）读取某月逐日数据。8月/9月表同结构同列映射。"""
+def extract_month_data(target_id, tab_name, first_row, last_row, cols=None,
+                       ly_offset=None, ly_cols=None):
+    """新版引擎（getValue 行式）读取某月逐日数据。8月/9月表同结构同列映射。
+
+    ly_offset/ly_cols：可选，顺带读同期(2025)段。2025 段与当期日行错 ly_offset 行并排
+    （9月 = 2），ly_cols = {data.json字段: (0-indexed列, 单位)}，单位 int/pct(×100)/dec。
+    同期段按连续列区间读取，避开飞书对散点 getValue 懒加载返回 null 的问题。
+    """
     cols = cols or AUG_COLS
     result = activate_tab_retry(target_id, tab_name)
     if result != "ACTIVATED":
@@ -513,12 +536,23 @@ def extract_month_data(target_id, tab_name, first_row, last_row, cols=None):
     time.sleep(15)
 
     cols_csv = ",".join(str(c) for c in sorted(set(cols.values())))
+    ly_read = ""
+    if ly_offset is not None and ly_cols:
+        ly_cs = [c for c, _u in ly_cols.values()]
+        ly_lo, ly_hi = min(ly_cs), max(ly_cs)
+        ly_read = (
+            "for(var lc=" + str(ly_lo) + ";lc<=" + str(ly_hi) + ";lc++){"
+            "var lv;try{lv=s.getValue(r+" + str(ly_offset) + ",lc);}catch(e){lv='E';}"
+            "row['ly'+lc]=lv===undefined||lv===null?null:lv;}"
+        )
     js_read = (
         "(function(){var s=window.spread.getActiveSheet();var out=[];"
         "for(var r=" + str(first_row) + ";r<=" + str(last_row) + ";r++){"
         "var row={};var cols=[" + cols_csv + "];"
         "cols.forEach(function(c){var v;try{v=s.getValue(r,c);}catch(e){v='E';}"
-        "row['c'+c]=v===undefined||v===null?null:v;});out.push(row);}"
+        "row['c'+c]=v===undefined||v===null?null:v;});"
+        + ly_read +
+        "out.push(row);}"
         "return JSON.stringify(out);})()"
     )
     raw = cdp_eval(target_id, js_read)
@@ -591,6 +625,19 @@ def extract_month_data(target_id, tab_name, first_row, last_row, cols=None):
             day["cart_rate"] = round(day["cart_users"] / day["v"] * 100, 1)
         if not day.get("cart_conv") and day.get("b", 0) > 0 and day.get("cart_users", 0) > 0:
             day["cart_conv"] = round(day["b"] / day["cart_users"] * 100, 1)
+
+        # 同期(2025)段字段：与当日对齐（merge 时 a=0 的未来天随后由 fix_data 清空 ly_*）
+        if ly_cols:
+            for _f, (_c, _u) in ly_cols.items():
+                v = row.get("ly" + str(_c))
+                if not isinstance(v, (int, float)):
+                    continue
+                if _u == "pct":
+                    day[_f] = round(v * 100, 1)
+                elif _u == "dec":
+                    day[_f] = round(v, 4)
+                else:
+                    day[_f] = round(v)
 
         days.append(day)
 
@@ -696,7 +743,8 @@ def main():
         print(f"  提取8月数据...")
         aug_days, aug_err = extract_month_data(tid, "8月", AUG_FIRST_ROW, AUG_LAST_ROW, AUG_COLS)
         print(f"  提取9月数据...")
-        sep_days, sep_err = extract_month_data(tid, "9月", SEP_FIRST_ROW, SEP_LAST_ROW, SEP_COLS)
+        sep_days, sep_err = extract_month_data(tid, "9月", SEP_FIRST_ROW, SEP_LAST_ROW, SEP_COLS,
+                                               ly_offset=SEP_LY_ROW_OFFSET, ly_cols=SEP_LY_COLS)
         cdp_close(tid)
         if not july_err and not aug_err and not sep_err:
             err = None
