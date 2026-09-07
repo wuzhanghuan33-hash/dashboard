@@ -1,0 +1,797 @@
+{
+ "m2026_07": {
+  "self": {
+   "buyAmtRatio": {
+    "value": 0.18915427221511733
+   },
+   "pv": {
+    "cycleCrc": -0.2751600201,
+    "syncCrc": 0.0948704817,
+    "value": 8083443,
+    "yearSyncCrc": 0.0948704817
+   },
+   "consultRate": {
+    "cycleCrc": 0.3084326231,
+    "syncCrc": -0.3170760873,
+    "value": 0.028192109757256528,
+    "yearSyncCrc": -0.3170760873
+   },
+   "hasPurchaseUbyCntRate": {
+    "cycleCrc": -0.4295302013,
+    "syncCrc": -0.15,
+    "value": 0.0085,
+    "yearSyncCrc": -0.15
+   },
+   "payOldByrCnt": {
+    "cycleCrc": -0.4389246055,
+    "syncCrc": -0.4110429448,
+    "value": 1920,
+    "yearSyncCrc": -0.4110429448
+   },
+   "shopCustomer": {
+    "cycleCrc": -0.3290202728,
+    "syncCrc": 0.1709507836,
+    "value": 1738020,
+    "yearSyncCrc": 0.1709507836
+   },
+   "cubeAmt": {
+    "cycleCrc": -0.1580932248,
+    "syncCrc": -0.085459569,
+    "value": 274948.23083,
+    "yearSyncCrc": -0.085459569
+   },
+   "payAmtRfdRate": {
+    "cycleCrc": -0.2531969309,
+    "syncCrc": -0.3297628156,
+    "value": 0.2628,
+    "yearSyncCrc": -0.3297628156
+   },
+   "noPurchaseBuyCnt": {
+    "cycleCrc": -0.3812514017,
+    "syncCrc": -0.1938641344,
+    "value": 5518,
+    "yearSyncCrc": -0.1938641344
+   },
+   "payItmCnt": {
+    "cycleCrc": -0.4409981846,
+    "syncCrc": -0.2090988246,
+    "value": 18167,
+    "yearSyncCrc": -0.2090988246
+   },
+   "stayTime": {
+    "cycleCrc": -0.0985448846,
+    "syncCrc": -0.2877117336,
+    "value": 14.74068891432742,
+    "yearSyncCrc": -0.2877117336
+   },
+   "consultingUv": {
+    "cycleCrc": -0.1219009006,
+    "syncCrc": -0.2019597613,
+    "value": 48947,
+    "yearSyncCrc": -0.2019597613
+   },
+   "interestPortalUv": {
+    "cycleCrc": -0.327851395,
+    "syncCrc": -0.0637960254,
+    "value": 641912,
+    "yearSyncCrc": -0.0637960254
+   },
+   "cltItmCnt": {
+    "cycleCrc": -0.2922179252,
+    "syncCrc": -0.2965135882,
+    "value": 10432,
+    "yearSyncCrc": -0.2965135882
+   },
+   "rePurchasePayAmount": {
+    "cycleCrc": -0.6658507359,
+    "syncCrc": -0.4137731983,
+    "value": 4106334.6000000024,
+    "yearSyncCrc": -0.4137731983
+   },
+   "hasPurchaseNewUv": {
+    "cycleCrc": -0.0199258613,
+    "syncCrc": -0.3115386383,
+    "value": 224731,
+    "yearSyncCrc": -0.3115386383
+   },
+   "statDate": 1785427200000,
+   "uv": {
+    "cycleCrc": -0.3288923832,
+    "syncCrc": 0.1685639114,
+    "value": 1736195,
+    "yearSyncCrc": 0.1685639114
+   },
+   "zzExpendAmt": {
+    "cycleCrc": null,
+    "syncCrc": null,
+    "value": 0
+   },
+   "cartCnt": {
+    "cycleCrc": -0.3760782206,
+    "syncCrc": -0.1842762806,
+    "value": 73128,
+    "yearSyncCrc": -0.1842762806
+   },
+   "payByrCnt": {
+    "cycleCrc": -0.3336366394,
+    "syncCrc": -0.2393537219,
+    "value": 13182,
+    "yearSyncCrc": -0.2393537219
+   },
+   "payRate": {
+    "cycleCrc": -0.0070692927,
+    "syncCrc": -0.3490760149,
+    "value": 0.0075924651320848175,
+    "yearSyncCrc": -0.3490760149
+   },
+   "hasPurchasedUbyCnt": {
+    "cycleCrc": -0.4389246055,
+    "syncCrc": -0.4110429448,
+    "value": 1920,
+    "yearSyncCrc": -0.4110429448
+   },
+   "payAmt": {
+    "cycleCrc": -0.4706149962,
+    "syncCrc": -0.1703278664,
+    "value": 21708918.080000002,
+    "yearSyncCrc": -0.1703278664
+   },
+   "descScore": {
+    "cycleCrc": 0.0005863202,
+    "syncCrc": 0.0005427795,
+    "value": 4.942942903893414,
+    "yearSyncCrc": 0.0005427795
+   },
+   "tkExpendAmt": {
+    "cycleCrc": -0.7583278698,
+    "syncCrc": -0.3719810725,
+    "value": 51609.98,
+    "yearSyncCrc": -0.3719810725
+   },
+   "livePayAmt": {
+    "cycleCrc": null,
+    "syncCrc": null
+   },
+   "ordRfdRate": {
+    "cycleCrc": -0.2828646174,
+    "syncCrc": -0.3368612035,
+    "value": 0.2193,
+    "yearSyncCrc": -0.3368612035
+   },
+   "payPct": {
+    "cycleCrc": -0.2055610571,
+    "syncCrc": 0.0907463265,
+    "value": 1646.8607252313764,
+    "yearSyncCrc": 0.0907463265
+   },
+   "subPayOrdAmt": {
+    "cycleCrc": -0.4706149962,
+    "syncCrc": -0.1703278664,
+    "value": 21708918.080000002,
+    "yearSyncCrc": -0.1703278664
+   },
+   "feedCharge": {
+    "cycleCrc": null,
+    "syncCrc": null,
+    "value": 0
+   },
+   "cartItemCnt": {
+    "cycleCrc": -0.3760782206,
+    "syncCrc": -0.1842762806,
+    "value": 73128,
+    "yearSyncCrc": -0.1842762806
+   },
+   "realPayrealRfdRate": {
+    "cycleCrc": 0.0263737785,
+    "syncCrc": 0.1523872031,
+    "value": 0.022349152802269418,
+    "yearSyncCrc": 0.1523872031
+   },
+   "releaseItmCnt": {
+    "cycleCrc": -0.0782608696,
+    "syncCrc": -0.3161290323,
+    "value": 106,
+    "yearSyncCrc": -0.3161290323
+   },
+   "payShopRfdAmt": {
+    "cycleCrc": -0.6046724793,
+    "syncCrc": -0.4439030736,
+    "value": 5704580.099999996,
+    "yearSyncCrc": -0.4439030736
+   },
+   "allContentSupplyScale": {
+    "cycleCrc": 0.0074084013,
+    "syncCrc": 0.0550277774,
+    "value": 210228,
+    "yearSyncCrc": 0.0550277774
+   },
+   "productCoverage": {
+    "cycleCrc": 0.0130826479,
+    "syncCrc": 0.0843359489,
+    "value": 0.954954954954955,
+    "yearSyncCrc": 0.0843359489
+   },
+   "cartByrCnt": {
+    "cycleCrc": -0.3865918088,
+    "syncCrc": -0.2179728278,
+    "value": 40753,
+    "yearSyncCrc": -0.2179728278
+   },
+   "postTimeLenHour": {
+    "cycleCrc": -0.2240814381,
+    "syncCrc": null,
+    "value": 546.2656
+   },
+   "payOrdCnt": {
+    "cycleCrc": -0.3661900887,
+    "syncCrc": -0.2737201971,
+    "value": 16358,
+    "yearSyncCrc": -0.2737201971
+   },
+   "sucRefundRate": {
+    "cycleCrc": -0.2256251756,
+    "syncCrc": -0.1936805149,
+    "value": 0.2756,
+    "yearSyncCrc": -0.1936805149
+   },
+   "admCostFamtQzt": {
+    "cycleCrc": -0.2146505552,
+    "syncCrc": 0.4828718028,
+    "value": 541716.84,
+    "yearSyncCrc": 0.4828718028
+   },
+   "reVisitAmtRatio": {
+    "value": 0.8108457277848826
+   },
+   "adStrategyAmt": {
+    "cycleCrc": null,
+    "syncCrc": null,
+    "value": null
+   },
+   "noBuyPayGmv": {
+    "value": 9283180.890000008,
+    "yearSyncCrc": -0.0055679323
+   },
+   "p4pExpendAmt": {
+    "cycleCrc": -0.2734717371,
+    "syncCrc": -0.2307791563,
+    "value": 1026801.8199999998,
+    "yearSyncCrc": -0.2307791563
+   },
+   "olderPayAmt": {
+    "cycleCrc": -0.6658507359,
+    "syncCrc": -0.4137731983,
+    "value": 4106334.600000001,
+    "yearSyncCrc": -0.4137731983
+   },
+   "userId": {
+    "value": 810471546,
+    "yearSyncCrc": 0
+   },
+   "postVideoCheckCnt": {
+    "cycleCrc": -0.0901639344,
+    "syncCrc": -0.3693181818,
+    "value": 111,
+    "yearSyncCrc": -0.3693181818
+   },
+   "subPayOrdSubCnt": {
+    "cycleCrc": -0.3661900887,
+    "syncCrc": -0.2737201971,
+    "value": 16358,
+    "yearSyncCrc": -0.2737201971
+   },
+   "netPaymentAmount": {
+    "cycleCrc": -0.4048051811,
+    "syncCrc": -0.0081006226,
+    "value": 15892980.219999999,
+    "yearSyncCrc": -0.0081006226
+   },
+   "rfdSucAmt": {
+    "cycleCrc": -0.6012889056,
+    "syncCrc": -0.3307195604,
+    "value": 6495248.19,
+    "yearSyncCrc": -0.3307195604
+   },
+   "hasBuyPayGmv": {
+    "value": 4106334.6000000024,
+    "yearSyncCrc": -0.4137731983
+   },
+   "followStayTime": {
+    "cycleCrc": -0.5545487586,
+    "syncCrc": -0.516575697,
+    "value": 24136155.042829543,
+    "yearSyncCrc": -0.516575697
+   }
+  },
+  "rival": {
+   "cartByrCnt": {
+    "value": 15379
+   },
+   "pv": {
+    "value": 1329155
+   },
+   "postTimeLenHour": {
+    "value": 703.3836
+   },
+   "sucRefundRate": {
+    "value": 0.5331
+   },
+   "payOrdCnt": {
+    "value": 4218
+   },
+   "consultRate": {
+    "value": 0.0354
+   },
+   "hasPurchaseUbyCntRate": {
+    "value": 0.0094
+   },
+   "payOldByrCnt": {
+    "value": 14
+   },
+   "shopCustomer": {
+    "value": 444447
+   },
+   "cubeAmt": {
+    "value": 27618
+   },
+   "payItmCnt": {
+    "value": 6983
+   },
+   "stayTime": {
+    "value": 17
+   },
+   "admCostFamtQzt": {
+    "value": 187134.7
+   },
+   "cltItmCnt": {
+    "value": 3732
+   },
+   "adStrategyAmt": {
+    "value": 13115.4
+   },
+   "rePurchasePayAmount": {
+    "value": 1245084.38
+   },
+   "uv": {
+    "value": 445897
+   },
+   "zzExpendAmt": {
+    "value": 0
+   },
+   "cartCnt": {
+    "value": 20441
+   },
+   "p4pExpendAmt": {
+    "value": 110988.2
+   },
+   "payByrCnt": {
+    "value": 3340
+   },
+   "olderPayAmt": {
+    "value": 93106.4
+   },
+   "payRate": {
+    "value": 0.0103
+   },
+   "hasPurchasedUbyCnt": {
+    "value": 270
+   },
+   "payAmt": {
+    "value": 8293962
+   },
+   "subPayOrdSubCnt": {
+    "value": 4227
+   },
+   "descScore": {
+    "value": 4.9349
+   },
+   "netPaymentAmount": {
+    "value": 5826266.805
+   },
+   "tkExpendAmt": {
+    "value": 10588.6
+   },
+   "livePayAmt": {},
+   "payPct": {
+    "value": 3047
+   },
+   "subPayOrdAmt": {
+    "value": 8293962.74
+   },
+   "feedCharge": {
+    "value": 0
+   },
+   "rfdSucAmt": {
+    "value": 1917588
+   },
+   "cartItemCnt": {
+    "value": 20441
+   },
+   "oldRepeatByrRate": {
+    "value": 0.0093
+   },
+   "allContentSupplyScale": {
+    "value": 23669
+   },
+   "productCoverage": {
+    "value": 0.8051948051948052
+   }
+  }
+ },
+ "m2025_07": {
+  "self": {
+   "buyAmtRatio": {
+    "value": 0.2677053116094769
+   },
+   "pv": {
+    "cycleCrc": -0.4731651132,
+    "syncCrc": -0.3937723625,
+    "value": 7383013,
+    "yearSyncCrc": -0.3937723625
+   },
+   "consultRate": {
+    "cycleCrc": 0.6928981638,
+    "syncCrc": 0.1869021285,
+    "value": 0.04128147987112241,
+    "yearSyncCrc": 0.1869021285
+   },
+   "hasPurchaseUbyCntRate": {
+    "cycleCrc": -0.1150442478,
+    "syncCrc": -0.2,
+    "value": 0.01,
+    "yearSyncCrc": -0.2
+   },
+   "payOldByrCnt": {
+    "cycleCrc": -0.1384778013,
+    "syncCrc": -0.3022260274,
+    "value": 3260,
+    "yearSyncCrc": -0.3022260274
+   },
+   "shopCustomer": {
+    "cycleCrc": -0.5157177587,
+    "syncCrc": -0.3692395038,
+    "value": 1484281,
+    "yearSyncCrc": -0.3692395038
+   },
+   "cubeAmt": {
+    "cycleCrc": -0.2489072912,
+    "syncCrc": -0.4894777082,
+    "value": 300640.86999999994,
+    "yearSyncCrc": -0.4894777082
+   },
+   "payAmtRfdRate": {
+    "cycleCrc": 0.406384505,
+    "value": 0.3921
+   },
+   "noPurchaseBuyCnt": {
+    "cycleCrc": -0.3674336937,
+    "syncCrc": -0.3603999252,
+    "value": 6845,
+    "yearSyncCrc": -0.3603999252
+   },
+   "payItmCnt": {
+    "cycleCrc": -0.2490028117,
+    "syncCrc": -0.3043399255,
+    "value": 22970,
+    "yearSyncCrc": -0.3043399255
+   },
+   "stayTime": {
+    "cycleCrc": 0.0440938561,
+    "syncCrc": -0.0578627126,
+    "value": 20.694836079230054,
+    "yearSyncCrc": -0.0578627126
+   },
+   "consultingUv": {
+    "cycleCrc": -0.1841170602,
+    "syncCrc": -0.2482012184,
+    "value": 61334,
+    "yearSyncCrc": -0.2482012184
+   },
+   "interestPortalUv": {
+    "value": 685654
+   },
+   "cltItmCnt": {
+    "cycleCrc": -0.2954005512,
+    "syncCrc": -0.3306098497,
+    "value": 14829,
+    "yearSyncCrc": -0.3306098497
+   },
+   "rePurchasePayAmount": {
+    "cycleCrc": 0.2598263225,
+    "syncCrc": -0.3031310135,
+    "value": 7004685.879999996,
+    "yearSyncCrc": -0.3031310135
+   },
+   "hasPurchaseNewUv": {
+    "cycleCrc": -0.0251546971,
+    "syncCrc": -0.1257402115,
+    "value": 326425,
+    "yearSyncCrc": -0.1257402115
+   },
+   "statDate": 1753891200000,
+   "uv": {
+    "cycleCrc": -0.5180555114,
+    "syncCrc": -0.3665873844,
+    "value": 1485751,
+    "yearSyncCrc": -0.3665873844
+   },
+   "zzExpendAmt": {
+    "cycleCrc": null,
+    "syncCrc": null,
+    "value": 0
+   },
+   "cartCnt": {
+    "cycleCrc": -0.2966081082,
+    "syncCrc": -0.2570443546,
+    "value": 89648,
+    "yearSyncCrc": -0.2570443546
+   },
+   "payByrCnt": {
+    "cycleCrc": -0.2690231146,
+    "syncCrc": -0.2949552482,
+    "value": 17330,
+    "yearSyncCrc": -0.2949552482
+   },
+   "payRate": {
+    "cycleCrc": 0.5167242343,
+    "syncCrc": 0.1130892163,
+    "value": 0.011664134838206401,
+    "yearSyncCrc": 0.1130892163
+   },
+   "hasPurchasedUbyCnt": {
+    "cycleCrc": -0.1384778013,
+    "syncCrc": -0.3022260274,
+    "value": 3260,
+    "yearSyncCrc": -0.3022260274
+   },
+   "payAmt": {
+    "cycleCrc": -0.1940135436,
+    "syncCrc": -0.3433889206,
+    "value": 26165658.94,
+    "yearSyncCrc": -0.3433889206
+   },
+   "descScore": {
+    "cycleCrc": 0.0011307108,
+    "syncCrc": 0.0016216233,
+    "value": 4.940261431031815,
+    "yearSyncCrc": 0.0016216233
+   },
+   "tkExpendAmt": {
+    "cycleCrc": -0.3840876725,
+    "syncCrc": -0.1590361609,
+    "value": 82179.01999999999,
+    "yearSyncCrc": -0.1590361609
+   },
+   "livePayAmt": {
+    "cycleCrc": null
+   },
+   "ordRfdRate": {
+    "cycleCrc": 0.2852701127,
+    "value": 0.3307
+   },
+   "payPct": {
+    "cycleCrc": 0.1026155169,
+    "syncCrc": -0.068695884,
+    "value": 1509.847601846509,
+    "yearSyncCrc": -0.068695884
+   },
+   "subPayOrdAmt": {
+    "cycleCrc": -0.1940135436,
+    "syncCrc": -0.3433889206,
+    "value": 26165658.939999998,
+    "yearSyncCrc": -0.3433889206
+   },
+   "feedCharge": {
+    "cycleCrc": null,
+    "syncCrc": null,
+    "value": 0
+   },
+   "cartItemCnt": {
+    "cycleCrc": -0.2966081082,
+    "syncCrc": -0.2570443546,
+    "value": 89648,
+    "yearSyncCrc": -0.2570443546
+   },
+   "realPayrealRfdRate": {
+    "cycleCrc": 0.0713298216,
+    "value": 0.019393787731865245
+   },
+   "releaseItmCnt": {
+    "value": 155
+   },
+   "payShopRfdAmt": {
+    "cycleCrc": 0.1335083215,
+    "value": 10258247.850000003
+   },
+   "allContentSupplyScale": {
+    "value": 199263
+   },
+   "productCoverage": {
+    "value": 0.8806818181818182
+   },
+   "cartByrCnt": {
+    "cycleCrc": -0.2511029676,
+    "syncCrc": -0.2390853605,
+    "value": 52112,
+    "yearSyncCrc": -0.2390853605
+   },
+   "postTimeLenHour": {
+    "cycleCrc": null
+   },
+   "payOrdCnt": {
+    "cycleCrc": -0.2481054916,
+    "syncCrc": -0.2924860212,
+    "value": 22523,
+    "yearSyncCrc": -0.2924860212
+   },
+   "sucRefundRate": {
+    "cycleCrc": 0.1769972452,
+    "syncCrc": -0.5591952541,
+    "value": 0.3418,
+    "yearSyncCrc": -0.5591952541
+   },
+   "admCostFamtQzt": {
+    "cycleCrc": 0.3087899824,
+    "syncCrc": null,
+    "value": 365316.0299999999
+   },
+   "reVisitAmtRatio": {
+    "value": 0.732294688390523
+   },
+   "adStrategyAmt": {
+    "cycleCrc": -0.588381349,
+    "syncCrc": -0.3255334467,
+    "value": 295615.75999999995,
+    "yearSyncCrc": -0.3255334467
+   },
+   "noBuyPayGmv": {
+    "value": 9335158.420000002,
+    "yearSyncCrc": -0.4278802743
+   },
+   "p4pExpendAmt": {
+    "cycleCrc": -0.1655027028,
+    "syncCrc": -0.3027987495,
+    "value": 1334859.5899999999,
+    "yearSyncCrc": -0.3027987495
+   },
+   "olderPayAmt": {
+    "cycleCrc": 0.2598263225,
+    "syncCrc": -0.3031310135,
+    "value": 7004685.880000001,
+    "yearSyncCrc": -0.3031310135
+   },
+   "userId": {
+    "value": 810471546,
+    "yearSyncCrc": 0
+   },
+   "postVideoCheckCnt": {
+    "value": 176
+   },
+   "subPayOrdSubCnt": {
+    "cycleCrc": -0.2481054916,
+    "syncCrc": -0.2924860212,
+    "value": 22523,
+    "yearSyncCrc": -0.2924860212
+   },
+   "netPaymentAmount": {
+    "cycleCrc": -0.3203910936,
+    "value": 16022774.670000002
+   },
+   "rfdSucAmt": {
+    "cycleCrc": -0.0133853097,
+    "syncCrc": -0.390988741,
+    "value": 9704822.979999999,
+    "yearSyncCrc": -0.390988741
+   },
+   "hasBuyPayGmv": {
+    "value": 7004685.879999996,
+    "yearSyncCrc": -0.3031310135
+   },
+   "followStayTime": {
+    "value": 49927475.498167425
+   }
+  },
+  "rival": {
+   "cartByrCnt": {
+    "value": 15479
+   },
+   "pv": {
+    "value": 1147697
+   },
+   "postTimeLenHour": {},
+   "sucRefundRate": {
+    "value": 0.6921
+   },
+   "payOrdCnt": {
+    "value": 4773
+   },
+   "consultRate": {
+    "value": 0.0568
+   },
+   "hasPurchaseUbyCntRate": {},
+   "payOldByrCnt": {
+    "value": 12
+   },
+   "shopCustomer": {
+    "value": 0
+   },
+   "cubeAmt": {
+    "value": 24705.2
+   },
+   "payItmCnt": {
+    "value": 7661
+   },
+   "stayTime": {
+    "value": 19
+   },
+   "admCostFamtQzt": {
+    "value": 170355.08
+   },
+   "cltItmCnt": {
+    "value": 4213
+   },
+   "adStrategyAmt": {
+    "value": 37495.6
+   },
+   "rePurchasePayAmount": {},
+   "uv": {
+    "value": 306924
+   },
+   "zzExpendAmt": {
+    "value": 0
+   },
+   "cartCnt": {
+    "value": 24466
+   },
+   "p4pExpendAmt": {
+    "value": 130394.8
+   },
+   "payByrCnt": {
+    "value": 3445
+   },
+   "olderPayAmt": {
+    "value": 85561.6
+   },
+   "payRate": {
+    "value": 0.0145
+   },
+   "hasPurchasedUbyCnt": {},
+   "payAmt": {
+    "value": 8509614.4
+   },
+   "subPayOrdSubCnt": {
+    "value": 4773
+   },
+   "descScore": {
+    "value": 4.9095
+   },
+   "netPaymentAmount": {
+    "value": 5004674
+   },
+   "tkExpendAmt": {
+    "value": 11894.8
+   },
+   "livePayAmt": {},
+   "payPct": {
+    "value": 3187.8
+   },
+   "subPayOrdAmt": {
+    "value": 8612832.08
+   },
+   "feedCharge": {
+    "value": 0
+   },
+   "rfdSucAmt": {
+    "value": 2044463.6
+   },
+   "cartItemCnt": {
+    "value": 24466
+   },
+   "oldRepeatByrRate": {
+    "value": 0.0122
+   },
+   "allContentSupplyScale": {},
+   "productCoverage": {}
+  }
+ }
+}
