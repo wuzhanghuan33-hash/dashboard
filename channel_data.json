@@ -1,0 +1,222 @@
+[
+ {
+  "level": 1,
+  "parent": "root",
+  "page": "站外沟通",
+  "page_id": "100.1",
+  "is_group": true,
+  "uv": 9679,
+  "payByr": null,
+  "payRate": null
+ },
+ {
+  "level": 2,
+  "parent": "站外沟通",
+  "page": "自主访问",
+  "page_id": "direct",
+  "is_group": false,
+  "uv": 9644,
+  "payByr": null,
+  "payRate": null
+ },
+ {
+  "level": 2,
+  "parent": "站外沟通",
+  "page": "手淘拍立淘",
+  "page_id": "23.s1172",
+  "is_group": false,
+  "uv": 30,
+  "payByr": null,
+  "payRate": null
+ },
+ {
+  "level": 2,
+  "parent": "站外沟通",
+  "page": "淘口令分享",
+  "page_id": "21.4",
+  "is_group": false,
+  "uv": 5,
+  "payByr": null,
+  "payRate": null
+ },
+ {
+  "level": 1,
+  "parent": "root",
+  "page": "无界",
+  "page_id": "22.25",
+  "is_group": true,
+  "uv": 5372,
+  "payByr": null,
+  "payRate": null
+ },
+ {
+  "level": 2,
+  "parent": "无界",
+  "page": "内容营销",
+  "page_id": "22.28",
+  "is_group": true,
+  "uv": 2215,
+  "payByr": null,
+  "payRate": null
+ },
+ {
+  "level": 3,
+  "parent": "内容营销",
+  "page": "超级短视频",
+  "page_id": "22.18",
+  "is_group": false,
+  "uv": 2215,
+  "payByr": null,
+  "payRate": null
+ },
+ {
+  "level": 2,
+  "parent": "无界",
+  "page": "人群推广",
+  "page_id": "22.19",
+  "is_group": false,
+  "uv": 1857,
+  "payByr": null,
+  "payRate": null
+ },
+ {
+  "level": 2,
+  "parent": "无界",
+  "page": "关键词推广",
+  "page_id": "22.2",
+  "is_group": false,
+  "uv": 1521,
+  "payByr": null,
+  "payRate": null
+ },
+ {
+  "level": 2,
+  "parent": "无界",
+  "page": "线索推广",
+  "page_id": "22.30",
+  "is_group": false,
+  "uv": 2,
+  "payByr": null,
+  "payRate": null
+ },
+ {
+  "level": 1,
+  "parent": "root",
+  "page": "推荐",
+  "page_id": "reward.5081",
+  "is_group": false,
+  "uv": 956,
+  "payByr": null,
+  "payRate": null
+ },
+ {
+  "level": 1,
+  "parent": "root",
+  "page": "搜索",
+  "page_id": "reward.5080",
+  "is_group": false,
+  "uv": 660,
+  "payByr": null,
+  "payRate": null
+ },
+ {
+  "level": 1,
+  "parent": "root",
+  "page": "站内沟通",
+  "page_id": "100.2",
+  "is_group": true,
+  "uv": 545,
+  "payByr": null,
+  "payRate": null
+ },
+ {
+  "level": 2,
+  "parent": "站内沟通",
+  "page": "购物车",
+  "page_id": "21.3",
+  "is_group": false,
+  "uv": 292,
+  "payByr": null,
+  "payRate": null
+ },
+ {
+  "level": 2,
+  "parent": "站内沟通",
+  "page": "我的淘宝",
+  "page_id": "100.2.5012",
+  "is_group": false,
+  "uv": 253,
+  "payByr": null,
+  "payRate": null
+ },
+ {
+  "level": 2,
+  "parent": "站内沟通",
+  "page": "消息",
+  "page_id": "100.2.5013",
+  "is_group": false,
+  "uv": 48,
+  "payByr": null,
+  "payRate": null
+ },
+ {
+  "level": 2,
+  "parent": "站内沟通",
+  "page": "关注",
+  "page_id": "100.2.5011",
+  "is_group": false,
+  "uv": 5,
+  "payByr": null,
+  "payRate": null
+ },
+ {
+  "level": 1,
+  "parent": "root",
+  "page": "淘宝直播",
+  "page_id": "23.s2594",
+  "is_group": false,
+  "uv": 329,
+  "payByr": null,
+  "payRate": null
+ },
+ {
+  "level": 1,
+  "parent": "root",
+  "page": "品销宝- 品牌专区",
+  "page_id": "22.6",
+  "is_group": false,
+  "uv": 172,
+  "payByr": null,
+  "payRate": null
+ },
+ {
+  "level": 1,
+  "parent": "root",
+  "page": "淘金币及相关场域",
+  "page_id": "23.s1366.origin",
+  "is_group": false,
+  "uv": 127,
+  "payByr": null,
+  "payRate": null
+ },
+ {
+  "level": 1,
+  "parent": "root",
+  "page": "天猫榜单",
+  "page_id": "23.5036",
+  "is_group": false,
+  "uv": 78,
+  "payByr": null,
+  "payRate": null
+ },
+ {
+  "level": 1,
+  "parent": "root",
+  "page": "淘宝客",
+  "page_id": "22.1",
+  "is_group": false,
+  "uv": 71,
+  "payByr": null,
+  "payRate": null
+ }
+]
