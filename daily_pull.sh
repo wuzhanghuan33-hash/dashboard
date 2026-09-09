@@ -3,6 +3,11 @@
 DIR="/Users/luoxiaomin/.local/share/dashboard"
 LOG="$DIR/daily_pull.log"
 
+# macOS 通知(与 verify_data.py 同机制, launchd 环境可用)
+notify() {
+  osascript -e "display notification \"$1\" with title \"看板自动任务\"" >/dev/null 2>&1
+}
+
 # push 带重试：国际链路间歇抖动会偶发超时，最多试 5 次(间隔递增)扛过坏窗口
 push_retry() {
   local branch="$1"
@@ -18,20 +23,53 @@ push_retry() {
     delay=$((delay * 2))
   done
   echo "✗ push $branch 重试耗尽仍失败" >> "$LOG"
+  notify "GitHub $branch 推送重试耗尽仍失败, 见 daily_pull.log"
   return 1
 }
 
 echo "===== $(date '+%Y-%m-%d %H:%M:%S') =====" >> "$LOG"
 cd "$DIR" || exit 1
 
+# ---- 看门狗: 本轮超时自动终止并通知, 防卡死让 launchd 误以为 job 未结束而阻塞后续定时 ----
+WATCHDOG_TIMEOUT=${WATCHDOG_TIMEOUT:-2400}
+(
+  sleep "$WATCHDOG_TIMEOUT"
+  if kill -0 "$$" 2>/dev/null; then
+    PGID=$(ps -o pgid= -p "$$" 2>/dev/null | tr -d ' ')
+    [ -n "$PGID" ] || PGID="$$"
+    echo "===== $(date '+%Y-%m-%d %H:%M:%S') [看门狗] 执行超时 ${WATCHDOG_TIMEOUT}s, 终止进程组 ${PGID} =====" >> "$LOG"
+    notify "数据任务超时已自动终止, 将等待下次定时补跑"
+    kill -TERM -- "-${PGID}" 2>/dev/null
+    sleep 8
+    kill -KILL -- "-${PGID}" 2>/dev/null
+  fi
+) &
+WD_PID=$!
+trap "kill $WD_PID 2>/dev/null" EXIT
+
 # 1. 拉数据
-/usr/bin/python3 daily_pull.py >> "$LOG" 2>&1
+/usr/bin/python3 daily_pull.py >> "$LOG" 2>&1 || {
+  RC=$?
+  echo "✗ daily_pull.py 失败 (exit=$RC)" >> "$LOG"
+  notify "数据拉取失败(exit=$RC), 本轮中止, 下轮定时重试"
+  exit $RC
+}
 
 # 2. 补剔退同比
-/usr/bin/python3 backfill_yoy_net.py >> "$LOG" 2>&1
+/usr/bin/python3 backfill_yoy_net.py >> "$LOG" 2>&1 || {
+  RC=$?
+  echo "✗ backfill_yoy_net.py 失败 (exit=$RC)" >> "$LOG"
+  notify "剔退同比补算失败(exit=$RC), 本轮中止"
+  exit $RC
+}
 
 # 3. 生成 data.js（内含同期对齐硬校验：错位直接抛错中止，错位数据不会进入 data.js）
-/usr/bin/python3 fix_data.py >> "$LOG" 2>&1
+/usr/bin/python3 fix_data.py >> "$LOG" 2>&1 || {
+  RC=$?
+  echo "✗ fix_data.py 失败 (exit=$RC)" >> "$LOG"
+  notify "data.js 生成校验失败(exit=$RC), 未推送, 请检查同期对齐"
+  exit $RC
+}
 
 # 3.5 更新 index.html 的 data.js 版本号，破浏览器/CDN 静态缓存
 #    （否则版本号固定，用户浏览器会一直用缓存的旧 data.js）
