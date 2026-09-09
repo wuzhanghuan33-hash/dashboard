@@ -10,4 +10,5 @@ chrome-profile-tmall-buyer/
 daily_pull.log
 sycm_*.log
 server.log
+health_check.log
 .!*

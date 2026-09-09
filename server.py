@@ -36,7 +36,12 @@ class Handler(http.server.SimpleHTTPRequestHandler):
         self.send_header('Expires', '0')
         super().end_headers()
     def log_message(self, fmt, *args):
-        print(f"  [{datetime.now().strftime('%H:%M:%S')}] {args[0]} {args[1]} {args[2]}")
+        # 标准库请求日志的占位符数不定，硬编码解 args 会 IndexError 崩溃(2026-08-26 事故)
+        try:
+            msg = fmt % args
+        except Exception:
+            msg = f"{fmt} {args}"
+        print(f"  [{datetime.now().strftime('%H:%M:%S')}] {msg}")
 
 try:
     http.server.HTTPServer(("0.0.0.0", PORT), Handler).serve_forever()
