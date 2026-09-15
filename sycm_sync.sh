@@ -5,9 +5,9 @@
 DIR="/Users/luoxiaomin/.local/share/dashboard"
 LOG="$DIR/sycm_sync.log"
 
-# macOS 通知(与 verify_data.py 同机制)
+# 统一告警入口(alert.sh)：持久日志 + 飞书送达 + macOS 兜底
 notify() {
-  osascript -e "display notification \"$1\" with title \"看板自动任务\"" >/dev/null 2>&1
+  bash "$DIR/alert.sh" XX "看板自动任务" "$1"
 }
 
 # 风控熔断：标记存在则跳过本次同步（浏览器保持关闭）

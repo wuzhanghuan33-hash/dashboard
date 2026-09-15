@@ -3,9 +3,10 @@
 DIR="/Users/luoxiaomin/.local/share/dashboard"
 LOG="$DIR/daily_pull.log"
 
-# macOS 通知(与 verify_data.py 同机制, launchd 环境可用)
+# 统一告警入口(alert.sh)：持久日志 + 飞书送达 + macOS 兜底。
+# 注意 macOS 通知在 launchd 环境会被系统静默丢弃，不能作主通道。
 notify() {
-  osascript -e "display notification \"$1\" with title \"看板自动任务\"" >/dev/null 2>&1
+  bash "$DIR/alert.sh" XX "看板自动任务" "$1"
 }
 
 # push 带重试：国际链路间歇抖动会偶发超时，最多试 5 次(间隔递增)扛过坏窗口

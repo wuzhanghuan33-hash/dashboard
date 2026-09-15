@@ -184,19 +184,15 @@ def match_risk(snap):
 
 
 def notify(title, msg):
-    """通知中心+声音+弹窗，全部后台运行不阻塞主流程。"""
-    esc = lambda s: s.replace('"', "'")
-    subprocess.Popen(["osascript", "-e",
-                      f'display notification "{esc(msg)}" with title "{esc(title)}" sound name "Sosumi"'])
-    subprocess.Popen(["osascript", "-e",
-                      f'display alert "{esc(title)}" message "{esc(msg)}" buttons {{"知道了"}} default button 1'])
+    """统一走 alert.sh：持久日志 + 飞书送达 + macOS 兜底，后台运行不阻塞主流程。
+    注：macOS 通知在 launchd 环境会被系统静默丢弃(exit=0 但不投递)，不可作主通道。"""
+    subprocess.Popen(["bash", str(DIR / "alert.sh"), "XX", title, msg])
 
 
 def notify_structure_warning():
-    """提醒级通知（非熔断）：页面结构异常、核心指标缺失时中止写入并提醒人工查看。
-    走通知中心横幅+声音，不用弹窗（避免打扰，也无需手动关闭）。"""
-    subprocess.Popen(["osascript", "-e",
-                      'display notification "生意参谋页面结构异常（核心指标块缺失），本轮同步已中止。请打开浏览器检查页面状态。" with title "⚠ 生意参谋结构异常" sound name "Glass"'])
+    """提醒级通知（非熔断）：页面结构异常、核心指标缺失时中止写入并提醒人工查看。"""
+    subprocess.Popen(["bash", str(DIR / "alert.sh"), "!!", "生意参谋页面结构异常",
+                      "核心指标块缺失，本轮同步已中止。请打开浏览器检查页面状态。"])
 
 
 def flag_exists():

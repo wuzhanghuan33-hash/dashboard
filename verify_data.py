@@ -22,11 +22,7 @@ from month_layout import MONTH_LAYOUT, CUR_VALUE_COLS  # noqa: E402
 
 
 def notify(title, msg):
-    esc = lambda s: s.replace('"', "'")
-    subprocess.Popen(["osascript", "-e",
-                      f'display notification "{esc(msg)}" with title "{esc(title)}" sound name "Glass"'])
-    subprocess.Popen(["osascript", "-e",
-                      f'display alert "{esc(title)}" message "{esc(msg)}" buttons {{"知道了"}} default button 1'])
+    subprocess.Popen(["bash", str(DIR / "alert.sh"), "XX", title, msg])
 
 
 def serial_to_md(serial):

@@ -6,7 +6,8 @@
 DIR="/Users/luoxiaomin/.local/share/dashboard"
 LOG="$DIR/health_check.log"
 
-notify() { osascript -e "display notification \"$1\" with title \"看板巡检\"" >/dev/null 2>&1; }
+# 统一告警入口(alert.sh)：持久日志 + 飞书送达 + macOS 兜底。
+notify() { bash "$DIR/alert.sh" XX "看板巡检" "$1"; }
 
 echo "===== $(date '+%Y-%m-%d %H:%M:%S') 看板巡检 =====" >> "$LOG"
 ANOM=0; WARN=0

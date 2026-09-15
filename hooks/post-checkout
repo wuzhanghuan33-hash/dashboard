@@ -10,11 +10,6 @@ BRANCH=$(git symbolic-ref --short -q HEAD 2>/dev/null) || exit 0
 [ "$BRANCH" = "main" ] && exit 0
 
 DIR="/Users/luoxiaomin/.local/share/dashboard"
-TS=$(date '+%Y-%m-%d %H:%M:%S')
-{
-  echo "[$TS] [XX] 工作区已切到分支 '$BRANCH'（非 main）"
-  echo "       定时任务读磁盘脚本，此刻起可能跑该分支的旧代码，直至切回 main。"
-  echo "       处置：git checkout main（确已回 main 可忽略本行）。"
-} >> "$DIR/alert.log"
-osascript -e "display notification \"工作区切到 $BRANCH，定时任务可能跑旧脚本，请切回 main\" with title \"看板仓库护栏\"" >/dev/null 2>&1
+bash "$DIR/alert.sh" XX "仓库护栏：工作区切到分支 '$BRANCH'（非 main）" \
+  "定时任务读磁盘脚本，此刻起可能跑该分支的旧代码，直至切回 main。处置: git checkout main"
 exit 0

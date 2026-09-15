@@ -19,3 +19,6 @@ sycm_RISK.txt
 sycm_RISK.txt.*
 .!*
 alert.log
+feishu_webhook.txt
+feishu_webhook_secret.txt
+.keepalive_state
