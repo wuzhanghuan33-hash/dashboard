@@ -1,0 +1,20 @@
+#!/bin/bash
+# 护栏：本仓库的 launchd 定时任务(keepalive/sync/daily-pull)读的是**工作区磁盘上的脚本**。
+# 切到非 main 分支会让磁盘脚本变成该分支的旧快照，定时任务若在窗口内触发就会跑旧代码
+# ——2026-09-15 10:06 keepalive 因此用旧风控词表误判、熔断关停 9225。
+# 本钩子在 .git/hooks/ 下，**不随分支变化**，所以能穿透那个窗口。
+# 发布流程已改为 git plumbing 不切分支，正常不会触发；一旦触发＝有人在切分支。
+# 参数：$1=旧 HEAD $2=新 HEAD $3=1 分支切换 / 0 文件级 checkout
+[ "$3" = "1" ] || exit 0
+BRANCH=$(git symbolic-ref --short -q HEAD 2>/dev/null) || exit 0
+[ "$BRANCH" = "main" ] && exit 0
+
+DIR="/Users/luoxiaomin/.local/share/dashboard"
+TS=$(date '+%Y-%m-%d %H:%M:%S')
+{
+  echo "[$TS] [XX] 工作区已切到分支 '$BRANCH'（非 main）"
+  echo "       定时任务读磁盘脚本，此刻起可能跑该分支的旧代码，直至切回 main。"
+  echo "       处置：git checkout main（确已回 main 可忽略本行）。"
+} >> "$DIR/alert.log"
+osascript -e "display notification \"工作区切到 $BRANCH，定时任务可能跑旧脚本，请切回 main\" with title \"看板仓库护栏\"" >/dev/null 2>&1
+exit 0

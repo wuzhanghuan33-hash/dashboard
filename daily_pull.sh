@@ -27,6 +27,59 @@ push_retry() {
   return 1
 }
 
+# 用 git plumbing 把产物提交到 gh-pages，全程不切分支、不动工作区。
+# 为什么不用 checkout：gh-pages 里冻着一份旧脚本快照(33 个 .py/.sh)，`git checkout
+# gh-pages` 会把工作区的脚本全部换成旧版；若 launchd 定时任务(keepalive 每 5 分钟)
+# 恰好落在窗口内，就会跑旧代码——2026-09-15 10:06 即因此用旧词表误判风控、熔断关停
+# 9225，导致当天批量误报。plumbing 只读对象库、写远程 ref，窗口从根上消失。
+publish_gh_pages() {
+  local parent tree commit idx f blob i delay
+  # 父提交优先取远程 tip(避免本地 ref 落后 → non-fast-forward)，拿不到退回本地 ref
+  git fetch origin gh-pages >> "$LOG" 2>&1 || true
+  parent=$(git rev-parse origin/gh-pages 2>/dev/null || git rev-parse refs/heads/gh-pages 2>/dev/null) || {
+    echo "⚠ 无 gh-pages 参照，跳过同步" >> "$LOG"; return 1; }
+
+  idx=$(mktemp -u "${TMPDIR:-/tmp}/ghidx.XXXXXX") || return 1
+  if ! GIT_INDEX_FILE="$idx" git read-tree "$parent" >> "$LOG" 2>&1; then
+    rm -f "$idx"; echo "⚠ read-tree gh-pages 失败，跳过同步" >> "$LOG"; return 1
+  fi
+  for f in data.json data.js index.html; do
+    if ! blob=$(git rev-parse "main:$f" 2>/dev/null); then
+      rm -f "$idx"; echo "⚠ 取 main:$f 失败，跳过同步" >> "$LOG"; return 1
+    fi
+    if ! GIT_INDEX_FILE="$idx" git update-index --add --cacheinfo "100644,$blob,$f" >> "$LOG" 2>&1; then
+      rm -f "$idx"; echo "⚠ update-index $f 失败，跳过同步" >> "$LOG"; return 1
+    fi
+  done
+  tree=$(GIT_INDEX_FILE="$idx" git write-tree 2>/dev/null)
+  rm -f "$idx"
+  [ -n "$tree" ] || { echo "⚠ write-tree 失败，跳过同步" >> "$LOG"; return 1; }
+
+  # 产物与 gh-pages 现内容一致 → 不造空提交
+  if [ "$tree" = "$(git rev-parse "${parent}^{tree}" 2>/dev/null)" ]; then
+    echo "gh-pages 产物无变化，跳过提交" >> "$LOG"; return 0
+  fi
+
+  commit=$(git commit-tree "$tree" -p "$parent" -m "auto: $(date '+%Y-%m-%d %H:%M') 同步" 2>>"$LOG") || {
+    echo "⚠ commit-tree 失败，跳过同步" >> "$LOG"; return 1; }
+
+  # 直推 commit 到远程 gh-pages(不碰任何本地 ref)，成功后再对齐本地 ref
+  # 注意用 ${commit} 花括号：zsh 会把 "$commit:r..." 的 :r 当「去扩展名」修饰符吃掉
+  for ((i=1; i<=5; i++)); do
+    if git push origin "${commit}:refs/heads/gh-pages" >> "$LOG" 2>&1; then
+      git update-ref refs/heads/gh-pages "$commit"
+      echo "✓ push gh-pages 成功 (第${i}次, 未切分支)" >> "$LOG"
+      return 0
+    fi
+    delay=$((10 * (2 ** (i - 1))))
+    echo "⚠ push gh-pages 失败(第${i}/5次)，${delay}s 后重试" >> "$LOG"
+    sleep "$delay"
+  done
+  echo "✗ push gh-pages 重试耗尽仍失败" >> "$LOG"
+  notify "GitHub gh-pages 推送重试耗尽仍失败, 见 daily_pull.log"
+  return 1
+}
+
 echo "===== $(date '+%Y-%m-%d %H:%M:%S') =====" >> "$LOG"
 cd "$DIR" || exit 1
 
@@ -88,18 +141,10 @@ git diff --cached --quiet || {
   # GitHub 走 HTTPS（gh 认证），链路抖动由 push_retry 自动重试
   push_retry main
 
-  # 同步到 gh-pages 分支
-  # 未提交的代码改动会挡住 `git checkout gh-pages`，先 stash，同步后恢复
-  git stash push -m "daily-sync" >> "$LOG" 2>&1 || true
-  if git checkout gh-pages >> "$LOG" 2>&1; then
-    git checkout main -- data.json data.js index.html
-    git commit -m "auto: $(date '+%Y-%m-%d %H:%M') 同步" >> "$LOG" 2>&1
-    push_retry gh-pages
-    git checkout main >> "$LOG" 2>&1
-  else
-    echo "⚠ gh-pages 同步失败（checkout gh-pages 出错），下次运行重试" >> "$LOG"
-  fi
-  if git stash list | grep -q "daily-sync"; then git stash pop >> "$LOG" 2>&1; fi
+  # 同步到 gh-pages 分支：plumbing 提交 + 直推，全程不切分支
+  # (旧实现用 git checkout gh-pages，会临时把工作区脚本换成 gh-pages 的旧快照，
+  #  是 2026-09-15 风控误熔断的根因，已废弃)
+  publish_gh_pages
 }
 
 # 5. 日志超过 1MB 时截断
