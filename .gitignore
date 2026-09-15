@@ -5,10 +5,16 @@ chrome-profile-tmall-buyer/
 
 # 登录 cookie（含淘宝会话，敏感，切勿提交）
 *_cookies.json
+# cookie 备份/损坏态（含同样敏感的会话数据，*_cookies.json 覆盖不到带后缀的）
+*_cookies.json.*
 
 # 运行日志 / WPS 临时文件（. !<inode>!<filename> 是 WPS 在 macOS 生成的 0 字节残留）
 daily_pull.log
 sycm_*.log
 server.log
 health_check.log
+login_session.log
+# 风控熔断标记及其留档证据（运行时状态，不入库）
+sycm_RISK.txt
+sycm_RISK.txt.*
 .!*

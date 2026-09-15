@@ -48,9 +48,14 @@ TEXT_RISK_PATTERNS = [
 # 弹窗/通知层文本命中 = 中置信。生意参谋风控可能直接弹警告通知（文案动态，
 # 关键词无法穷举）→ 检测页面上的 modal/toast/dialog 覆盖层，文本含警告类词即熔断。
 # 平衡策略：普通公告（系统维护、活动提醒等）一般不含这些词，不误报。
+# 只用「风控/反爬专有」短语，不用「风险/异常/注意」这类业务分析内容里也会
+# 出现的宽泛词（09-15 曾因商品表列头「风险预警」命中「风险」而误熔断；
+# 09-03 因 AI 助手文案含「异常」误熔断）。真正的风控弹窗必含下列专有词，
+# 且 URL/正文两层已有精确词兜底。
 DIALOG_ALERT_PATTERNS = [
-    "警告", "异常", "限制", "违规", "记录", "封禁", "处罚",
-    "停止", "暂停", "风险", "检测", "安全", "注意",
+    "安全验证", "请进行安全验证", "滑块", "智能验证", "验证码",
+    "操作过于频繁", "操作频繁", "账号存在风险", "账号异常",
+    "已被限制", "访问受限", "登录已过期", "封禁",
 ]
 # 检测弹窗层的 DOM 选择器（含 role/常见类名）
 DIALOG_SELECTOR = ('[role="alert"],[role="dialog"],[aria-role="dialog"],'
@@ -59,7 +64,11 @@ DIALOG_SELECTOR = ('[role="alert"],[role="dialog"],[aria-role="dialog"],'
 # 已知良性浮层放行：生意参谋自家产品引导/营销弹窗（2026-09 起首页常驻
 # 「claw-data-analysis」AI 分析助手引导，文案含「异常/风险」会误命中上面的关键词）。
 # 结构标记命中即跳过，不做风险熔断。真风控警告不会用产品营销组件弹。
-BENIGN_DIALOG_MARKERS = ("claw-data-analysis",)
+BENIGN_DIALOG_MARKERS = ("claw-data-analysis", "high-price")
+# 文本级良性标记：生意参谋自家页面会给营销/经营提醒浮层注入 sentinelStart 前缀
+# （09-03 AI 助手引导、09-15 优惠竞争力提醒 两次误报文案均带此前缀）。
+# 出现在弹窗文本中即判定为业务浮层，不做风控熔断。
+BENIGN_DIALOG_TEXT_MARKERS = ("sentinelStart",)
 
 
 def log(msg):
@@ -144,8 +153,9 @@ def match_risk(snap):
             txt, sig = dlg.get("txt", ""), dlg.get("sig", "")
         else:
             txt, sig = dlg, ""
-        # 已知良性产品浮层（结构标记命中）→ 跳过，不放熔断
-        if sig and any(m in sig for m in BENIGN_DIALOG_MARKERS):
+        # 已知良性产品浮层（结构标记 / 文本前缀命中）→ 跳过，不放熔断
+        if (sig and any(m in sig for m in BENIGN_DIALOG_MARKERS)) or \
+                any(m in txt for m in BENIGN_DIALOG_TEXT_MARKERS):
             continue
         for p in DIALOG_ALERT_PATTERNS:
             if p in txt:
