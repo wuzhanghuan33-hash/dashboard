@@ -42,7 +42,7 @@ URL_RISK_PATTERNS = [
 # 是经营建议不是账号风控，会误触发熔断。用精确的「账号存在风险」仍可命中真风控。
 TEXT_RISK_PATTERNS = [
     "安全验证", "滑块", "智能验证", "操作过于频繁", "操作频繁",
-    "账号异常", "服务繁忙", "已被限制", "风险提示",
+    "账号异常", "服务繁忙", "已被限制",
     "账号存在风险", "请进行安全验证", "登录已过期",
 ]
 # 弹窗/通知层文本命中 = 中置信。生意参谋风控可能直接弹警告通知（文案动态，
@@ -69,6 +69,13 @@ BENIGN_DIALOG_MARKERS = ("claw-data-analysis", "high-price")
 # （09-03 AI 助手引导、09-15 优惠竞争力提醒 两次误报文案均带此前缀）。
 # 出现在弹窗文本中即判定为业务浮层，不做风控熔断。
 BENIGN_DIALOG_TEXT_MARKERS = ("sentinelStart",)
+# 领域规则（用户明确要求，2026-09-15）：**涉及优惠/促销的提醒一律不当风控预警**。
+# 生意参谋会推送这类经营建议浮层（如「优惠竞争力下降提醒」「大促优惠投入疑似
+# 变差预警」），属运营洞察而非账号风控，命中即放行。与账号风控专有词冲突时以
+# 风控为准（见 match_risk）——真风控文案不会写「优惠」。
+BENIGN_TOPIC_PATTERNS = (
+    "优惠", "促销", "大促", "满减", "折扣", "价格竞争力", "活动报名",
+)
 
 
 def log(msg):
@@ -141,18 +148,31 @@ def match_risk(snap):
         return False, None, None
     url = snap.get("url", "")
     body = snap.get("body", "")
+    dialogs = snap.get("dialogs", [])
     for p in URL_RISK_PATTERNS:
         if re.search(p, url, re.I):
             return True, f"URL:{p}", url
+    # 正文扫描剔除弹窗层文本：弹窗在下层单独判定（含优惠类业务放行），
+    # 否则弹窗文案会经 body 二次命中、绕过弹窗层的放行逻辑。
+    body_only = body
+    for dlg in dialogs:
+        dtxt = dlg.get("txt", "") if isinstance(dlg, dict) else dlg
+        if dtxt:
+            body_only = body_only.replace(dtxt, "")
     for p in TEXT_RISK_PATTERNS:
-        if p in body:
+        if p in body_only:
             return True, f"页面文本:{p}", url
-    for dlg in snap.get("dialogs", []):
+    for dlg in dialogs:
         # page_snapshot 现返回 {txt, sig}；兼容旧字符串格式
         if isinstance(dlg, dict):
             txt, sig = dlg.get("txt", ""), dlg.get("sig", "")
         else:
             txt, sig = dlg, ""
+        # 领域规则：涉及优惠/促销的经营提醒不当风控预警，直接放行；
+        # 但若同时含账号风控专有词，则以风控为准（真风控不会写「优惠」）。
+        if any(m in txt for m in BENIGN_TOPIC_PATTERNS) and \
+                not any(p in txt for p in DIALOG_ALERT_PATTERNS):
+            continue
         # 已知良性产品浮层（结构标记 / 文本前缀命中）→ 跳过，不放熔断
         if (sig and any(m in sig for m in BENIGN_DIALOG_MARKERS)) or \
                 any(m in txt for m in BENIGN_DIALOG_TEXT_MARKERS):
