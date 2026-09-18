@@ -279,6 +279,13 @@ def main():
     y = datetime.now() - timedelta(days=1)
     print(f"昨日: {y.month}月{y.day}日  a={data['a']:,}  v={data['v']:,}  b={data['b']:,}")
 
+    # 2.5 抓取成功 = 登录态此刻确实有效 → 顺手刷新 cookie 快照。
+    # 实测（2026-09-18）注入式续命两周后失效，有效期约 2.5 天；快照越新，
+    # 9225 重建时的恢复票越有效。失败不中断主流程（尽力而为）。
+    r = subprocess.run([sys.executable, str(Path(__file__).with_name("sycm_save_cookies.py"))],
+                       capture_output=True, text=True, timeout=90)
+    print("  " + (r.stdout.strip() or r.stderr.strip() or "cookie 快照刷新无输出"))
+
     cfg = TARGET_MONTHS.get(y.month)
     if not cfg:
         print(f"  ⚠ 昨日在 {y.month}月，未配置写回 tab（当前: {sorted(TARGET_MONTHS)}），跳过。")
