@@ -1,0 +1,989 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>2027 天猫自营预算汇报｜增量来源、达成路径与资源需求</title>
+<style>
+  :root{
+    --ink:#161616;
+    --muted:#6B6257;
+    --paper:#F4F0E8;
+    --card:#FFFFFF;
+    --line:#E6DFD3;
+    --line-soft:#EFEAE1;
+    --accent:#B23A2E;
+    --accent-2:#D97745;
+    --green:#2F7D5D;
+    --red:#B23A2E;
+    --gold:#9A6B1F;
+  }
+  *{box-sizing:border-box;}
+  html{scroll-behavior:smooth;}
+  body{
+    margin:0;
+    background:var(--paper);
+    color:var(--ink);
+    font-family:"PingFang SC","Hiragino Sans GB","Microsoft YaHei",-apple-system,BlinkMacSystemFont,"Segoe UI",sans-serif;
+    font-size:15px;
+    line-height:1.75;
+    -webkit-font-smoothing:antialiased;
+  }
+  .num{font-variant-numeric:tabular-nums;text-align:right;white-space:nowrap;}
+  .pos{color:var(--green);font-weight:600;}
+  .neg{color:var(--red);font-weight:600;}
+  .muted{color:var(--muted);}
+  .small{font-size:12.5px;}
+
+  /* Cover */
+  .cover{
+    position:relative;
+    overflow:hidden;
+    background:
+      radial-gradient(900px 420px at 82% -10%, rgba(178,58,46,.55) 0%, rgba(178,58,46,0) 60%),
+      radial-gradient(700px 360px at 8% 110%, rgba(217,119,69,.22) 0%, rgba(217,119,69,0) 60%),
+      #141414;
+    color:#fff;
+    padding:72px 7vw 56px;
+    border-bottom:6px solid var(--accent);
+  }
+  .cover .eyebrow{
+    font-size:12px;
+    letter-spacing:.22em;
+    text-transform:uppercase;
+    color:#F0B27A;
+    font-weight:600;
+  }
+  .cover h1{
+    margin:14px 0 10px;
+    font-size:44px;
+    line-height:1.18;
+    letter-spacing:-.02em;
+    font-weight:700;
+    max-width:980px;
+  }
+  .cover .subtitle{
+    margin:0;
+    font-size:20px;
+    color:rgba(255,255,255,.82);
+    font-weight:400;
+  }
+  .cover .meta{
+    margin-top:18px;
+    font-size:13px;
+    color:rgba(255,255,255,.55);
+  }
+  .kpi-grid{
+    display:grid;
+    grid-template-columns:repeat(3,minmax(0,1fr));
+    gap:12px;
+    margin-top:36px;
+    max-width:1060px;
+  }
+  .kpi{
+    background:rgba(255,255,255,.06);
+    border:1px solid rgba(255,255,255,.14);
+    border-radius:12px;
+    padding:16px 18px;
+  }
+  .kpi .label{font-size:12px;color:rgba(255,255,255,.6);}
+  .kpi .value{font-size:26px;font-weight:700;margin-top:4px;letter-spacing:-.01em;}
+  .kpi .delta{font-size:12px;color:#F0B27A;margin-top:2px;}
+  .hero-conclusion{
+    margin-top:28px;
+    max-width:1060px;
+    padding:18px 20px;
+    border-left:3px solid var(--accent-2);
+    background:rgba(255,255,255,.06);
+    border-radius:0 10px 10px 0;
+    font-size:16px;
+    color:rgba(255,255,255,.92);
+  }
+
+  /* TOC */
+  .toc{
+    position:sticky;
+    top:0;
+    z-index:20;
+    background:rgba(244,240,232,.92);
+    backdrop-filter:blur(10px);
+    border-bottom:1px solid var(--line);
+  }
+  .toc-inner{
+    max-width:1120px;
+    margin:0 auto;
+    padding:10px 24px;
+    display:flex;
+    gap:8px;
+    overflow-x:auto;
+    scrollbar-width:none;
+  }
+  .toc-inner::-webkit-scrollbar{display:none;}
+  .toc a{
+    flex:0 0 auto;
+    font-size:12.5px;
+    color:var(--muted);
+    text-decoration:none;
+    padding:5px 10px;
+    border-radius:999px;
+    border:1px solid transparent;
+    white-space:nowrap;
+  }
+  .toc a:hover{color:var(--accent);border-color:var(--line);background:#fff;}
+
+  main{
+    max-width:1120px;
+    margin:0 auto;
+    padding:36px 24px 90px;
+  }
+  section{
+    background:var(--card);
+    border:1px solid var(--line);
+    border-radius:16px;
+    padding:30px 34px;
+    margin-bottom:26px;
+    box-shadow:0 1px 2px rgba(22,22,22,.03);
+    page-break-inside:avoid;
+  }
+  .sec-head{
+    display:flex;
+    align-items:center;
+    gap:14px;
+    margin-bottom:6px;
+  }
+  .pnum{
+    flex:0 0 auto;
+    font-size:11px;
+    letter-spacing:.14em;
+    color:var(--accent);
+    border:1px solid rgba(178,58,46,.45);
+    padding:3px 9px;
+    border-radius:999px;
+    font-weight:600;
+  }
+  h2{
+    margin:0;
+    font-size:25px;
+    line-height:1.35;
+    letter-spacing:-.015em;
+    font-weight:700;
+  }
+  .lead{
+    margin:4px 0 20px;
+    font-size:16.5px;
+    font-weight:600;
+    color:var(--ink);
+  }
+  .lead em{
+    font-style:normal;
+    color:var(--accent);
+  }
+  h3{
+    font-size:16px;
+    margin:24px 0 10px;
+    letter-spacing:-.01em;
+  }
+  p{margin:10px 0;}
+  ul{margin:10px 0;padding-left:20px;}
+  li{margin:6px 0;}
+
+  .table-wrap{overflow-x:auto;margin:14px 0 6px;}
+  table{
+    width:100%;
+    border-collapse:collapse;
+    font-size:13.5px;
+    line-height:1.55;
+  }
+  th{
+    text-align:left;
+    font-weight:600;
+    color:#5A5148;
+    background:#F8F4ED;
+    padding:10px 12px;
+    border-bottom:1px solid var(--line);
+    white-space:nowrap;
+  }
+  td{
+    padding:10px 12px;
+    border-bottom:1px solid var(--line-soft);
+    vertical-align:top;
+  }
+  tbody tr:nth-child(even){background:#FCFAF6;}
+  tbody tr:hover{background:#FFF8F0;}
+  tr.total{font-weight:700;background:#F6F1E8 !important;}
+  tr.total td{border-top:2px solid var(--line);}
+  .center{text-align:center;}
+
+  .callout{
+    border-left:3px solid var(--accent);
+    background:#FBF3EC;
+    padding:14px 18px;
+    border-radius:0 10px 10px 0;
+    margin:18px 0;
+    font-size:14px;
+  }
+  .callout strong{color:var(--accent);}
+  .callout.green{border-left-color:var(--green);background:#EEF6F1;}
+  .callout.green strong{color:var(--green);}
+  .callout.gold{border-left-color:var(--gold);background:#FBF5E8;}
+  .callout.gold strong{color:var(--gold);}
+
+  .cards{
+    display:grid;
+    grid-template-columns:repeat(3,minmax(0,1fr));
+    gap:14px;
+    margin:18px 0;
+  }
+  .card{
+    border:1px solid var(--line);
+    border-radius:14px;
+    padding:18px;
+    background:#FBF8F2;
+  }
+  .card .tag{
+    display:inline-block;
+    font-size:11px;
+    font-weight:600;
+    letter-spacing:.06em;
+    color:var(--accent);
+    background:#F7E6DE;
+    padding:3px 9px;
+    border-radius:999px;
+  }
+  .card h4{margin:10px 0 6px;font-size:17px;}
+  .card .big{font-size:24px;font-weight:700;letter-spacing:-.01em;}
+  .card ul{padding-left:18px;margin:10px 0 0;font-size:13px;}
+  .card li{margin:5px 0;}
+
+  .timeline{
+    display:grid;
+    grid-template-columns:repeat(4,minmax(0,1fr));
+    gap:0;
+    margin:18px 0 8px;
+    border-top:2px solid var(--accent);
+  }
+  .tl{
+    padding:16px 16px 8px;
+    border-right:1px solid var(--line-soft);
+    position:relative;
+  }
+  .tl:last-child{border-right:none;}
+  .tl::before{
+    content:"";
+    position:absolute;
+    top:-7px;left:16px;
+    width:10px;height:10px;border-radius:50%;
+    background:var(--accent);
+    box-shadow:0 0 0 4px #fff;
+  }
+  .tl .q{font-size:12px;font-weight:700;letter-spacing:.12em;color:var(--accent);}
+  .tl h4{margin:6px 0 6px;font-size:15px;}
+  .tl p{font-size:12.5px;color:var(--muted);margin:4px 0;}
+  .tl .kpi{background:none;border:none;padding:0;margin-top:8px;font-size:12.5px;color:var(--ink);font-weight:600;}
+
+  /* Bridge */
+  .anchors{
+    display:flex;
+    align-items:center;
+    gap:14px;
+    flex-wrap:wrap;
+    margin:6px 0 20px;
+    padding:14px 16px;
+    background:#F8F4ED;
+    border:1px solid var(--line);
+    border-radius:12px;
+  }
+  .anchor{font-size:13px;color:var(--muted);}
+  .anchor strong{display:block;font-size:22px;color:var(--ink);letter-spacing:-.01em;}
+  .anchor.arrow{font-size:22px;color:var(--accent);font-weight:700;}
+  .bridge{display:grid;gap:11px;margin:10px 0 4px;}
+  .bridge-row{
+    display:grid;
+    grid-template-columns:220px minmax(0,1fr) 110px;
+    align-items:center;
+    gap:14px;
+  }
+  .bridge-label{font-size:13px;color:var(--ink);}
+  .bridge-label span{display:block;font-size:11px;color:var(--muted);}
+  .bridge-track{height:12px;background:#F0EBE3;border-radius:6px;overflow:hidden;}
+  .bridge-fill{height:100%;border-radius:6px;}
+  .bridge-fill.pos{background:linear-gradient(90deg,#2F7D5D,#58A67F);}
+  .bridge-fill.neg{background:linear-gradient(90deg,#B23A2E,#D96A5A);}
+  .bridge-val{text-align:right;font-variant-numeric:tabular-nums;font-size:13.5px;font-weight:700;}
+  .bridge-net{
+    display:flex;
+    justify-content:space-between;
+    align-items:center;
+    margin-top:16px;
+    padding-top:14px;
+    border-top:1px dashed var(--line);
+    font-size:15px;
+    font-weight:700;
+  }
+  .bridge-net strong{font-size:24px;color:var(--accent);}
+
+  .footer{
+    max-width:1120px;
+    margin:0 auto;
+    padding:0 24px 60px;
+    color:var(--muted);
+    font-size:12px;
+    line-height:1.8;
+  }
+  .footer strong{color:var(--ink);}
+
+  .print-btn{
+    position:fixed;
+    right:24px;
+    bottom:24px;
+    z-index:50;
+    border:none;
+    background:var(--accent);
+    color:#fff;
+    font:600 13px/1 "PingFang SC","Microsoft YaHei",sans-serif;
+    padding:13px 20px;
+    border-radius:999px;
+    cursor:pointer;
+    box-shadow:0 8px 24px rgba(178,58,46,.32);
+  }
+  .print-btn:hover{background:#982F25;}
+
+  .script{
+    background:#FBF8F2;
+    border:1px solid var(--line);
+    border-radius:14px;
+    padding:22px 24px;
+    font-size:14.5px;
+    line-height:1.9;
+  }
+  .script p{margin:10px 0;}
+  .script strong{color:var(--accent);}
+
+  @media (max-width:900px){
+    .cover{padding:48px 24px 40px;}
+    .cover h1{font-size:32px;}
+    .kpi-grid{grid-template-columns:1fr 1fr;}
+    .cards{grid-template-columns:1fr;}
+    .timeline{grid-template-columns:1fr 1fr;}
+    .bridge-row{grid-template-columns:150px minmax(0,1fr) 90px;}
+    section{padding:22px 18px;}
+    main{padding:24px 14px 70px;}
+  }
+
+  @media print{
+    @page{size:A4;margin:12mm;}
+    body{background:#fff;font-size:10.5pt;line-height:1.6;}
+    .cover{
+      background:#fff;
+      color:#111;
+      border-bottom:3px solid var(--accent);
+      padding:0 0 20px;
+    }
+    .cover .eyebrow{color:var(--accent);}
+    .cover .subtitle{color:#444;}
+    .cover .meta{color:#777;}
+    .cover h1{font-size:26pt;}
+    .kpi{background:#FAFAFA;border-color:#DDD;}
+    .kpi .label{color:#777;}
+    .kpi .value{color:#111;}
+    .kpi .delta{color:#B23A2E;}
+    .hero-conclusion{background:#FAFAFA;color:#222;border-left-color:var(--accent);}
+    .toc,.print-btn{display:none !important;}
+    main{max-width:none;padding:0;}
+    section{
+      box-shadow:none;
+      border:1px solid #DDD;
+      border-radius:0;
+      padding:16px 18px;
+      margin-bottom:12px;
+      page-break-inside:avoid;
+    }
+    table{font-size:9pt;}
+    th,td{padding:6px 8px;}
+    .cards{gap:8px;}
+    .card{background:#FAFAFA;}
+    a{color:inherit;text-decoration:none;}
+  }
+</style>
+</head>
+<body>
+
+<header class="cover">
+  <div class="eyebrow">2027 天猫自营预算 · 上会汇报</div>
+  <h1>增量来源、达成路径与资源需求</h1>
+  <p class="subtitle">2027 年目标 2.80 亿元 / +24.02%，增量 5,423 万元</p>
+  <div class="meta">汇报对象：电商负责人 / 总经理　·　编制：天猫自营运营　·　2026-10-28</div>
+
+  <div class="kpi-grid">
+    <div class="kpi">
+      <div class="label">GMV / 销售额</div>
+      <div class="value">2.80 亿元</div>
+      <div class="delta">同比 +24.02%</div>
+    </div>
+    <div class="kpi">
+      <div class="label">销量</div>
+      <div class="value">26.43 万台</div>
+      <div class="delta">同比 +12.12%</div>
+    </div>
+    <div class="kpi">
+      <div class="label">ASP</div>
+      <div class="value">1,059 元</div>
+      <div class="delta">同比 +10.61%</div>
+    </div>
+    <div class="kpi">
+      <div class="label">净增量</div>
+      <div class="value">5,423 万元</div>
+      <div class="delta">2027 vs 2026</div>
+    </div>
+    <div class="kpi">
+      <div class="label">新品贡献</div>
+      <div class="value">87.16%</div>
+      <div class="delta">7 款新品 / 4,725 万元</div>
+    </div>
+    <div class="kpi">
+      <div class="label">厨电净增占比</div>
+      <div class="value">52.08%</div>
+      <div class="delta">烟机 + 灶具</div>
+    </div>
+  </div>
+
+  <div class="hero-conclusion">
+    目标可打，但胜负手在 7 款新品；不追加总费用，要三项确定性——<strong>新品按时到仓、厨电有人主责、费用按效率分</strong>。
+  </div>
+</header>
+
+<nav class="toc">
+  <div class="toc-inner">
+    <a href="#p1">P1 一页结论</a>
+    <a href="#p2">P2 增长桥</a>
+    <a href="#p3">P3 品类结构</a>
+    <a href="#p4">P4 产品结构</a>
+    <a href="#p5">P5 价格带</a>
+    <a href="#p6">P6 三条曲线</a>
+    <a href="#p7">P7 季度节奏</a>
+    <a href="#p8">P8 效率模型</a>
+    <a href="#p9">P9 资源需求</a>
+    <a href="#p10">P10 风险与止损</a>
+    <a href="#p11">P11 拍板事项</a>
+    <a href="#appendix">附录</a>
+  </div>
+</nav>
+
+<main>
+
+  <section id="p1">
+    <div class="sec-head"><span class="pnum">P1</span><h2>一页结论</h2></div>
+    <p class="lead">2027 年目标 <em>2.80 亿元 / +24.02%</em>，增量 5,423 万元，87% 来自 7 款新品。</p>
+
+    <div class="table-wrap">
+      <table>
+        <thead>
+          <tr><th>指标</th><th class="num">2026 预估</th><th class="num">2027 预算</th><th class="num">同比</th></tr>
+        </thead>
+        <tbody>
+          <tr><td>GMV / 销售额</td><td class="num">22,577 万元</td><td class="num">28,000 万元</td><td class="num pos">+24.02%</td></tr>
+          <tr><td>销量</td><td class="num">235,733 台</td><td class="num">264,305 台</td><td class="num pos">+12.12%</td></tr>
+          <tr><td>ASP</td><td class="num">957.74 元</td><td class="num">1,059.38 元</td><td class="num pos">+10.61%</td></tr>
+        </tbody>
+      </table>
+    </div>
+
+    <div class="cards">
+      <div class="card">
+        <span class="tag">增量结构</span>
+        <h4>厨电接棒</h4>
+        <div class="big">52.08%</div>
+        <ul>
+          <li>厨电净增 2,824 万元</li>
+          <li>燃热净增 2,178 万元（40.17%）</li>
+          <li>电热仅 231 万元（4.27%）</li>
+        </ul>
+      </div>
+      <div class="card">
+        <span class="tag">增量来源</span>
+        <h4>新品驱动</h4>
+        <div class="big">87.16%</div>
+        <ul>
+          <li>7 款新品贡献 4,725 万元增量</li>
+          <li>3 款零基数真新品承担 3,120 万元</li>
+          <li>新品占 2027 总盘 19.55%</li>
+        </ul>
+      </div>
+      <div class="card">
+        <span class="tag">资源诉求</span>
+        <h4>三项确定性</h4>
+        <div class="big">不追加总费用</div>
+        <ul>
+          <li>3 款真新品 12/15 到仓</li>
+          <li>厨电升一级、设 PMO</li>
+          <li>烟机费用与转化率对赌</li>
+        </ul>
+      </div>
+    </div>
+  </section>
+
+  <section id="p2">
+    <div class="sec-head"><span class="pnum">P2</span><h2>增长桥：5,423 万元从哪来</h2></div>
+    <p class="lead">增量不是靠老品降价，是<em>“新品换挡 + 厨电扩张”</em>。</p>
+
+    <div class="anchors">
+      <div class="anchor">2026 基数<strong>22,577 万元</strong></div>
+      <div class="anchor arrow">→</div>
+      <div class="anchor">2027 目标<strong>28,000 万元</strong></div>
+      <div class="anchor" style="margin-left:auto;">净增量<strong style="color:var(--accent);">+5,422 万元</strong></div>
+    </div>
+
+    <div class="bridge">
+      <div class="bridge-row">
+        <div class="bridge-label">燃热新品<span>S9E / R9A / R9U</span></div>
+        <div class="bridge-track"><div class="bridge-fill pos" style="width:100%"></div></div>
+        <div class="bridge-val pos">+3,344</div>
+      </div>
+      <div class="bridge-row">
+        <div class="bridge-label">厨电爆品<span>K7 1.0 / J10 / A5</span></div>
+        <div class="bridge-track"><div class="bridge-fill pos" style="width:59.33%"></div></div>
+        <div class="bridge-val pos">+1,984</div>
+      </div>
+      <div class="bridge-row">
+        <div class="bridge-label">厨电新品<span>K7 2.0 / F5</span></div>
+        <div class="bridge-track"><div class="bridge-fill pos" style="width:21.50%"></div></div>
+        <div class="bridge-val pos">+719</div>
+      </div>
+      <div class="bridge-row">
+        <div class="bridge-label">电热新品<span>U7 PRO/MAX / J9</span></div>
+        <div class="bridge-track"><div class="bridge-fill pos" style="width:19.79%"></div></div>
+        <div class="bridge-val pos">+662</div>
+      </div>
+      <div class="bridge-row">
+        <div class="bridge-label">壁挂炉 + 消毒柜<span>5000-6000 放量</span></div>
+        <div class="bridge-track"><div class="bridge-fill pos" style="width:5.62%"></div></div>
+        <div class="bridge-val pos">+188</div>
+      </div>
+      <div class="bridge-row">
+        <div class="bridge-label">其他长尾<span>自然衰减</span></div>
+        <div class="bridge-track"><div class="bridge-fill neg" style="width:3.97%"></div></div>
+        <div class="bridge-val neg">−133</div>
+      </div>
+      <div class="bridge-row">
+        <div class="bridge-label">热水老爆品<span>P3 / S9 / R9 / U7E</span></div>
+        <div class="bridge-track"><div class="bridge-fill neg" style="width:40.15%"></div></div>
+        <div class="bridge-val neg">−1,343</div>
+      </div>
+    </div>
+
+    <div class="bridge-net">
+      <span>净增量（2027 − 2026）</span>
+      <strong>+5,421.71 万元</strong>
+    </div>
+
+    <div class="callout">
+      <strong>一句话：</strong>燃热新品是最大单点（61.69%），厨电爆品是第二引擎（36.59%）；热水老品下滑 1,343 万元，由新品对冲。
+    </div>
+  </section>
+
+  <section id="p3">
+    <div class="sec-head"><span class="pnum">P3</span><h2>增量来源 1：品类结构</h2></div>
+    <p class="lead">厨电接棒，燃热靠结构，电热是拖累。</p>
+
+    <div class="table-wrap">
+      <table>
+        <thead>
+          <tr>
+            <th>品类</th>
+            <th class="num">2027 金额（万元）</th>
+            <th class="num">金额同比</th>
+            <th class="num">2027 销量</th>
+            <th class="num">销量同比</th>
+            <th class="num">ASP 同比</th>
+            <th class="num">增量占比</th>
+          </tr>
+        </thead>
+        <tbody>
+          <tr><td>燃热</td><td class="num">12,999.9965</td><td class="num pos">+20.13%</td><td class="num">93,575</td><td class="num pos">+6.31%</td><td class="num pos">+13.00%</td><td class="num">40.17%</td></tr>
+          <tr><td>电热</td><td class="num">3,899.4858</td><td class="num pos">+6.31%</td><td class="num">57,956</td><td class="num neg">−1.41%</td><td class="num pos">+7.83%</td><td class="num">4.27%</td></tr>
+          <tr><td>烟机</td><td class="num">6,392.0356</td><td class="num pos">+45.21%</td><td class="num">45,518</td><td class="num pos">+31.56%</td><td class="num pos">+10.38%</td><td class="num">36.70%</td></tr>
+          <tr><td>灶具</td><td class="num">4,067.1749</td><td class="num pos">+25.80%</td><td class="num">65,262</td><td class="num pos">+11.53%</td><td class="num pos">+12.81%</td><td class="num">15.38%</td></tr>
+          <tr><td>壁挂炉</td><td class="num">539.6705</td><td class="num pos">+38.00%</td><td class="num">1,257</td><td class="num pos">+40.60%</td><td class="num neg">−1.86%</td><td class="num">2.74%</td></tr>
+          <tr><td>消毒柜</td><td class="num">100.2906</td><td class="num muted">—*</td><td class="num">737</td><td class="num neg">−35.97%</td><td class="num muted">—*</td><td class="num">0.72%</td></tr>
+        </tbody>
+      </table>
+    </div>
+    <p class="small muted">* 消毒柜 2026 金额在 Part1 与 Part2 存在 61 / 119 万元口径差异，量级 &lt;0.4%，不影响主结论；上会前需财务确认。</p>
+
+    <ul>
+      <li><strong>烟机 +45.21%、灶具 +25.80%</strong>，合计贡献 52.08% 增量，是 2027 年第一增长引擎。</li>
+      <li><strong>燃热 +20.13% 主要靠 ASP +13.00%</strong>，量只增 6.31%；这是结构升级，不是规模扩张。</li>
+      <li><strong>电热销量 −1.41%</strong>，是唯一量跌品类；2027 年定位应是“守正”，不是“进攻”。</li>
+    </ul>
+  </section>
+
+  <section id="p4">
+    <div class="sec-head"><span class="pnum">P4</span><h2>增量来源 2：产品结构</h2></div>
+    <p class="lead">7 款新品贡献 <em>87% 增量</em>，3 款零基数真新品承担 3,120 万元。</p>
+
+    <div class="table-wrap">
+      <table>
+        <thead>
+          <tr><th>产品组</th><th class="num">2027 金额（万元）</th><th class="num">2026 金额（万元）</th><th class="num">增量（万元）</th><th class="num">占总增量</th></tr>
+        </thead>
+        <tbody>
+          <tr><td>7 款新品</td><td class="num">5,473.32</td><td class="num">748.00</td><td class="num pos">+4,725.32</td><td class="num">87.16%</td></tr>
+          <tr><td>厨电爆品 3 款</td><td class="num">4,885.00</td><td class="num">2,901.00</td><td class="num pos">+1,984.00</td><td class="num">36.59%</td></tr>
+          <tr><td>热水老爆品 4 款</td><td class="num">5,746.20</td><td class="num">7,088.997</td><td class="num neg">−1,342.80</td><td class="num">−24.77%</td></tr>
+          <tr><td>其他</td><td class="num">11,894.13</td><td class="num">11,838.95</td><td class="num pos">+55.18</td><td class="num">1.02%</td></tr>
+          <tr class="total"><td>合计</td><td class="num">27,998.65</td><td class="num">22,576.95</td><td class="num">+5,421.71</td><td class="num">100%</td></tr>
+        </tbody>
+      </table>
+    </div>
+
+    <h3>关键新品</h3>
+    <div class="table-wrap">
+      <table>
+        <thead>
+          <tr><th>型号</th><th class="num">2027 金额（万元）</th><th class="num">2026 金额（万元）</th><th>定位</th></tr>
+        </thead>
+        <tbody>
+          <tr><td>S9E</td><td class="num">1,661.62</td><td class="num">0（新增）</td><td>1500+ 份额</td></tr>
+          <tr><td>R9A</td><td class="num">912.70</td><td class="num">0（新增）</td><td>2000+ 增量</td></tr>
+          <tr><td>U7 PRO/MAX</td><td class="num">546.00</td><td class="num">0（新增）</td><td>电热中高端</td></tr>
+          <tr><td>R9U</td><td class="num">1,071.00</td><td class="num">301.00</td><td>3000+ 市场</td></tr>
+          <tr><td>J9</td><td class="num">449.00</td><td class="num">333.00</td><td>超净系列</td></tr>
+          <tr><td>K7 2.0</td><td class="num">380.00</td><td class="num">55.00</td><td>2000-3000</td></tr>
+          <tr><td>F5</td><td class="num">453.00</td><td class="num">59.00</td><td>欧式 1500-2000</td></tr>
+        </tbody>
+      </table>
+    </div>
+
+    <div class="callout">
+      <strong>一句话：</strong>2027 年的增长不是“老品多卖”，是“7 款新品接棒 + 3 款厨电爆品扩份额”；老品主动退市 1,343 万元。
+    </div>
+  </section>
+
+  <section id="p5">
+    <div class="sec-head"><span class="pnum">P5</span><h2>增量来源 3：价格带</h2></div>
+    <p class="lead">价格带上移贡献近一半增长，也是<em>最大假设</em>。</p>
+
+    <div class="table-wrap">
+      <table>
+        <thead>
+          <tr><th>品类</th><th>关键价格带</th><th class="num">2026 销量占比</th><th class="num">2027 销量占比</th><th class="num">变化</th><th class="num">该带销量同比</th></tr>
+        </thead>
+        <tbody>
+          <tr><td>燃热</td><td>2000 元以上</td><td class="num">4.62%</td><td class="num">18.39%</td><td class="num pos">+13.77pp</td><td class="num pos">+322.90%</td></tr>
+          <tr><td>燃热</td><td>1000 元以下</td><td class="num">55.47%</td><td class="num">43.49%</td><td class="num neg">−11.98pp</td><td class="num neg">−16.67%</td></tr>
+          <tr><td>电热</td><td>800 元以上</td><td class="num">14.90%</td><td class="num">40.13%</td><td class="num pos">+25.23pp</td><td class="num pos">+165.60%</td></tr>
+          <tr><td>烟机</td><td>2000 元以上</td><td class="num">4.66%</td><td class="num">10.85%</td><td class="num pos">+6.19pp</td><td class="num pos">+206.60%</td></tr>
+          <tr><td>灶具</td><td>1500 元以上</td><td class="num">0.45%</td><td class="num">2.40%</td><td class="num pos">+1.95pp</td><td class="num pos">+491.70%</td></tr>
+          <tr><td>壁挂炉</td><td>6000 元以上</td><td class="num">19.46%</td><td class="num">7.24%</td><td class="num neg">−12.22pp</td><td class="num neg">−47.70%</td></tr>
+        </tbody>
+      </table>
+    </div>
+
+    <ul>
+      <li>总盘 ASP <strong>+10.61%</strong>，贡献约 <strong>49.54%</strong> 的金额增长；若 ASP 只兑现一半，总盘增速从 +24.02% 降到 <strong>+18.06%</strong>。</li>
+      <li>燃热 2000+ 要从 <strong>4,070 台拉到 17,213 台（4.2 倍）</strong>；S9E / R9A / R9U 三款新品是主要承接。</li>
+      <li>壁挂炉是唯一“向下移”的品类：6000+ 收缩，5000-6000 放量；小基数，重效率不重规模。</li>
+    </ul>
+  </section>
+
+  <section id="p6">
+    <div class="sec-head"><span class="pnum">P6</span><h2>达成路径 1：三条曲线</h2></div>
+    <p class="lead">燃热换挡、厨电扩张、电热守正，<em>三条曲线并行</em>。</p>
+
+    <div class="cards">
+      <div class="card">
+        <span class="tag">曲线 A · 第一优先</span>
+        <h4>燃热换挡</h4>
+        <div class="big pos">+2,178 万元</div>
+        <ul>
+          <li>S9E / R9A / R9U Q1 首发</li>
+          <li>P3 保价或清仓，S9 / R9 退市</li>
+          <li>里程碑：Q1 新品达成 25%；燃热 2000+ 占比 10%</li>
+          <li>主责：热水品类运营</li>
+        </ul>
+      </div>
+      <div class="card">
+        <span class="tag">曲线 B · 第二优先</span>
+        <h4>厨电扩张</h4>
+        <div class="big pos">+2,824 万元</div>
+        <ul>
+          <li>K7 1.0 扩规模；J10 打 3000+；A5 对标美的 / 万和</li>
+          <li>K7 2.0 / F5 补价格带</li>
+          <li>里程碑：Q2 厨电 GMV +35%；烟机转化 0.34%</li>
+          <li>主责：厨电 PMO</li>
+        </ul>
+      </div>
+      <div class="card">
+        <span class="tag">曲线 C · 第三优先</span>
+        <h4>电热守正</h4>
+        <div class="big pos">+231 万元</div>
+        <ul>
+          <li>U7 PRO/MAX / J9 补中高端</li>
+          <li>U7E 守 800-1200</li>
+          <li>里程碑：电热销量转正；800+ 占比 35%</li>
+          <li>主责：热水品类运营</li>
+        </ul>
+      </div>
+    </div>
+
+    <div class="callout green">
+      <strong>一句话：</strong>燃热管“换得过来”，厨电管“扩得出去”，电热管“守得住”。
+    </div>
+  </section>
+
+  <section id="p7">
+    <div class="sec-head"><span class="pnum">P7</span><h2>达成路径 2：季度节奏</h2></div>
+    <p class="lead">Q1 换挡、Q2 放量、Q3 升级、Q4 收官；<em>节奏不能反</em>。</p>
+
+    <div class="timeline">
+      <div class="tl">
+        <div class="q">Q1 · 1-3 月</div>
+        <h4>新品首发</h4>
+        <p>燃热三款新品首发；老品让位；开门红。</p>
+        <div class="kpi">新品 Q1 达成 ≥25%<br>燃热 2000+ 占比 ≥10%</div>
+      </div>
+      <div class="tl">
+        <div class="q">Q2 · 4-6 月</div>
+        <h4>厨电放量</h4>
+        <p>618 厨电放量；烟机转化专项；烟灶套购。</p>
+        <div class="kpi">厨电 Q2 GMV +35%<br>烟机转化 ≥0.34%</div>
+      </div>
+      <div class="tl">
+        <div class="q">Q3 · 7-9 月</div>
+        <h4>结构升级</h4>
+        <p>818/99 结构升级；费用重排；电热矩阵。</p>
+        <div class="kpi">燃热 2000+ ≥16%<br>电热 800+ ≥35%；费率 ≤19.5%</div>
+      </div>
+      <div class="tl">
+        <div class="q">Q4 · 10-12 月</div>
+        <h4>收官利润</h4>
+        <p>双11/双12 收官；利润优先；老品清仓。</p>
+        <div class="kpi">新品全年 ≥85%<br>GMV ≥4.31 亿元；费率 ≤19.18%</div>
+      </div>
+    </div>
+
+    <div class="callout gold">
+      <strong>注意：</strong>季度占比不要按 25% 均分；先用 2026 实际月度 GMV 占比做季节系数，再拆季度 / 月度，否则 Q4 会被动压货。
+    </div>
+  </section>
+
+  <section id="p8">
+    <div class="sec-head"><span class="pnum">P8</span><h2>达成路径 3：效率模型</h2></div>
+    <p class="lead">GMV +21.06% 由访客、转化、客单价共同支撑，<em>费用杠杆为正</em>。</p>
+
+    <div class="table-wrap">
+      <table>
+        <thead>
+          <tr><th>因子</th><th class="num">2026</th><th class="num">2027</th><th class="num">变化</th><th class="num">对 GMV 增长贡献</th></tr>
+        </thead>
+        <tbody>
+          <tr><td>访客</td><td class="num">3,558.70 万</td><td class="num">3,833.44 万</td><td class="num pos">+7.72%</td><td class="num">39.0%</td></tr>
+          <tr><td>转化率</td><td class="num">0.58840%</td><td class="num">0.63547%</td><td class="num pos">+8.00%</td><td class="num">40.3%</td></tr>
+          <tr><td>客单价</td><td class="num">1,699.93 元</td><td class="num">1,768.94 元</td><td class="num pos">+4.06%</td><td class="num">20.8%</td></tr>
+          <tr><td>GMV</td><td class="num">35,595.51 万元</td><td class="num">43,092.18 万元</td><td class="num pos">+21.06%</td><td class="num">100%</td></tr>
+          <tr><td>推广花费</td><td class="num">3,722 万元</td><td class="num">4,412 万元</td><td class="num">+18.54%</td><td class="num">—</td></tr>
+          <tr><td>费率</td><td class="num">19.58%</td><td class="num">19.18%</td><td class="num pos">−0.41pp</td><td class="num">—</td></tr>
+        </tbody>
+      </table>
+    </div>
+
+    <h3>分线效率</h3>
+    <div class="table-wrap">
+      <table>
+        <thead>
+          <tr><th>线</th><th class="num">GMV 同比</th><th class="num">花费同比</th><th class="num">费率变化</th><th>判断</th></tr>
+        </thead>
+        <tbody>
+          <tr><td>燃热</td><td class="num pos">+15.57%</td><td class="num">+15.78%</td><td class="num">+0.03pp</td><td>持平</td></tr>
+          <tr><td>电热</td><td class="num pos">+5.17%</td><td class="num">+6.37%</td><td class="num neg">+0.20pp</td><td>小幅恶化</td></tr>
+          <tr><td>壁挂炉</td><td class="num pos">+56.98%</td><td class="num">+14.29%</td><td class="num pos">−5.62pp</td><td>效率红利</td></tr>
+          <tr><td>烟机</td><td class="num pos">+34.68%</td><td class="num">+38.21%</td><td class="num neg">+0.52pp</td><td>买量换增长</td></tr>
+          <tr><td>灶具</td><td class="num pos">+34.68%</td><td class="num">+9.98%</td><td class="num pos">−3.69pp</td><td>效率红利</td></tr>
+        </tbody>
+      </table>
+    </div>
+
+    <div class="callout">
+      <strong>一句话：</strong>总费率降 0.41pp，但烟机是“花钱买增长”，灶具 / 壁挂炉才是效率红利；钱要跟着效率走。
+    </div>
+  </section>
+
+  <section id="p9">
+    <div class="sec-head"><span class="pnum">P9</span><h2>需要什么资源</h2></div>
+    <p class="lead">不追加总费用，要<em>三项确定性</em>。</p>
+
+    <div class="table-wrap">
+      <table>
+        <thead>
+          <tr><th>资源</th><th>具体诉求</th><th>量化</th><th>时点</th><th>不给的后果</th></tr>
+        </thead>
+        <tbody>
+          <tr>
+            <td><strong>货品</strong></td>
+            <td>3 款真新品 12/15 到仓；Q1 备货；老品退市时间表</td>
+            <td>3 款真新品 Q1 备货 5,072 台；R9U 另 1,019 台</td>
+            <td>12/15</td>
+            <td>Q1 缺口 780 万元，全年增速降至 +19.57%</td>
+          </tr>
+          <tr>
+            <td><strong>组织</strong></td>
+            <td>厨电升一级战役，设 PMO</td>
+            <td>1 名 PMO + 周会</td>
+            <td>11 月</td>
+            <td>52.08% 增量无主责，618 打成防守战</td>
+          </tr>
+          <tr>
+            <td><strong>费用</strong></td>
+            <td>总费用 4,412 万元不追加，只调结构：烟机 +20% 封顶、转化达标再释放；灶具 / 壁挂炉加投</td>
+            <td>烟机 918 万、灶具 609 万、壁挂炉 82 万、电热 568 万、燃热 2,120 万、机动 115 万</td>
+            <td>Q1</td>
+            <td>烟机费率 +0.52pp，总费率难保 −0.41pp</td>
+          </tr>
+          <tr>
+            <td><strong>站内 / 站外</strong></td>
+            <td>新品首发资源位 + 站外种草预算</td>
+            <td>4 款新品首发包</td>
+            <td>12 月</td>
+            <td>新品冷启动慢，Q1 达成 &lt;25%</td>
+          </tr>
+          <tr>
+            <td><strong>授权</strong></td>
+            <td>烟机费率红线 20.61%；Q3 止损重排权</td>
+            <td>—</td>
+            <td>11 月</td>
+            <td>偏差无法及时纠偏</td>
+          </tr>
+        </tbody>
+      </table>
+    </div>
+
+    <h3>费用结构：总额不变，结构调</h3>
+    <div class="table-wrap">
+      <table>
+        <thead>
+          <tr><th>线</th><th class="num">2026</th><th class="num">2027 预算</th><th class="num">建议</th><th class="num">建议 vs 预算</th></tr>
+        </thead>
+        <tbody>
+          <tr><td>燃热</td><td class="num">1,831</td><td class="num">2,120</td><td class="num">2,120</td><td class="num">0</td></tr>
+          <tr><td>烟机</td><td class="num">764.79</td><td class="num">1,057</td><td class="num">918</td><td class="num neg">−139</td></tr>
+          <tr><td>灶具</td><td class="num">529.21</td><td class="num">582</td><td class="num">609</td><td class="num pos">+27</td></tr>
+          <tr><td>壁挂炉</td><td class="num">63</td><td class="num">72</td><td class="num">82</td><td class="num pos">+10</td></tr>
+          <tr><td>电热</td><td class="num">534</td><td class="num">568</td><td class="num">568</td><td class="num">0</td></tr>
+          <tr><td>其他 / 机动</td><td class="num">0</td><td class="num">13</td><td class="num">115</td><td class="num pos">+102</td></tr>
+          <tr class="total"><td>合计</td><td class="num">3,722</td><td class="num">4,412</td><td class="num">4,412</td><td class="num">0</td></tr>
+        </tbody>
+      </table>
+    </div>
+
+    <div class="callout green">
+      <strong>一句话：</strong>不是要更多钱，是要“货按时到、人有人管、钱按效率分”。
+    </div>
+  </section>
+
+  <section id="p10">
+    <div class="sec-head"><span class="pnum">P10</span><h2>风险与止损</h2></div>
+    <p class="lead">三个断点，<em>三条止损线</em>。</p>
+
+    <div class="table-wrap">
+      <table>
+        <thead>
+          <tr><th>风险</th><th>触发条件</th><th>影响</th><th>对策</th></tr>
+        </thead>
+        <tbody>
+          <tr>
+            <td>新品爬坡不及预期</td>
+            <td>Q1 新品达成 &lt;20%</td>
+            <td>新品 70% 达成 → 总盘 +16.74%</td>
+            <td>老品延寿 3 个月 + 价格保护；厨电爆品加投补缺口</td>
+          </tr>
+          <tr>
+            <td>价格带上移不达</td>
+            <td>Q2 燃热 2000+ 占比 &lt;12%</td>
+            <td>ASP 只兑现一半 → 总盘 +18.06%</td>
+            <td>下调 ASP 假设，保 GMV；费用向灶具 / 壁挂炉倾斜</td>
+          </tr>
+          <tr>
+            <td>烟机效率恶化</td>
+            <td>Q2 烟机转化 &lt;0.33%</td>
+            <td>费率 +0.52pp，总费率失守</td>
+            <td>烟机花费砍 15%，转投灶具 / 壁挂炉</td>
+          </tr>
+          <tr>
+            <td>总盘缺口</td>
+            <td>Q3 累计增速 &lt;15%</td>
+            <td>全年目标缺口</td>
+            <td>全年目标重排，保利润与份额，不压 Q4 库存</td>
+          </tr>
+        </tbody>
+      </table>
+    </div>
+
+    <div class="callout gold">
+      <strong>机制：</strong>月度滚动预测，偏差 &gt;5% 预警；Q1 / Q2 / Q3 三个闸门，到点就调，不等到年底。
+    </div>
+  </section>
+
+  <section id="p11">
+    <div class="sec-head"><span class="pnum">P11</span><h2>请老板拍板 4 件事</h2></div>
+    <p class="lead">四个拍板，决定 2027 能不能<em>按这个路径打</em>。</p>
+
+    <div class="table-wrap">
+      <table>
+        <thead>
+          <tr><th>#</th><th>决策事项</th><th>选项</th><th>建议</th></tr>
+        </thead>
+        <tbody>
+          <tr><td>1</td><td>2026 基数口径</td><td>Part1 22,577 万 / Part2 21,446 万</td><td>以财务确认口径为准；结构用 Part2、目标用 Part1，中层表显式区分</td></tr>
+          <tr><td>2</td><td>厨电是否升一级、设 PMO</td><td>是 / 否</td><td><strong>是</strong>；52.08% 增量必须有主责人</td></tr>
+          <tr><td>3</td><td>新品首年达成率目标</td><td>85% / 70%</td><td><strong>目标 85%，B 计划按 70% 预留预算</strong></td></tr>
+          <tr><td>4</td><td>烟机费率红线</td><td>20.61% / 更高</td><td><strong>20.61%</strong>；超过即砍量转投灶具 / 壁挂炉</td></tr>
+        </tbody>
+      </table>
+    </div>
+
+    <div class="callout">
+      <strong>会议期望输出：</strong>4 个拍板 + 会议纪要 + 各部门承诺时间表。
+    </div>
+  </section>
+
+  <section id="appendix">
+    <div class="sec-head"><span class="pnum">附录</span><h2>上会前口径校验 &amp; 口播稿</h2></div>
+
+    <h3>上会前必须锁定的 4 处口径</h3>
+    <div class="table-wrap">
+      <table>
+        <thead>
+          <tr><th>#</th><th>问题</th><th>不改的后果</th><th>建议动作</th></tr>
+        </thead>
+        <tbody>
+          <tr><td>1</td><td>Part1 与 Part2 的 2026 基数不一致（总盘 22,577 vs 21,446 万元）</td><td>同一份材料出现 +24.02% 与 +30.56% 两个增速</td><td>财务确认唯一基数</td></tr>
+          <tr><td>2</td><td>厨电 5 个金额同比公式引用错列</td><td>K7 1.0 显示 +170.10%（实际 +58.79%）、J10 显示 +59.10%（实际 +169.21%）等</td><td>改为“金额差 / 2026 金额”</td></tr>
+          <tr><td>3</td><td>Part5 行级花费同比与两列金额不符</td><td>烟机显示 +28.44%，实际 +38.21%</td><td>重填或改为公式</td></tr>
+          <tr><td>4</td><td>费率分母未定义</td><td>花费 / GMV = 10.24%，表内 19.18%</td><td>补“不含税 / 剔退 / 全渠道”说明</td></tr>
+        </tbody>
+      </table>
+    </div>
+    <p class="small muted">这 4 处不影响主结论（增量来源、路径、资源），但影响数字可信度；建议 10/30 前修正后再上会。</p>
+
+    <h3>5 分钟口播稿</h3>
+    <div class="script">
+      <p>老板，2027 年目标 <strong>2.8 亿元，增长 24.02%</strong>。增量 5,423 万元，拆开是三块：燃热新品 3,344 万元、厨电爆品 1,984 万元、厨电新品 719 万元；热水老品主动退市减 1,343 万元。</p>
+      <p>增量结构上，厨电净增 2,824 万元，占 <strong>52.08%</strong>；燃热 2,178 万元，占 40.17%；电热只有 231 万元。增长引擎已经从热水转到厨电。</p>
+      <p>增量来源上，7 款新品贡献 4,725 万元，占总增量 <strong>87.16%</strong>；其中 S9E、R9A、U7 PRO/MAX 三款零基数真新品承担 3,120 万元。所以 2027 年能不能成，关键在新品能不能按时到仓、按时上架。</p>
+      <p>达成路径是四步：Q1 燃热三款新品换挡，Q2 618 厨电放量，Q3 价格带升级，Q4 双11 收官。总盘 ASP 提升 10.61%，贡献近一半增长；访客 +7.72%、转化 +8.00%、客单价 +4.06%，费用只增 18.54%，费率降 0.41 个百分点。</p>
+      <p>我需要三件事：第一，3 款真新品 12/15 到仓，Q1 备货 5,072 台；第二，厨电升一级、设 PMO；第三，烟机费用设置 20.61% 费率红线，转化不达标就砍量转投灶具和壁挂炉。</p>
+      <p>这三件到位，目标能打；新品只完成 70%，总盘会掉到 <strong>+16.74%</strong>。请老板拍板。</p>
+    </div>
+  </section>
+
+</main>
+
+<div class="footer">
+  <p><strong>数据口径：</strong>金额单位万元；2026 为预估全年达成，2027 为预算规划；Part1 / Part2 基数差异、费率分母定义见附录。销量单位台，ASP 单位元 / 台，费率同比为百分点变化。</p>
+  <p><strong>编制：</strong>天猫自营运营 · 2026-10-28</p>
+</div>
+
+<button class="print-btn" onclick="window.print()">打印 / 另存为 PDF</button>
+
+</body>
+</html>
